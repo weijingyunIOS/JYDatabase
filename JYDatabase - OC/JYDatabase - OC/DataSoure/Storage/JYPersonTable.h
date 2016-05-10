@@ -6,8 +6,8 @@
 //  Copyright © 2016年 weijingyun. All rights reserved.
 //
 
-#import "JYContentDB.h"
+#import "JYContentTable.h"
 #import "JYPersonInfo.h"
-@interface JYPersonTable : JYContentDB
+@interface JYPersonTable : JYContentTable
 
 @end

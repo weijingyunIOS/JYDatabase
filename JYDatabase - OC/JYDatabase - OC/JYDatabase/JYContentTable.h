@@ -1,5 +1,5 @@
 //
-//  JYContentDB.h
+//  JYContentTable.h
 //  JYDatabase - OC
 //
 //  Created by weijingyun on 16/5/9.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @class FMDatabaseQueue , FMDatabase;
 
-@interface JYContentDB : NSObject
+@interface JYContentTable : NSObject
 
 @property (nonatomic, strong) FMDatabaseQueue *dbQueue;
 @property (nonatomic, strong) NSString *tableName;  //数据库表名
@@ -19,7 +19,7 @@
 
 - (id)checkEmpty:(id)aObject;
 
-// create (需先设置表名)
+// create (需先设置表名)JYContentTable
 - (void)createTable;
 
 // Upgrade (需先设置表名)

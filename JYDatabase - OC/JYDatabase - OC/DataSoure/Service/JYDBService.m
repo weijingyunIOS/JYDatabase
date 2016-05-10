@@ -21,7 +21,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         globalService = [[JYDBService alloc] init];
-        
+        globalService.personDB = [JYPersonDB storage];
     });
     return globalService;
 }
@@ -41,14 +41,6 @@
 
 - (void)deletePersonInfo:(NSString *)aPersonInfoid{
     [self.personDB.personTable deleteContent:aPersonInfoid];
-}
-
-#pragma mark - 懒加载
-- (JYPersonDB *)personDB{
-    if (!_personDB) {
-        _personDB = [JYPersonDB storage];
-    }
-    return _personDB;
 }
 
 @end

@@ -14,7 +14,7 @@
 		5C88CB1B1CE08CAE006EBC35 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB151CE08CAE006EBC35 /* FMResultSet.m */; };
 		5C88CB1F1CE08EF0006EBC35 /* JYDataBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB1E1CE08EF0006EBC35 /* JYDataBase.m */; };
 		5C88CB261CE092F4006EBC35 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C88CB251CE092F4006EBC35 /* libsqlite3.tbd */; };
-		5C88CB291CE09F00006EBC35 /* JYContentDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB281CE09F00006EBC35 /* JYContentDB.m */; };
+		5C88CB291CE09F00006EBC35 /* JYContentTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB281CE09F00006EBC35 /* JYContentTable.m */; };
 		5C88CB331CE0A258006EBC35 /* JYPersonInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB321CE0A258006EBC35 /* JYPersonInfo.m */; };
 		5C88CB391CE0A2DA006EBC35 /* JYPersonTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB381CE0A2DA006EBC35 /* JYPersonTable.m */; };
 		5C88CB3C1CE0A43E006EBC35 /* JYPersonDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB3B1CE0A43E006EBC35 /* JYPersonDB.m */; };
@@ -62,8 +62,8 @@
 		5C88CB1E1CE08EF0006EBC35 /* JYDataBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYDataBase.m; sourceTree = "<group>"; };
 		5C88CB231CE08FC5006EBC35 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		5C88CB251CE092F4006EBC35 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		5C88CB271CE09F00006EBC35 /* JYContentDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYContentDB.h; sourceTree = "<group>"; };
-		5C88CB281CE09F00006EBC35 /* JYContentDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYContentDB.m; sourceTree = "<group>"; };
+		5C88CB271CE09F00006EBC35 /* JYContentTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYContentTable.h; sourceTree = "<group>"; };
+		5C88CB281CE09F00006EBC35 /* JYContentTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYContentTable.m; sourceTree = "<group>"; };
 		5C88CB311CE0A258006EBC35 /* JYPersonInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYPersonInfo.h; sourceTree = "<group>"; };
 		5C88CB321CE0A258006EBC35 /* JYPersonInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYPersonInfo.m; sourceTree = "<group>"; };
 		5C88CB371CE0A2DA006EBC35 /* JYPersonTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYPersonTable.h; sourceTree = "<group>"; };
@@ -120,8 +120,8 @@
 			isa = PBXGroup;
 			children = (
 				5C88CB0A1CE08CAE006EBC35 /* fmdb */,
-				5C88CB271CE09F00006EBC35 /* JYContentDB.h */,
-				5C88CB281CE09F00006EBC35 /* JYContentDB.m */,
+				5C88CB271CE09F00006EBC35 /* JYContentTable.h */,
+				5C88CB281CE09F00006EBC35 /* JYContentTable.m */,
 				5C88CB1D1CE08EF0006EBC35 /* JYDataBase.h */,
 				5C88CB1E1CE08EF0006EBC35 /* JYDataBase.m */,
 			);
@@ -385,7 +385,7 @@
 				5CE7DCA41CE0615E00470171 /* ViewController.m in Sources */,
 				5C88CB3F1CE0A671006EBC35 /* JYDBService.m in Sources */,
 				5C88CB191CE08CAE006EBC35 /* FMDatabasePool.m in Sources */,
-				5C88CB291CE09F00006EBC35 /* JYContentDB.m in Sources */,
+				5C88CB291CE09F00006EBC35 /* JYContentTable.m in Sources */,
 				5C88CB331CE0A258006EBC35 /* JYPersonInfo.m in Sources */,
 				5C88CB3C1CE0A43E006EBC35 /* JYPersonDB.m in Sources */,
 				5CE7DCA11CE0615E00470171 /* AppDelegate.m in Sources */,

@@ -1,22 +1,22 @@
 //
-//  JYContentDB.m
+//  JYContentTable.m
 //  JYDatabase - OC
 //
 //  Created by weijingyun on 16/5/9.
 //  Copyright © 2016年 weijingyun. All rights reserved.
 //
 
-#import "JYContentDB.h"
+#import "JYContentTable.h"
 #import "FMDB.h"
 #import <objc/runtime.h>
 
-@interface JYContentDB()
+@interface JYContentTable()
 
 @property (nonatomic, strong) NSCache *cache;
 
 @end
 
-@implementation JYContentDB
+@implementation JYContentTable
 
 - (instancetype)init
 {
@@ -80,7 +80,7 @@
 #pragma mark - Create Table
 - (void)createTable{
     [self configTableName];
-    __weak JYContentDB *weakSelf = self;
+    __weak JYContentTable *weakSelf = self;
     [self.dbQueue inDatabase:^(FMDatabase *aDB) {
         NSMutableString *strM = [[NSMutableString alloc] init];
         [strM appendFormat:@"CREATE TABLE if not exists %@ (%@ varchar(64) NOT NULL, ",self.tableName,[weakSelf contentId]];
@@ -121,7 +121,7 @@
         [arrayM addObject:[self checkEmpty:[aContent valueForKey:obj]]];
     }];
     
-    __weak JYContentDB *weakSelf = self;
+    __weak JYContentTable *weakSelf = self;
     [self.dbQueue inDatabase:^(FMDatabase *aDB) {
         NSMutableString *strM = [[NSMutableString alloc] init];
         NSMutableString *strM1 = [[NSMutableString alloc] initWithString:@"?"];
@@ -147,7 +147,7 @@
         return [self.cache objectForKey:aID];
     }
     
-    __weak JYContentDB *weakSelf = self;
+    __weak JYContentTable *weakSelf = self;
     __block id content = nil;
     [self.dbQueue inTransaction:^(FMDatabase *aDB, BOOL *aRollback) {
         NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = ?", weakSelf.tableName, [weakSelf contentId]];
@@ -175,7 +175,7 @@
     [self configTableName];
     
     NSLog(@"getAllContent %@",[self class]);
-    __weak JYContentDB *weakSelf = self;
+    __weak JYContentTable *weakSelf = self;
     __block id content = nil;
     NSMutableArray *arrayM = [[NSMutableArray alloc] init];
     [self.dbQueue inTransaction:^(FMDatabase *aDB, BOOL *aRollback) {
@@ -206,7 +206,7 @@
     [self configTableName];
     
     NSLog(@"deleteContent %@",aID);
-    __weak JYContentDB *weakSelf = self;
+    __weak JYContentTable *weakSelf = self;
     [self.dbQueue inDatabase:^(FMDatabase *aDB) {
         NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = ?", weakSelf.tableName, [weakSelf contentId]];
         [aDB executeUpdate:sql,
@@ -218,7 +218,7 @@
 
 - (void)deleteContents{
     [self configTableName];
-    __weak JYContentDB *weakSelf = self;
+    __weak JYContentTable *weakSelf = self;
     [self.dbQueue inDatabase:^(FMDatabase *aDB) {
         NSString *sql = [NSString stringWithFormat:@"DROP TABLE IF EXISTS %@", weakSelf.tableName];
         [aDB executeUpdate:sql];

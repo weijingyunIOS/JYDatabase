@@ -21,7 +21,7 @@
 
 - (void)configTableName{
     
-    self.contentClass = [JYPersonTable class];
+    self.contentClass = [JYPersonInfo class];
     self.tableName = @"patient_info_table";
 }
 
