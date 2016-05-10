@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C88CB171CE08CAE006EBC35 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB0C1CE08CAE006EBC35 /* FMDatabase.m */; };
+		5C88CB181CE08CAE006EBC35 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB0E1CE08CAE006EBC35 /* FMDatabaseAdditions.m */; };
+		5C88CB191CE08CAE006EBC35 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB101CE08CAE006EBC35 /* FMDatabasePool.m */; };
+		5C88CB1A1CE08CAE006EBC35 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB121CE08CAE006EBC35 /* FMDatabaseQueue.m */; };
+		5C88CB1B1CE08CAE006EBC35 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB151CE08CAE006EBC35 /* FMResultSet.m */; };
+		5C88CB1F1CE08EF0006EBC35 /* JYDataBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB1E1CE08EF0006EBC35 /* JYDataBase.m */; };
+		5C88CB261CE092F4006EBC35 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C88CB251CE092F4006EBC35 /* libsqlite3.tbd */; };
+		5C88CB291CE09F00006EBC35 /* JYContentDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB281CE09F00006EBC35 /* JYContentDB.m */; };
+		5C88CB331CE0A258006EBC35 /* JYPersonInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB321CE0A258006EBC35 /* JYPersonInfo.m */; };
+		5C88CB391CE0A2DA006EBC35 /* JYPersonTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB381CE0A2DA006EBC35 /* JYPersonTable.m */; };
+		5C88CB3C1CE0A43E006EBC35 /* JYPersonDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB3B1CE0A43E006EBC35 /* JYPersonDB.m */; };
+		5C88CB3F1CE0A671006EBC35 /* JYDBService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB3E1CE0A671006EBC35 /* JYDBService.m */; };
 		5CE7DC9E1CE0615E00470171 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE7DC9D1CE0615E00470171 /* main.m */; };
 		5CE7DCA11CE0615E00470171 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE7DCA01CE0615E00470171 /* AppDelegate.m */; };
 		5CE7DCA41CE0615E00470171 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE7DCA31CE0615E00470171 /* ViewController.m */; };
@@ -35,6 +47,31 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C88CB0B1CE08CAE006EBC35 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		5C88CB0C1CE08CAE006EBC35 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		5C88CB0D1CE08CAE006EBC35 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		5C88CB0E1CE08CAE006EBC35 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		5C88CB0F1CE08CAE006EBC35 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		5C88CB101CE08CAE006EBC35 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		5C88CB111CE08CAE006EBC35 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		5C88CB121CE08CAE006EBC35 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		5C88CB131CE08CAE006EBC35 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		5C88CB141CE08CAE006EBC35 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		5C88CB151CE08CAE006EBC35 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		5C88CB1D1CE08EF0006EBC35 /* JYDataBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYDataBase.h; sourceTree = "<group>"; };
+		5C88CB1E1CE08EF0006EBC35 /* JYDataBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYDataBase.m; sourceTree = "<group>"; };
+		5C88CB231CE08FC5006EBC35 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		5C88CB251CE092F4006EBC35 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		5C88CB271CE09F00006EBC35 /* JYContentDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYContentDB.h; sourceTree = "<group>"; };
+		5C88CB281CE09F00006EBC35 /* JYContentDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYContentDB.m; sourceTree = "<group>"; };
+		5C88CB311CE0A258006EBC35 /* JYPersonInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYPersonInfo.h; sourceTree = "<group>"; };
+		5C88CB321CE0A258006EBC35 /* JYPersonInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYPersonInfo.m; sourceTree = "<group>"; };
+		5C88CB371CE0A2DA006EBC35 /* JYPersonTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYPersonTable.h; sourceTree = "<group>"; };
+		5C88CB381CE0A2DA006EBC35 /* JYPersonTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYPersonTable.m; sourceTree = "<group>"; };
+		5C88CB3A1CE0A43E006EBC35 /* JYPersonDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYPersonDB.h; sourceTree = "<group>"; };
+		5C88CB3B1CE0A43E006EBC35 /* JYPersonDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYPersonDB.m; sourceTree = "<group>"; };
+		5C88CB3D1CE0A671006EBC35 /* JYDBService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYDBService.h; sourceTree = "<group>"; };
+		5C88CB3E1CE0A671006EBC35 /* JYDBService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYDBService.m; sourceTree = "<group>"; };
 		5CE7DC991CE0615E00470171 /* JYDatabase - OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "JYDatabase - OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CE7DC9D1CE0615E00470171 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5CE7DC9F1CE0615E00470171 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -58,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C88CB261CE092F4006EBC35 /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +116,75 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C88CB091CE08CAE006EBC35 /* JYDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				5C88CB0A1CE08CAE006EBC35 /* fmdb */,
+				5C88CB271CE09F00006EBC35 /* JYContentDB.h */,
+				5C88CB281CE09F00006EBC35 /* JYContentDB.m */,
+				5C88CB1D1CE08EF0006EBC35 /* JYDataBase.h */,
+				5C88CB1E1CE08EF0006EBC35 /* JYDataBase.m */,
+			);
+			path = JYDatabase;
+			sourceTree = "<group>";
+		};
+		5C88CB0A1CE08CAE006EBC35 /* fmdb */ = {
+			isa = PBXGroup;
+			children = (
+				5C88CB131CE08CAE006EBC35 /* FMDB.h */,
+				5C88CB0B1CE08CAE006EBC35 /* FMDatabase.h */,
+				5C88CB0C1CE08CAE006EBC35 /* FMDatabase.m */,
+				5C88CB0D1CE08CAE006EBC35 /* FMDatabaseAdditions.h */,
+				5C88CB0E1CE08CAE006EBC35 /* FMDatabaseAdditions.m */,
+				5C88CB0F1CE08CAE006EBC35 /* FMDatabasePool.h */,
+				5C88CB101CE08CAE006EBC35 /* FMDatabasePool.m */,
+				5C88CB111CE08CAE006EBC35 /* FMDatabaseQueue.h */,
+				5C88CB121CE08CAE006EBC35 /* FMDatabaseQueue.m */,
+				5C88CB141CE08CAE006EBC35 /* FMResultSet.h */,
+				5C88CB151CE08CAE006EBC35 /* FMResultSet.m */,
+			);
+			path = fmdb;
+			sourceTree = "<group>";
+		};
+		5C88CB2A1CE0A1AC006EBC35 /* DataSoure */ = {
+			isa = PBXGroup;
+			children = (
+				5C88CB2B1CE0A1AC006EBC35 /* Content */,
+				5C88CB2D1CE0A1AC006EBC35 /* Storage */,
+				5C88CB2C1CE0A1AC006EBC35 /* Service */,
+			);
+			path = DataSoure;
+			sourceTree = "<group>";
+		};
+		5C88CB2B1CE0A1AC006EBC35 /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				5C88CB311CE0A258006EBC35 /* JYPersonInfo.h */,
+				5C88CB321CE0A258006EBC35 /* JYPersonInfo.m */,
+			);
+			path = Content;
+			sourceTree = "<group>";
+		};
+		5C88CB2C1CE0A1AC006EBC35 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				5C88CB3D1CE0A671006EBC35 /* JYDBService.h */,
+				5C88CB3E1CE0A671006EBC35 /* JYDBService.m */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		5C88CB2D1CE0A1AC006EBC35 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				5C88CB3A1CE0A43E006EBC35 /* JYPersonDB.h */,
+				5C88CB3B1CE0A43E006EBC35 /* JYPersonDB.m */,
+				5C88CB371CE0A2DA006EBC35 /* JYPersonTable.h */,
+				5C88CB381CE0A2DA006EBC35 /* JYPersonTable.m */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
 		5CE7DC901CE0615E00470171 = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +208,8 @@
 		5CE7DC9B1CE0615E00470171 /* JYDatabase - OC */ = {
 			isa = PBXGroup;
 			children = (
+				5C88CB091CE08CAE006EBC35 /* JYDatabase */,
+				5C88CB2A1CE0A1AC006EBC35 /* DataSoure */,
 				5CE7DC9F1CE0615E00470171 /* AppDelegate.h */,
 				5CE7DCA01CE0615E00470171 /* AppDelegate.m */,
 				5CE7DCA21CE0615E00470171 /* ViewController.h */,
@@ -117,6 +226,8 @@
 		5CE7DC9C1CE0615E00470171 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5C88CB251CE092F4006EBC35 /* libsqlite3.tbd */,
+				5C88CB231CE08FC5006EBC35 /* libsqlite3.0.tbd */,
 				5CE7DC9D1CE0615E00470171 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -270,9 +381,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C88CB391CE0A2DA006EBC35 /* JYPersonTable.m in Sources */,
 				5CE7DCA41CE0615E00470171 /* ViewController.m in Sources */,
+				5C88CB3F1CE0A671006EBC35 /* JYDBService.m in Sources */,
+				5C88CB191CE08CAE006EBC35 /* FMDatabasePool.m in Sources */,
+				5C88CB291CE09F00006EBC35 /* JYContentDB.m in Sources */,
+				5C88CB331CE0A258006EBC35 /* JYPersonInfo.m in Sources */,
+				5C88CB3C1CE0A43E006EBC35 /* JYPersonDB.m in Sources */,
 				5CE7DCA11CE0615E00470171 /* AppDelegate.m in Sources */,
+				5C88CB1A1CE08CAE006EBC35 /* FMDatabaseQueue.m in Sources */,
 				5CE7DC9E1CE0615E00470171 /* main.m in Sources */,
+				5C88CB1F1CE08EF0006EBC35 /* JYDataBase.m in Sources */,
+				5C88CB171CE08CAE006EBC35 /* FMDatabase.m in Sources */,
+				5C88CB1B1CE08CAE006EBC35 /* FMResultSet.m in Sources */,
+				5C88CB181CE08CAE006EBC35 /* FMDatabaseAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,7 +486,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -403,7 +525,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -416,6 +538,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "JYDatabase - OC/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "yunyunxiao.JYDatabase---OC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -427,6 +550,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "JYDatabase - OC/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "yunyunxiao.JYDatabase---OC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -498,6 +622,7 @@
 				5CE7DCC81CE0615E00470171 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5CE7DCC91CE0615E00470171 /* Build configuration list for PBXNativeTarget "JYDatabase - OCTests" */ = {
 			isa = XCConfigurationList;
@@ -506,6 +631,7 @@
 				5CE7DCCB1CE0615E00470171 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5CE7DCCC1CE0615E00470171 /* Build configuration list for PBXNativeTarget "JYDatabase - OCUITests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +640,7 @@
 				5CE7DCCE1CE0615E00470171 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
