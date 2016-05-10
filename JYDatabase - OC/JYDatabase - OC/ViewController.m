@@ -21,14 +21,10 @@
     JYPersonInfo *info = [[JYPersonInfo alloc] init];
     info.personnumber = @"123456";
     info.nameDB = @"nameDB";
-    [JYDBService shared];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[JYDBService shared] updatePersonInfo:info];
-        NSArray *array = [[JYDBService shared] getAllPersonInfo];
+    [[JYDBService shared] updatePersonInfo:info];
+    NSArray *array = [[JYDBService shared] getAllPersonInfo];
         
-        NSLog(@"%@",array);
-    });
-    
+    NSLog(@"%@",array);
     
 }
 
