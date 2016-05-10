@@ -70,21 +70,21 @@
     NSString* version = [self getVersion];
     if (version == nil)
     {
-        [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-            [weakDataBase createDBVersionTable];
-            [weakDataBase createAllTable];
-            [weakDataBase updateDBFromVersion:1];
-            [weakDataBase updateVersion];
+//        [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+            [self createDBVersionTable];
+            [self createAllTable];
+            [self updateDBFromVersion:1];
+            [self updateVersion];
             // 如果 &rollback ＝ YES 就会回滚
-        }];
+//        }];
         
     }
     else if ([version integerValue] != [self getCurrentDBVersion])
     {
-        [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-            [weakDataBase updateDBFromVersion:[version integerValue]];
-            [weakDataBase updateVersion];
-        }];
+//        [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+            [self updateDBFromVersion:[version integerValue]];
+            [self updateVersion];
+//        }];
     }
 }
 

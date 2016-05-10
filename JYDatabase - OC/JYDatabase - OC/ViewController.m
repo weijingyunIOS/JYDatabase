@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "JYDBService.h"
 
 @interface ViewController ()
 
@@ -17,6 +18,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    JYPersonInfo *info = [[JYPersonInfo alloc] init];
+    info.personnumber = @"123456";
+    info.nameDB = @"nameDB";
+    [[JYDBService shared] updatePersonInfo:info];
+    
 }
 
 - (void)didReceiveMemoryWarning {

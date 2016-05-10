@@ -7,7 +7,6 @@
 //
 
 #import "JYPersonTable.h"
-#import "JYPersonInfo.h"
 
 @implementation JYPersonTable
 
@@ -27,7 +26,7 @@
 }
 
 - (NSString *)contentId{
-    return @"patientnumber";
+    return @"personnumber";
 }
 
 @end

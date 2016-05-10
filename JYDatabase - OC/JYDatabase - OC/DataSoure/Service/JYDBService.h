@@ -7,7 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "JYPersonDB.h"
 
 @interface JYDBService : NSObject
+
++ (instancetype)shared;
+- (void)updatePersonInfo:(JYPersonInfo *)aPersonInfo;
+- (JYPersonInfo *)getPersonInfo:(NSString*)aPersonInfo;
+- (NSArray<JYPersonInfo *> *)getAllPersonInfo;
+- (void)deletePersonInfo:(NSString *)aPersonInfoid;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "JYContentDB.h"
+#import "JYPersonInfo.h"
 @interface JYPersonTable : JYContentDB
 
 @end
