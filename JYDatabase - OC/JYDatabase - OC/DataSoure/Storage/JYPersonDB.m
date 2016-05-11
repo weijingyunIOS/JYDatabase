@@ -30,6 +30,11 @@
 }
 
 #pragma mark - 创建更新表
+- (NSInteger)getCurrentDBVersion
+{
+    return 4;
+}
+
 - (void)createAllTable{
     [self.personTable createTable];
 }

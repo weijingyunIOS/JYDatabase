@@ -101,18 +101,91 @@
 #pragma mark - Upgrade
 - (void)updateDBFromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion{
     
+    NSArray<NSString *> *tablefields = [self getCurrentFields];
+    NSArray<NSString *> *contentfields = [self getContentField];
+    __block NSMutableArray *fields = [contentfields mutableCopy];
+    [tablefields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [fields removeObject:obj];
+    }];
+    
+    [self addFieldS:fields];
+}
+
+- (NSArray<NSString*> *)getCurrentFields{
+    __block NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        
+        NSString *sql = [NSString stringWithFormat:@"PRAGMA table_info([%@])", self.tableName];
+        FMResultSet *rs = [db executeQuery:sql];
+        while([rs next]) {
+            [arrayM addObject:[rs stringForColumn:@"name"]];
+        }
+        [rs close];
+        [self checkError:db];
+    }];
+    
+    return arrayM;
+}
+
+// 新增字段数组
+- (void)addFieldS:(NSArray<NSString*>*)aFields{
+    __weak JYContentTable *weakSelf = self;
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        
+        [aFields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ varchar(128)", weakSelf.tableName,obj];
+            [db executeUpdate:sql];
+            [weakSelf checkError:db];
+        }];
+        
+    }];
 }
 
 #pragma mark - Operation
+//- (void)insertContents:(NSArray *)aContents{
+//    [self configTableName];
+//    
+//    id aContent = aContents.firstObject;
+//    NSLog(@"insert %@",[aContent class]);
+//    NSString * ts = [NSString stringWithFormat:@"%@不能为空",[self contentId]];
+//    NSAssert([aContent valueForKey:[self contentId]], ts);
+//    
+//    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+//    [arrayM addObject:[aContent valueForKey:[self contentId]]];
+//    [[self getContentField] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        [arrayM addObject:[self checkEmpty:[aContent valueForKey:obj]]];
+//    }];
+//    
+//    __weak JYContentTable *weakSelf = self;
+//    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+//        [aContents enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            
+//        }];
+//    }];
+//    [self.dbQueue inDatabase:^(FMDatabase *aDB) {
+//        
+//    
+//        NSMutableString *strM = [[NSMutableString alloc] init];
+//        NSMutableString *strM1 = [[NSMutableString alloc] initWithString:@"?"];
+//        [strM appendFormat:@"INSERT OR REPLACE INTO %@(%@",weakSelf.tableName,[weakSelf contentId]];
+//        [[weakSelf getContentField] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            [strM appendFormat:@", %@",obj];
+//            [strM1 appendFormat:@",?"];
+//        }];
+//        [strM appendFormat:@") VALUES (%@)",strM1];
+//        
+//        NSLog(@"-----%@",strM);
+//        [aDB executeUpdate:[strM copy] withArgumentsInArray:[arrayM copy]];
+//        [weakSelf checkError:aDB];
+//    }];
+//}
+
 - (void)insertContent:(id)aContent{
     [self configTableName];
     
     NSLog(@"insert %@",[aContent class]);
-    if ([aContent valueForKey:[self contentId]] == nil) {
-        NSLog(@"%@不能为空",[self contentId]);
-        return;
-    }
-    
+    NSString * ts = [NSString stringWithFormat:@"%@不能为空",[self contentId]];
+    NSAssert([aContent valueForKey:[self contentId]], ts);
     [self saveCacheContent:aContent];
     
     NSMutableArray *arrayM = [[NSMutableArray alloc] init];

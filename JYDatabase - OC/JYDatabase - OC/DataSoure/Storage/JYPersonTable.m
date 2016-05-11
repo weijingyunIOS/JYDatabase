@@ -22,7 +22,7 @@
 - (void)configTableName{
     
     self.contentClass = [JYPersonInfo class];
-    self.tableName = @"patient_info_table";
+    self.tableName = @"JYPersonTable";
 }
 
 - (NSString *)contentId{

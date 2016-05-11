@@ -66,7 +66,7 @@
         self.dbQueue = [[FMDatabaseQueue alloc] initWithPath:aPath];
     }
     
-    __weak JYDataBase *weakDataBase = self;
+//    __weak JYDataBase *weakDataBase = self;
     NSString* version = [self getVersion];
     if (version == nil)
     {

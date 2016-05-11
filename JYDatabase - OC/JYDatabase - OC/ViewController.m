@@ -21,6 +21,11 @@
     JYPersonInfo *info = [[JYPersonInfo alloc] init];
     info.personnumber = @"123456";
     info.nameDB = @"nameDB";
+    info.genderDB = 1;
+    info.resultsDB = 98.5;
+    info.floatDB = 10.10111;
+    info.intDB = 100;
+//    info.pointDB = CGPointMake(100, 100);
     [[JYDBService shared] updatePersonInfo:info];
     NSArray *array = [[JYDBService shared] getAllPersonInfo];
         
