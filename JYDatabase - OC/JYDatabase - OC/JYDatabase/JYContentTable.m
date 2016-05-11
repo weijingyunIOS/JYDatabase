@@ -60,7 +60,6 @@
     }
     
     NSAssert([self contentId].length > 0, @"主键不能为空");
-    NSLog(@"contentID : %@",[self contentId]);
     [arrayM removeObject:[self contentId]];
     return [arrayM copy];
 }
@@ -99,12 +98,18 @@
     
     NSArray<NSString *> *tablefields = [self getCurrentFields:aDB];
     NSArray<NSString *> *contentfields = [self getContentField];
-    __block NSMutableArray *fields = [contentfields mutableCopy];
+    __block NSMutableArray *addfields = [contentfields mutableCopy];
+    __block NSMutableArray *minusfields = [tablefields mutableCopy];
     [tablefields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [fields removeObject:obj];
+        [addfields removeObject:obj];
     }];
     
-    [self updateDB:aDB addFieldS:fields];
+    [minusfields removeObject:[self contentId]];
+    [contentfields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [minusfields removeObject:obj];
+    }];
+    [self updateDB:aDB addFieldS:addfields];
+    [self updateDB:aDB minusFieldS:minusfields];
 }
 
 - (NSArray<NSString*> *)getCurrentFields:(FMDatabase *)aDB{
@@ -126,6 +131,37 @@
         [aDB executeUpdate:sql];
         [self checkError:aDB];
     }];
+}
+
+// 删除字段 因为sqlLite没有提供类似ADD的方法，我们需要新建一个表然后删除原表
+- (void)updateDB:(FMDatabase *)aDB minusFieldS:(NSArray<NSString*>*)aFields{
+    if (aFields.count <= 0) {
+        return;
+    }
+    NSLog(@"多余字段%@",aFields);
+    // 1.根据原表新建一个表
+    NSString *tempTableName = [NSString stringWithFormat:@"temp_%@",self.tableName];
+    __block NSMutableString *tableField = [[NSMutableString alloc] init];
+    [[self getContentField] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [tableField appendFormat:@",%@",obj];
+    }];
+    NSString *sql = [NSString stringWithFormat:@"create table %@ as select %@%@ from %@", tempTableName,[self contentId],tableField,self.tableName];
+    [aDB executeUpdate:sql];
+    [self checkError:aDB];
+    // 2.删除原表
+    sql = [NSString stringWithFormat:@"drop table if exists %@", self.tableName];
+    [aDB executeUpdate:sql];
+    [self checkError:aDB];
+
+    // 3.为新表添加唯一索引
+    sql = [NSString stringWithFormat:@"create unique index '%@_key' on  %@(%@)", tempTableName,tempTableName,[self contentId]];
+    [aDB executeUpdate:sql];
+    [self checkError:aDB];
+    
+    // 4.将tempTableName 该名为 table
+    sql = [NSString stringWithFormat:@"alter table %@ rename to %@",tempTableName ,self.tableName];
+    [aDB executeUpdate:sql];
+    [self checkError:aDB];
 }
 
 #pragma mark - Operation

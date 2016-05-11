@@ -14,9 +14,9 @@
 @property (nonatomic, copy) NSString * personnumber;   // 人员编号
 @property (nonatomic, copy) NSString * iconDB;         // 照片地址
 @property (nonatomic, copy) NSString * addressDB;      // 地址
-@property (nonatomic, copy) NSString * nameDB;         // 姓名
-@property (nonatomic, assign) NSInteger genderDB;      // 性别 0男 1女
-@property (nonatomic, copy) NSString * birthdateDB;    // 出生年月
+//@property (nonatomic, copy) NSString * nameDB;         // 姓名
+//@property (nonatomic, assign) NSInteger genderDB;      // 性别 0男 1女
+//@property (nonatomic, copy) NSString * birthdateDB;    // 出生年月
 @property (nonatomic, copy) NSString * phonenumberDB;  // 联系方式
 @property (nonatomic, assign) double resultsDB;        // 成绩
 @property (nonatomic, assign) int intDB;
