@@ -32,7 +32,7 @@
     
 }
 
-- (void)insertDefaultData{
+- (void)insertDefaultData:(FMDatabase *)aDb{
     
 }
 
@@ -78,66 +78,53 @@
 }
 
 #pragma mark - Create Table
-- (void)createTable{
+- (void)createTable:(FMDatabase *)aDB{
     [self configTableName];
-    __weak JYContentTable *weakSelf = self;
-    [self.dbQueue inDatabase:^(FMDatabase *aDB) {
-        NSMutableString *strM = [[NSMutableString alloc] init];
-        [strM appendFormat:@"CREATE TABLE if not exists %@ (%@ varchar(64) NOT NULL, ",self.tableName,[weakSelf contentId]];
-        [[weakSelf getContentField] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [strM appendFormat:@"%@ varchar(256), ",obj];
-        }];
-        [strM appendFormat:@"PRIMARY KEY (%@) ON CONFLICT REPLACE)",[self contentId]];
-        NSLog(@"----------%@",strM);
-        [aDB executeUpdate:[strM copy]];
-        [weakSelf checkError:aDB];
+    NSMutableString *strM = [[NSMutableString alloc] init];
+    [strM appendFormat:@"CREATE TABLE if not exists %@ (%@ varchar(64) NOT NULL, ",self.tableName,[self contentId]];
+    [[self getContentField] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [strM appendFormat:@"%@ varchar(256), ",obj];
     }];
+    [strM appendFormat:@"PRIMARY KEY (%@) ON CONFLICT REPLACE)",[self contentId]];
+    NSLog(@"----------%@",strM);
+    [aDB executeUpdate:[strM copy]];
+    [self checkError:aDB];
     
     // 插入默认数据
-    [self insertDefaultData];
-    
+    [self insertDefaultData:aDB];
 }
 
 #pragma mark - Upgrade
-- (void)updateDBFromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion{
+- (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion {
     
-    NSArray<NSString *> *tablefields = [self getCurrentFields];
+    NSArray<NSString *> *tablefields = [self getCurrentFields:aDB];
     NSArray<NSString *> *contentfields = [self getContentField];
     __block NSMutableArray *fields = [contentfields mutableCopy];
     [tablefields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [fields removeObject:obj];
     }];
     
-    [self addFieldS:fields];
+    [self updateDB:aDB addFieldS:fields];
 }
 
-- (NSArray<NSString*> *)getCurrentFields{
+- (NSArray<NSString*> *)getCurrentFields:(FMDatabase *)aDB{
     __block NSMutableArray *arrayM = [[NSMutableArray alloc] init];
-    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        
-        NSString *sql = [NSString stringWithFormat:@"PRAGMA table_info([%@])", self.tableName];
-        FMResultSet *rs = [db executeQuery:sql];
-        while([rs next]) {
-            [arrayM addObject:[rs stringForColumn:@"name"]];
-        }
-        [rs close];
-        [self checkError:db];
-    }];
-    
+    NSString *sql = [NSString stringWithFormat:@"PRAGMA table_info([%@])", self.tableName];
+    FMResultSet *rs = [aDB executeQuery:sql];
+    while([rs next]) {
+        [arrayM addObject:[rs stringForColumn:@"name"]];
+    }
+    [rs close];
+    [self checkError:aDB];
     return arrayM;
 }
 
 // 新增字段数组
-- (void)addFieldS:(NSArray<NSString*>*)aFields{
-    __weak JYContentTable *weakSelf = self;
-    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        
-        [aFields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ varchar(128)", weakSelf.tableName,obj];
-            [db executeUpdate:sql];
-            [weakSelf checkError:db];
-        }];
-        
+- (void)updateDB:(FMDatabase *)aDB addFieldS:(NSArray<NSString*>*)aFields{
+    [aFields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ varchar(128)", self.tableName,obj];
+        [aDB executeUpdate:sql];
+        [self checkError:aDB];
     }];
 }
 

@@ -66,26 +66,18 @@
         self.dbQueue = [[FMDatabaseQueue alloc] initWithPath:aPath];
     }
     
-//    __weak JYDataBase *weakDataBase = self;
-    NSString* version = [self getVersion];
-    if (version == nil)
-    {
-//        [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-            [self createDBVersionTable];
-            [self createAllTable];
-            [self updateDBFromVersion:1];
-            [self updateVersion];
-            // 如果 &rollback ＝ YES 就会回滚
-//        }];
-        
-    }
-    else if ([version integerValue] != [self getCurrentDBVersion])
-    {
-//        [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-            [self updateDBFromVersion:[version integerValue]];
-            [self updateVersion];
-//        }];
-    }
+    __weak JYDataBase *weakSelf = self;
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *version = [weakSelf getVersion:db];
+        if (version == nil) {
+            [self createDBVersionTable:db];
+            [self createAllTable:db];
+            [self updateVersion:db];
+        }else if([version integerValue] != [self getCurrentDBVersion]){
+            [self updateDB:db fromVersion:[version integerValue]];
+            [self updateVersion:db];
+        }
+    }];
 }
 
 - (void)dealloc
@@ -100,65 +92,57 @@
     return 1;
 }
 
-- (NSString *)getVersion
+- (NSString *)getVersion:(FMDatabase *)aDB
 {
-    __block NSString* version = nil;
-    [self.dbQueue inDatabase:^(FMDatabase *aDB) {
-        FMResultSet *rs = [aDB executeQuery:@"SELECT Version FROM gkdb_version WHERE Name = 'version'"];
-        while ([rs next]) {
-            version = [rs stringForColumnIndex:0];
-        }
-        [rs close];
-    }];
+    NSString* version = nil;
+    FMResultSet *rs = [aDB executeQuery:@"SELECT Version FROM gkdb_version WHERE Name = 'version'"];
+    while ([rs next]) {
+        version = [rs stringForColumnIndex:0];
+    }
+    [rs close];
     return version;
 }
 
-- (void)updateVersion
+- (void)updateVersion:(FMDatabase *)aDB
 {
-    NSString* version = [self getVersion];
+    NSString* version = [self getVersion:aDB];
     
     if (version)
     {
-        [self.dbQueue inDatabase:^(FMDatabase *db) {
-            [db executeUpdate:@"UPDATE gkdb_version SET Version=? WHERE Name = 'version'", @([self getCurrentDBVersion])];
-            [self checkError:db];
-        }];
+        [aDB executeUpdate:@"UPDATE gkdb_version SET Version=? WHERE Name = 'version'", @([self getCurrentDBVersion])];
+        [self checkError:aDB];
     } else {
-        [self.dbQueue inDatabase:^(FMDatabase *db) {
-            [db executeUpdate:@"INSERT INTO gkdb_version (Name, Version) VALUES(?,?)" , @"version", @([self getCurrentDBVersion])];
-            [self checkError:db];
-        }];
+        [aDB executeUpdate:@"INSERT INTO gkdb_version (Name, Version) VALUES(?,?)" , @"version", @([self getCurrentDBVersion])];
+        [self checkError:aDB];
     }
 }
 
 
-- (void)updateDBFromVersion:(NSInteger)aFromVersion
+- (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion
 {
     NSInteger from = aFromVersion;
     NSInteger to = [self getCurrentDBVersion];
     while (from < to) {
-        [self updateDBFromVersion:from toVersion:from + 1];
+        [self updateDB:aDB fromVersion:from toVersion:from + 1];
         ++from;
     }
 }
 
-- (void)updateDBFromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion
+- (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion
 {
     
 }
 
 #pragma mark - Create Table
 
-- (void)createAllTable
+- (void)createAllTable:(FMDatabase *)aDB
 {
 }
 
-- (void)createDBVersionTable
+- (void)createDBVersionTable:(FMDatabase *)aDB
 {
-    [self.dbQueue inDatabase:^(FMDatabase *aDB) {
-        [aDB executeUpdate:@"CREATE TABLE gkdb_version (Version varchar(20), Name varchar(10))"];
-        [self checkError:aDB];
-    }];
+    [aDB executeUpdate:@"CREATE TABLE gkdb_version (Version varchar(20), Name varchar(10))"];
+    [self checkError:aDB];
 }
 
 @end

@@ -20,21 +20,20 @@
 - (id)checkEmpty:(id)aObject;
 
 // create (需先设置表名)JYContentTable
-- (void)createTable;
+- (void)createTable:(FMDatabase *)aDB;
 
 // Upgrade (需先设置表名)
-- (void)updateDBFromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion;
+- (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion;
 
 // Operation (需先设置表名)
 - (void)insertContent:(id)aContent;
 - (id)getContentByID:(NSString*)aID;
 - (NSArray *)getAllContent;
-//- (NSArray *)getContentsBy:(id)aContent; // 查找符合 模型中 有数据的字段的
 
 - (void)deleteContent:(NSString *)aID;
 - (void)deleteContents;
 
 // 重写该方法 在建表时插入默认数据
-- (void)insertDefaultData;
+- (void)insertDefaultData:(FMDatabase *)aDb;
 
 @end

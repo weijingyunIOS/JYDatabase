@@ -21,6 +21,10 @@
 @property (nonatomic, assign) double resultsDB;        // 成绩
 @property (nonatomic, assign) int intDB;
 @property (nonatomic, assign) CGFloat floatDB;
-@property (nonatomic, copy) NSString * qqphonenumberDB;  // 联系方式
+@property (nonatomic, copy) NSString * qqphonenumberDB;
+@property (nonatomic, copy) NSString * add1DB;
+@property (nonatomic, copy) NSString * add2DB;
+@property (nonatomic, copy) NSString * add3DB;
+@property (nonatomic, copy) NSString * add4DB;
 
 @end

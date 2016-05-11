@@ -32,15 +32,15 @@
 #pragma mark - 创建更新表
 - (NSInteger)getCurrentDBVersion
 {
-    return 4;
+    return 5;
 }
 
-- (void)createAllTable{
-    [self.personTable createTable];
+- (void)createAllTable:(FMDatabase *)aDB{
+    [self.personTable createTable:aDB];
 }
 
-- (void)updateDBFromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion{
-    [self.personTable updateDBFromVersion:aFromVersion toVersion:aToVersion];
+- (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion {
+    [self.personTable updateDB:aDB fromVersion:aFromVersion toVersion:aToVersion];
 }
 
 #pragma make - 懒加载
