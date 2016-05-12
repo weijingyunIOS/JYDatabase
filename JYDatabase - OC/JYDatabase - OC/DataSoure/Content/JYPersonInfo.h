@@ -20,7 +20,6 @@
 @property (nonatomic, assign) double doubleDB;
 @property (nonatomic, assign) float floatDB;
 
-
 //@property (nonatomic, copy) NSMutableString *mutableString1DB;
 //@property (nonatomic, assign) NSInteger integert1DB;
 //@property (nonatomic, assign) NSUInteger uInteger1DB;

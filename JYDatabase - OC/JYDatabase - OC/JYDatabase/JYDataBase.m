@@ -65,10 +65,9 @@
         // 读写 或 创建
         self.dbQueue = [[FMDatabaseQueue alloc] initWithPath:aPath];
     }
-    
-    __weak JYDataBase *weakSelf = self;
+
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        NSString *version = [weakSelf getVersion:db];
+        NSString *version = [self getVersion:db];
         if (version == nil) {
             [self createDBVersionTable:db];
             [self createAllTable:db];
@@ -77,6 +76,7 @@
             [self updateDB:db fromVersion:[version integerValue]];
             [self updateVersion:db];
         }
+        [self checkError:db];
     }];
 }
 
@@ -110,10 +110,8 @@
     if (version)
     {
         [aDB executeUpdate:@"UPDATE gkdb_version SET Version=? WHERE Name = 'version'", @([self getCurrentDBVersion])];
-        [self checkError:aDB];
     } else {
         [aDB executeUpdate:@"INSERT INTO gkdb_version (Name, Version) VALUES(?,?)" , @"version", @([self getCurrentDBVersion])];
-        [self checkError:aDB];
     }
 }
 
@@ -142,7 +140,6 @@
 - (void)createDBVersionTable:(FMDatabase *)aDB
 {
     [aDB executeUpdate:@"CREATE TABLE gkdb_version (Version varchar(20), Name varchar(10))"];
-    [self checkError:aDB];
 }
 
 @end

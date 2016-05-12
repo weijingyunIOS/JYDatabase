@@ -23,6 +23,7 @@
     self = [super init];
     if (self) {
         self.cache = [[NSCache alloc] init];
+        self.cache.countLimit = 20;
         [self configTableName];
     }
     return self;
@@ -66,7 +67,6 @@
 - (NSDictionary*)attributeTypeDic{
     NSMutableDictionary *dicM = [[NSMutableDictionary alloc] init];
     unsigned int outCount;
-    NSLog(@"%@",NSStringFromClass(self.contentClass));
     objc_property_t *properties = class_copyPropertyList(self.contentClass, &outCount);
     for (NSInteger index = 0; index < outCount; index++) {
         NSString *tmpName = [NSString stringWithFormat:@"%s",property_getName(properties[index])];
@@ -123,16 +123,16 @@
             
         case 6:
             str = @"VARCHAR";
-            length = @"1";
+            length = @"128";
             break;
             
         case 7:
             str = @"VARCHAR";
-            length = @"1";
+            length = @"128";
             break;
             
         default:
-            NSAssert(YES, @"当前类型不支持");
+            NSAssert(NO, @"当前类型不支持");
             break;
     }
     return @[str,length];
@@ -246,72 +246,51 @@
 }
 
 #pragma mark - Operation
-//- (void)insertContents:(NSArray *)aContents{
-//    [self configTableName];
-//    
-//    id aContent = aContents.firstObject;
-//    NSLog(@"insert %@",[aContent class]);
-//    NSString * ts = [NSString stringWithFormat:@"%@不能为空",[self contentId]];
-//    NSAssert([aContent valueForKey:[self contentId]], ts);
-//    
-//    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
-//    [arrayM addObject:[aContent valueForKey:[self contentId]]];
-//    [[self getContentField] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        [arrayM addObject:[self checkEmpty:[aContent valueForKey:obj]]];
-//    }];
-//    
-//    __weak JYContentTable *weakSelf = self;
-//    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-//        [aContents enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//            
-//        }];
-//    }];
-//    [self.dbQueue inDatabase:^(FMDatabase *aDB) {
-//        
-//    
-//        NSMutableString *strM = [[NSMutableString alloc] init];
-//        NSMutableString *strM1 = [[NSMutableString alloc] initWithString:@"?"];
-//        [strM appendFormat:@"INSERT OR REPLACE INTO %@(%@",weakSelf.tableName,[weakSelf contentId]];
-//        [[weakSelf getContentField] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//            [strM appendFormat:@", %@",obj];
-//            [strM1 appendFormat:@",?"];
-//        }];
-//        [strM appendFormat:@") VALUES (%@)",strM1];
-//        
-//        NSLog(@"-----%@",strM);
-//        [aDB executeUpdate:[strM copy] withArgumentsInArray:[arrayM copy]];
-//        [weakSelf checkError:aDB];
-//    }];
-//}
+- (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents{
+    [self configTableName];
+    NSLog(@"insert %@",[aContents.firstObject class]);
+    NSArray<NSString *> *fields = [self getContentField];
+    // 1.插入语句拼接
+    NSMutableString *strM = [[NSMutableString alloc] init];
+    NSMutableString *strM1 = [[NSMutableString alloc] initWithString:@"?"];
+    [strM appendFormat:@"INSERT OR REPLACE INTO %@(%@",self.tableName,[self contentId]];
+    [fields enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [strM appendFormat:@", %@",obj];
+        [strM1 appendFormat:@",?"];
+    }];
+    [strM appendFormat:@") VALUES (%@)",strM1];
+    NSLog(@"-----%@",strM);
+        
+    // 2.一条条插入
+    [aContents enumerateObjectsUsingBlock:^(id  _Nonnull aContent, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        // 断言消息 主key 不能为空
+        NSString * ts = [NSString stringWithFormat:@"%@不能为空",[self contentId]];
+        NSAssert([aContent valueForKey:[self contentId]], ts );
+
+        // 2.1 获取参数
+        NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+        [arrayM addObject:[aContent valueForKey:[self contentId]]];
+        [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [arrayM addObject:[self checkEmpty:[aContent valueForKey:obj]]];
+        }];
+        
+        // 2.2 执行插入
+        [aDB executeUpdate:[strM copy] withArgumentsInArray:[arrayM copy]];
+    }];
+
+    [self checkError:aDB];
+}
 
 - (void)insertContent:(id)aContent{
-    [self configTableName];
-    
-    NSLog(@"insert %@",[aContent class]);
-    NSString * ts = [NSString stringWithFormat:@"%@不能为空",[self contentId]];
-    NSAssert([aContent valueForKey:[self contentId]], ts);
-    [self saveCacheContent:aContent];
-    
-    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
-    [arrayM addObject:[aContent valueForKey:[self contentId]]];
-    [[self getContentField] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [arrayM addObject:[self checkEmpty:[aContent valueForKey:obj]]];
+    [self.dbQueue inDatabase:^(FMDatabase *db) {
+        [self insertDB:db contents:@[aContent]];
     }];
-    
-    __weak JYContentTable *weakSelf = self;
-    [self.dbQueue inDatabase:^(FMDatabase *aDB) {
-        NSMutableString *strM = [[NSMutableString alloc] init];
-        NSMutableString *strM1 = [[NSMutableString alloc] initWithString:@"?"];
-        [strM appendFormat:@"INSERT OR REPLACE INTO %@(%@",weakSelf.tableName,[weakSelf contentId]];
-        [[weakSelf getContentField] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [strM appendFormat:@", %@",obj];
-            [strM1 appendFormat:@",?"];
-        }];
-        [strM appendFormat:@") VALUES (%@)",strM1];
-        
-        NSLog(@"-----%@",strM);
-        [aDB executeUpdate:[strM copy] withArgumentsInArray:[arrayM copy]];
-        [weakSelf checkError:aDB];
+}
+
+- (void)insertContents:(NSArray *)aContents{
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        [self insertDB:db contents:aContents];
     }];
 }
 

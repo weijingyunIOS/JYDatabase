@@ -14,6 +14,8 @@
 @property (nonatomic, strong) FMDatabaseQueue *dbQueue;
 @property (nonatomic, strong) NSString *tableName;  //数据库表名
 @property (nonatomic, strong) Class contentClass;
+@property (nonatomic, readonly) NSCache *cache;     //默认缓存20条数据
+
 
 - (void)checkError:(FMDatabase *)aDb;
 
@@ -27,6 +29,7 @@
 
 // Operation (需先设置表名)
 - (void)insertContent:(id)aContent;
+- (void)insertContents:(NSArray *)aContents;
 - (id)getContentByID:(NSString*)aID;
 - (NSArray *)getAllContent;
 

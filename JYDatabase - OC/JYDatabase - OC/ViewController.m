@@ -18,20 +18,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    JYPersonInfo *info = [[JYPersonInfo alloc] init];
-    info.personnumber = @"123456";
-//    info.nameDB = @"nameDB";
-//    info.genderDB = 1;
-//    info.resultsDB = 98.5;
-    info.floatDB = 10.10111;
-    info.intDB = 100;
-    info.boolDB = YES;
-//    info.pointDB = CGPointMake(100, 100);
-    [[JYDBService shared] updatePersonInfo:info];
-//    NSArray *array = [[JYDBService shared] getAllPersonInfo];
-    
-//    NSLog(@"%@",array);
-    
+    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 200; i++) {
+        JYPersonInfo *info = [[JYPersonInfo alloc] init];
+        info.personnumber = [NSString stringWithFormat:@"123456%tu",i];
+        info.floatDB = 10.10111;
+        info.intDB = i;
+        info.boolDB = i % 2 == 0;
+        [arrayM addObject:info];
+    }
+    [[JYDBService shared] insertPersonInfos:arrayM];
 }
 
 - (void)didReceiveMemoryWarning {

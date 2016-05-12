@@ -12,7 +12,8 @@
 @interface JYDBService : NSObject
 
 + (instancetype)shared;
-- (void)updatePersonInfo:(JYPersonInfo *)aPersonInfo;
+- (void)insertPersonInfo:(JYPersonInfo *)aPersonInfo;
+- (void)insertPersonInfos:(NSArray<JYPersonInfo *> *)aPersonInfos;
 - (JYPersonInfo *)getPersonInfo:(NSString*)aPersonInfo;
 - (NSArray<JYPersonInfo *> *)getAllPersonInfo;
 - (void)deletePersonInfo:(NSString *)aPersonInfoid;

@@ -28,8 +28,12 @@
 
 # pragma mark JYPersonInfo operation
 
-- (void)updatePersonInfo:(JYPersonInfo *)aPersonInfo{
+- (void)insertPersonInfo:(JYPersonInfo *)aPersonInfo{
     [self.personDB.personTable insertContent:aPersonInfo];
+}
+
+- (void)insertPersonInfos:(NSArray<JYPersonInfo *> *)aPersonInfos{
+    [self.personDB.personTable insertContents:aPersonInfos];
 }
 
 - (JYPersonInfo *)getPersonInfo:(NSString*)aPersonInfo{
