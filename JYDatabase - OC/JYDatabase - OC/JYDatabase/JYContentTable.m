@@ -10,8 +10,9 @@
 #import "FMDB.h"
 #import <objc/runtime.h>
 
-//#define attributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\""];
-//#define lenghtArray    @[@"1",@"10",@"10",@"10",@"10",@"10",@"128",@"128"];
+#define kAttributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\""]
+#define kTypeArray      @[@"BOOL",@"DOUBLE",@"FLOAT",@"INTEGER",@"INTEGER",@"INTEGER",@"VARCHAR",@"VARCHAR"]
+#define kLenghtArray    @[@"1"   ,@"10"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128"]
 @interface JYContentTable()
 
 //@property (nonatomic, strong) NSCache *cache;
@@ -89,54 +90,12 @@
 
 // 类型的映射
 - (NSArray *)conversionAttributeType:(NSString *)aType{
-    NSArray<NSString *> *array = @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\""];
-    NSString *str = nil;
-    NSString *length = nil;
-    switch ([array indexOfObject:aType]) {
-        case 0:
-            str = @"BOOL";
-            length = @"1";
-            break;
-            
-        case 1:
-            str = @"DOUBLE";
-            length = @"10";
-            break;
-            
-        case 2:
-            str = @"FLOAT";
-            length = @"10";
-            break;
-            
-        case 3:
-            str = @"INTEGER";
-            length = @"10";
-            break;
-            
-        case 4:
-            str = @"INTEGER";
-            length = @"10";
-            break;
-            
-        case 5:
-            str = @"INTEGER";
-            length = @"10";
-            break;
-            
-        case 6:
-            str = @"VARCHAR";
-            length = @"128";
-            break;
-            
-        case 7:
-            str = @"VARCHAR";
-            length = @"128";
-            break;
-            
-        default:
-            NSAssert(NO, @"当前类型不支持");
-            break;
+    NSInteger index = [kAttributeArray indexOfObject:aType];
+    if (index > kAttributeArray.count) {
+        NSAssert(NO, @"当前类型不支持");
     }
+    NSString *str = kTypeArray[index];
+    NSString *length = kLenghtArray[index];
     return @[str,length];
 }
 
