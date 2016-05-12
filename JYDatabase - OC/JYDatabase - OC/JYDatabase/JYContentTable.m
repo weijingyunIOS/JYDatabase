@@ -10,9 +10,11 @@
 #import "FMDB.h"
 #import <objc/runtime.h>
 
+//#define attributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\""];
+//#define lenghtArray    @[@"1",@"10",@"10",@"10",@"10",@"10",@"128",@"128"];
 @interface JYContentTable()
 
-@property (nonatomic, strong) NSCache *cache;
+//@property (nonatomic, strong) NSCache *cache;
 
 @end
 
@@ -22,8 +24,8 @@
 {
     self = [super init];
     if (self) {
-        self.cache = [[NSCache alloc] init];
-        self.cache.countLimit = 20;
+//        self.cache = [[NSCache alloc] init];
+//        self.cache.countLimit = 20;
         [self configTableName];
     }
     return self;
@@ -245,7 +247,7 @@
     [self checkError:aDB];
 }
 
-#pragma mark - Operation
+#pragma mark - insert 插入
 - (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents{
     [self configTableName];
     NSLog(@"insert %@",[aContents.firstObject class]);
@@ -294,70 +296,73 @@
     }];
 }
 
+#pragma mark - get 查询
+- (id)getDB:(FMDatabase *)aDB contentByID:(NSString*)aID{
+    [self configTableName];
+    id content = nil;
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = ?", self.tableName, [self contentId]];
+    NSLog(@"contentByID-%@--%@",aID,sql);
+    FMResultSet *rs = [aDB executeQuery:sql,
+                       [self checkEmpty:aID]];
+    
+    if ([rs next]) {
+        content = [[self.contentClass alloc] init];
+        id value = [rs stringForColumn:[self contentId]];
+        [content setValue:value forKey:[self contentId]];
+        [[self getContentField] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            id value = [rs objectForKeyedSubscript:obj];
+            if (value != [NSNull null]) {
+               [content setValue:value forKey:obj];
+            }
+        }];
+    }
+    [rs close];
+    [self checkError:aDB];
+    return content;
+}
+
+- (NSArray *)getAllContent:(FMDatabase *)aDB{
+    [self configTableName];
+    __block id content = nil;
+    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@", self.tableName];
+    NSLog(@"getAllContent--%@",sql);
+    FMResultSet *rs = [aDB executeQuery:sql];
+    NSArray<NSString *> *fields = [self getContentField];
+    while([rs next]) {
+        content = [[self.contentClass alloc] init];
+        id value = [rs stringForColumn:[self contentId]];
+        [content setValue:value forKey:[self contentId]];
+        [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            id value = [rs objectForKeyedSubscript:obj];
+            if (value != [NSNull null]) {
+                [content setValue:value forKey:obj];
+            }
+        }];
+        [arrayM addObject:content];
+    }
+    [rs close];
+    [self checkError:aDB];
+    return [arrayM copy];
+}
 
 - (id)getContentByID:(NSString*)aID{
-    [self configTableName];
-    
-    NSLog(@"getContentByID %@",aID);
-    if ([self.cache objectForKey:aID]) {
-        return [self.cache objectForKey:aID];
-    }
-    
-    __weak JYContentTable *weakSelf = self;
     __block id content = nil;
-    [self.dbQueue inTransaction:^(FMDatabase *aDB, BOOL *aRollback) {
-        NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = ?", weakSelf.tableName, [weakSelf contentId]];
-        FMResultSet *rs = [aDB executeQuery:sql,
-                           [weakSelf checkEmpty:aID]];
-        
-        if ([rs next]) {
-            content = [[weakSelf.contentClass alloc] init];
-            id value = [rs stringForColumn:[weakSelf contentId]];
-            [content setValue:value forKey:[weakSelf contentId]];
-            [[weakSelf getContentField] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                id value = [rs stringForColumn:obj];
-                [content setValue:value forKey:obj];
-            }];
-            [weakSelf saveCacheContent:content];
-        }
-        
-        [rs close];
-        [weakSelf checkError:aDB];
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        content = [self getDB:db contentByID:aID];
     }];
     return content;
 }
 
 - (NSArray *)getAllContent{
-    [self configTableName];
-    
-    NSLog(@"getAllContent %@",[self class]);
-    __weak JYContentTable *weakSelf = self;
-    __block id content = nil;
-    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
-    [self.dbQueue inTransaction:^(FMDatabase *aDB, BOOL *aRollback) {
-        NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@", weakSelf.tableName];
-        NSLog(@"%@",sql);
-        FMResultSet *rs = [aDB executeQuery:sql];
-        
-        while([rs next]) {
-            content = [[weakSelf.contentClass alloc] init];
-            id value = [rs stringForColumn:[weakSelf contentId]];
-            [content setValue:value forKey:[weakSelf contentId]];
-            NSArray *contentFieldArray = [weakSelf getContentField];
-            [contentFieldArray enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                id value = [rs stringForColumn:obj];
-                [content setValue:value forKey:obj];
-            }];
-            [weakSelf saveCacheContent:content];
-            [arrayM addObject:content];
-        }
-        
-        [rs close];
-        [weakSelf checkError:aDB];
+    __block NSArray *array = nil;
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        array = [self getAllContent:db];
     }];
-    return [arrayM copy];
+    return array;
 }
 
+#pragma mark - delete 删除
 - (void)deleteContent:(NSString *)aID{
     [self configTableName];
     
@@ -368,7 +373,6 @@
         [aDB executeUpdate:sql,
          [weakSelf checkEmpty:aID]];
         [weakSelf checkError:aDB];
-        [weakSelf removeCacheContentID:aID];
     }];
 }
 
@@ -379,17 +383,16 @@
         NSString *sql = [NSString stringWithFormat:@"DROP TABLE IF EXISTS %@", weakSelf.tableName];
         [aDB executeUpdate:sql];
         [weakSelf checkError:aDB];
-        [weakSelf.cache removeAllObjects];
     }];
 }
 
-- (void)saveCacheContent:(id)aContent{
-    [self.cache setObject:aContent forKey:[aContent valueForKey:[self contentId]]];
-}
-
-- (void)removeCacheContentID:(NSString *)aID{
-    [self.cache removeObjectForKey:aID];
-}
+//- (void)saveCacheContent:(id)aContent{
+//    [self.cache setObject:aContent forKey:[aContent valueForKey:[self contentId]]];
+//}
+//
+//- (void)removeCacheContentID:(NSString *)aID{
+//    [self.cache removeObjectForKey:aID];
+//}
 
 - (void)dealloc{
     NSLog(@"%@ dealloc", NSStringFromClass([self class]));

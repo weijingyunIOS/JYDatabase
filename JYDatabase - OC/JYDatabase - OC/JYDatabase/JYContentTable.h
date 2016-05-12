@@ -14,7 +14,7 @@
 @property (nonatomic, strong) FMDatabaseQueue *dbQueue;
 @property (nonatomic, strong) NSString *tableName;  //数据库表名
 @property (nonatomic, strong) Class contentClass;
-@property (nonatomic, readonly) NSCache *cache;     //默认缓存20条数据
+//@property (nonatomic, readonly) NSCache *cache;     //默认缓存20条数据
 
 
 - (void)checkError:(FMDatabase *)aDb;
@@ -27,12 +27,16 @@
 // Upgrade (需先设置表名)
 - (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion;
 
-// Operation (需先设置表名)
+#pragma mark - insert 插入
+- (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
 - (void)insertContent:(id)aContent;
 - (void)insertContents:(NSArray *)aContents;
+#pragma mark - get 查询
+- (id)getDB:(FMDatabase *)aDB contentByID:(NSString*)aID;
+- (NSArray *)getAllContent:(FMDatabase *)aDB;
 - (id)getContentByID:(NSString*)aID;
 - (NSArray *)getAllContent;
-
+#pragma mark - delete 删除
 - (void)deleteContent:(NSString *)aID;
 - (void)deleteContents;
 
