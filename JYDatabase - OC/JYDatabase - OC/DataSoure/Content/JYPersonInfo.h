@@ -20,13 +20,13 @@
 @property (nonatomic, assign) double doubleDB;
 @property (nonatomic, assign) float floatDB;
 
-@property (nonatomic, copy) NSMutableString *mutableString1DB;
-@property (nonatomic, assign) NSInteger integert1DB;
-@property (nonatomic, assign) NSUInteger uInteger1DB;
-@property (nonatomic, assign) int int1DB;
-@property (nonatomic, assign) BOOL bool1DB;
-@property (nonatomic, assign) double double1DB;
-@property (nonatomic, assign) float float1DB;
+//@property (nonatomic, copy) NSMutableString *mutableString1DB;
+//@property (nonatomic, assign) NSInteger integert1DB;
+//@property (nonatomic, assign) NSUInteger uInteger1DB;
+//@property (nonatomic, assign) int int1DB;
+//@property (nonatomic, assign) BOOL bool1DB;
+@property (nonatomic, assign) double double3DB;
+//@property (nonatomic, assign) float float1DB;
 
 
 @end

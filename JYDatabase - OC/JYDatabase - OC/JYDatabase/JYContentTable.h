@@ -18,16 +18,19 @@
 
 
 - (void)checkError:(FMDatabase *)aDb;
-
 - (id)checkEmpty:(id)aObject;
+
+#pragma mark - 是否使用缓存默认使用 如果使用查找优先使用
+- (BOOL)enableCache;
 
 #pragma mark - 创建表
 - (NSString *)contentId;                    // 表的主键
 - (NSArray<NSString *> *)getContentField;   // 表除主键外其它的列 默认取 @“DB” 结尾的属性
 - (NSDictionary*)fieldLenght;               // 创建表 对应列默认长度  默认取默认值
-
 // 不重写 该方法会 通过 contentId getContentField fieldLenght 进行表的创建
 - (void)createTable:(FMDatabase *)aDB;
+// 重写该方法 在建表时插入默认数据
+- (void)insertDefaultData:(FMDatabase *)aDb;
 
 #pragma mark - 更新表
 // 1-2 2-3 3-4 一步步升级 不建议使用 - (void)updateDB:(FMDatabase *)aDB 已经实现一步到位
@@ -54,7 +57,9 @@
 - (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs;
 - (void)deleteAllContent;
 
-// 重写该方法 在建表时插入默认数据
-- (void)insertDefaultData:(FMDatabase *)aDb;
+#pragma mark - 缓存存取删
+- (id)getCacheContentID:(NSString *)aID;
+- (void)saveCacheContent:(id)aContent;
+- (void)removeCacheContentID:(NSString *)aID;
 
 @end

@@ -29,4 +29,8 @@
     return @"personnumber";
 }
 
+- (BOOL)enableCache{
+    return NO;
+}
+
 @end

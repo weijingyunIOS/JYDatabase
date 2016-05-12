@@ -26,8 +26,10 @@
     self = [super init];
     if (self) {
         self.cache = [[NSCache alloc] init];
-        self.cache.countLimit = 20;
-        [self configTableName];
+        if ([self enableCache]) {
+            self.cache.countLimit = 20;
+            [self configTableName];
+        }
     }
     return self;
 }
@@ -38,6 +40,10 @@
 
 - (void)insertDefaultData:(FMDatabase *)aDb{
     
+}
+
+- (BOOL)enableCache{
+    return YES;
 }
 
 - (NSDictionary*)fieldLenght{
@@ -243,8 +249,9 @@
         
         // 2.2 执行插入
         [aDB executeUpdate:[strM copy] withArgumentsInArray:[arrayM copy]];
+        [self saveCacheContent:aContent];
     }];
-
+    
     [self checkError:aDB];
 }
 
@@ -269,24 +276,35 @@
      __block NSMutableArray *arrayM = nil;
     [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull aID, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        FMResultSet *rs = [aDB executeQuery:sql,
-                           [self checkEmpty:aID]];
-        if ([rs next]) {
-            id content = [[self.contentClass alloc] init];
-            id value = [rs stringForColumn:[self contentId]];
-            [content setValue:value forKey:[self contentId]];
-            [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                id value = [rs objectForKeyedSubscript:obj];
-                if (value != [NSNull null]) {
-                    [content setValue:value forKey:obj];
-                }
-            }];
+        id content = [self getCacheContentID:aID];
+        if (content != nil) {
             if (arrayM == nil) {
                 arrayM = [[NSMutableArray alloc] init];
             }
             [arrayM addObject:content];
+        }else{
+            
+            FMResultSet *rs = [aDB executeQuery:sql,
+                               [self checkEmpty:aID]];
+            if ([rs next]) {
+                id content = [[self.contentClass alloc] init];
+                id value = [rs stringForColumn:[self contentId]];
+                [content setValue:value forKey:[self contentId]];
+                [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    id value = [rs objectForKeyedSubscript:obj];
+                    if (value != [NSNull null]) {
+                        [content setValue:value forKey:obj];
+                    }
+                }];
+                if (arrayM == nil) {
+                    arrayM = [[NSMutableArray alloc] init];
+                }
+                [self saveCacheContent:content];
+                [arrayM addObject:content];
+            }
+            [rs close];
         }
-        [rs close];
+        
     }];
     
     [self checkError:aDB];
@@ -314,6 +332,7 @@
         if (arrayM == nil) {
             arrayM = [[NSMutableArray alloc] init];
         }
+        [self saveCacheContent:content];
         [arrayM addObject:content];
     }
     [rs close];
@@ -344,7 +363,7 @@
     }];
     return array;
 }
-
+    
 #pragma mark - delete 删除
 - (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
     [self configTableName];
@@ -353,6 +372,7 @@
     [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull aID, NSUInteger idx, BOOL * _Nonnull stop) {
         [aDB executeUpdate:sql,
         [self checkEmpty:aID]];
+        [self removeCacheContentID:aID];
     }];
     [self checkError:aDB];
 }
@@ -362,6 +382,7 @@
     NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
     [aDB executeUpdate:sql];
     NSLog(@"delete--%@",sql);
+    [self removeAllCache];
     [self checkError:aDB];
 }
 
@@ -383,18 +404,33 @@
     }];
 }
 
+#pragma mark - 缓存存取删
+- (id)getCacheContentID:(NSString *)aID{
+    if (aID.length <= 0 || ![self enableCache]) {
+        return nil;
+    }
+    return [self.cache objectForKey:aID];
+}
+
 - (void)saveCacheContent:(id)aContent{
-    if (aContent == nil) {
+    if (aContent == nil || ![self enableCache]) {
         return;
     }
     [self.cache setObject:aContent forKey:[aContent valueForKey:[self contentId]]];
 }
 
 - (void)removeCacheContentID:(NSString *)aID{
-    if (aID.length <= 0) {
+    if (aID.length <= 0 || ![self enableCache]) {
         return;
     }
     [self.cache removeObjectForKey:aID];
+}
+
+- (void)removeAllCache{
+    if (![self enableCache]) {
+        return;
+    }
+    [self.cache removeAllObjects];
 }
 
 - (void)dealloc{
