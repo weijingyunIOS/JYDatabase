@@ -21,22 +21,29 @@
 
 - (id)checkEmpty:(id)aObject;
 
-// create (需先设置表名)JYContentTable
+#pragma mark - 创建表
+- (NSString *)contentId;                    // 表的主键
+- (NSArray<NSString *> *)getContentField;   // 表除主键外其它的列 默认取 @“DB” 结尾的属性
+- (NSDictionary*)fieldLenght;               // 创建表 对应列默认长度  默认取默认值
+
+// 不重写 该方法会 通过 contentId getContentField fieldLenght 进行表的创建
 - (void)createTable:(FMDatabase *)aDB;
 
-// Upgrade (需先设置表名)
+#pragma mark - 更新表 默认通过 getContentField 来进行对比 从而新增 删除对应列
 - (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion;
 
 #pragma mark - insert 插入
 - (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
 - (void)insertContent:(id)aContent;
 - (void)insertContents:(NSArray *)aContents;
+
 #pragma mark - get 查询
 - (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
 - (NSArray *)getAllContent:(FMDatabase *)aDB;
 - (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs;
 - (id)getContentByID:(NSString*)aID;
 - (NSArray *)getAllContent;
+
 #pragma mark - delete 删除
 - (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
 - (void)deleteAllContent:(FMDatabase *)aDB;

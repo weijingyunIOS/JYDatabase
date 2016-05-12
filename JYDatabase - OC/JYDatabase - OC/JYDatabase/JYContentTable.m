@@ -39,6 +39,10 @@
     
 }
 
+- (NSDictionary*)fieldLenght{
+    return nil;
+}
+
 - (NSString *)contentId{
     return nil;
 }
@@ -81,10 +85,6 @@
         free(properties);
     }
     return [dicM copy];
-}
-
-- (NSDictionary*)fieldLenght{
-    return nil;
 }
 
 // 类型的映射
@@ -179,6 +179,7 @@
     NSArray<NSString *> *tablefields = [self getCurrentFields:aDB];
     NSArray<NSString *> *contentfields = [self getContentField];
     __block NSMutableArray *addfields = [contentfields mutableCopy];
+    [addfields addObject:[self contentId]];
     __block NSMutableArray *minusfields = [tablefields mutableCopy];
     [tablefields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [addfields removeObject:obj];
