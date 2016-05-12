@@ -14,7 +14,7 @@
 @property (nonatomic, strong) FMDatabaseQueue *dbQueue;
 @property (nonatomic, strong) NSString *tableName;  //数据库表名
 @property (nonatomic, strong) Class contentClass;
-//@property (nonatomic, readonly) NSCache *cache;     //默认缓存20条数据
+@property (nonatomic, readonly) NSCache *cache;     //默认缓存20条数据
 
 
 - (void)checkError:(FMDatabase *)aDb;
@@ -29,8 +29,11 @@
 // 不重写 该方法会 通过 contentId getContentField fieldLenght 进行表的创建
 - (void)createTable:(FMDatabase *)aDB;
 
-#pragma mark - 更新表 默认通过 getContentField 来进行对比 从而新增 删除对应列
+#pragma mark - 更新表
+// 1-2 2-3 3-4 一步步升级 不建议使用 - (void)updateDB:(FMDatabase *)aDB 已经实现一步到位
 - (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion;
+// 默认通过 getContentField 来进行对比 从而新增 删除对应列
+- (void)updateDB:(FMDatabase *)aDB;
 
 #pragma mark - insert 插入
 - (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;

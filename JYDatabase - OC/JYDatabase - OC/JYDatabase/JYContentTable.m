@@ -15,7 +15,7 @@
 #define kLenghtArray    @[@"1"   ,@"10"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128"]
 @interface JYContentTable()
 
-//@property (nonatomic, strong) NSCache *cache;
+@property (nonatomic, strong) NSCache *cache;
 
 @end
 
@@ -25,8 +25,8 @@
 {
     self = [super init];
     if (self) {
-//        self.cache = [[NSCache alloc] init];
-//        self.cache.countLimit = 20;
+        self.cache = [[NSCache alloc] init];
+        self.cache.countLimit = 20;
         [self configTableName];
     }
     return self;
@@ -134,6 +134,10 @@
 
 #pragma mark - Upgrade
 - (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion {
+    NSAssert(NO, @"需要在子类重写该方法，建议使用 - (void)updateDB:(FMDatabase *)aDB 升级");
+}
+
+- (void)updateDB:(FMDatabase *)aDB{
     
     NSArray<NSString *> *tablefields = [self getCurrentFields:aDB];
     NSArray<NSString *> *contentfields = [self getContentField];
@@ -379,13 +383,19 @@
     }];
 }
 
-//- (void)saveCacheContent:(id)aContent{
-//    [self.cache setObject:aContent forKey:[aContent valueForKey:[self contentId]]];
-//}
-//
-//- (void)removeCacheContentID:(NSString *)aID{
-//    [self.cache removeObjectForKey:aID];
-//}
+- (void)saveCacheContent:(id)aContent{
+    if (aContent == nil) {
+        return;
+    }
+    [self.cache setObject:aContent forKey:[aContent valueForKey:[self contentId]]];
+}
+
+- (void)removeCacheContentID:(NSString *)aID{
+    if (aID.length <= 0) {
+        return;
+    }
+    [self.cache removeObjectForKey:aID];
+}
 
 - (void)dealloc{
     NSLog(@"%@ dealloc", NSStringFromClass([self class]));

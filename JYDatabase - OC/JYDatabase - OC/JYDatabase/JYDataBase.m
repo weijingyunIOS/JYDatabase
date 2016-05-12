@@ -74,6 +74,7 @@
             [self updateVersion:db];
         }else if([version integerValue] != [self getCurrentDBVersion]){
             [self updateDB:db fromVersion:[version integerValue]];
+            [self updateDB:db];
             [self updateVersion:db];
         }
         [self checkError:db];
@@ -129,6 +130,10 @@
 - (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion
 {
     
+}
+
+- (void)updateDB:(FMDatabase *)aDB{
+
 }
 
 #pragma mark - Create Table

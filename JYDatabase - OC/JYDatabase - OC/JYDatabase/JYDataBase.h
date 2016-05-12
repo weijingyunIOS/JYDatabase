@@ -33,7 +33,10 @@ typedef NS_ENUM(NSInteger, ArtDatabaseMode)
 - (NSInteger)getCurrentDBVersion;
 // 创建数据库
 - (void)createAllTable:(FMDatabase *)aDB;
-// 数据库升级
+// 数据库升级 1-2 2-3 3-4 4-5 的升级
 - (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion;
+
+// 一次性升级
+- (void)updateDB:(FMDatabase *)aDB;
 
 @end
