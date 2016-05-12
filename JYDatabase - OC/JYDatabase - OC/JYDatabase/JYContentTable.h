@@ -32,8 +32,9 @@
 - (void)insertContent:(id)aContent;
 - (void)insertContents:(NSArray *)aContents;
 #pragma mark - get 查询
-- (id)getDB:(FMDatabase *)aDB contentByID:(NSString*)aID;
+- (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
 - (NSArray *)getAllContent:(FMDatabase *)aDB;
+- (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs;
 - (id)getContentByID:(NSString*)aID;
 - (NSArray *)getAllContent;
 #pragma mark - delete 删除

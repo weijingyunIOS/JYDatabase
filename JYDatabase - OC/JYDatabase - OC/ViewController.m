@@ -30,10 +30,13 @@
     [[JYDBService shared] insertPersonInfos:arrayM];
     
     UIButton *button1 = [self addButtonTitle:@"查询单条" action:@selector(getConttent:)];
-    button1.frame = CGRectMake(0, 64, 100, 50);
+    button1.frame = CGRectMake(0, 64, 80, 50);
     
     UIButton *button2 = [self addButtonTitle:@"查询所有" action:@selector(getAllConttent:)];
-    button2.frame = CGRectMake(120, 64, 100, 50);
+    button2.frame = CGRectMake(100, 64, 80, 50);
+    
+    UIButton *button3 = [self addButtonTitle:@"查询多条" action:@selector(getConttents:)];
+    button3.frame = CGRectMake(200, 64, 80, 50);
 }
 
 - (void)getConttent:(UIButton*)but{
@@ -41,9 +44,14 @@
    NSLog(@"%@",info);
 }
 
+- (void)getConttents:(UIButton*)but{
+    NSArray* infos = [[JYDBService shared] getPersonInfos:@[@"1234560",@"12345610",@"123456011",@"1234562"]];
+    NSLog(@"%@",infos);
+}
+
 - (void)getAllConttent:(UIButton*)but{
     NSArray* infos = [[JYDBService shared] getAllPersonInfo];
-//    NSLog(@"%@",infos);
+    NSLog(@"%@",infos);
 }
 
 - (UIButton *)addButtonTitle:(NSString*)aTitle action:(SEL)aSel{

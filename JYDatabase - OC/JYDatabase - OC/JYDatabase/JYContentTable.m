@@ -297,28 +297,33 @@
 }
 
 #pragma mark - get 查询
-- (id)getDB:(FMDatabase *)aDB contentByID:(NSString*)aID{
+- (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
     [self configTableName];
-    id content = nil;
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = ?", self.tableName, [self contentId]];
-    NSLog(@"contentByID-%@--%@",aID,sql);
-    FMResultSet *rs = [aDB executeQuery:sql,
-                       [self checkEmpty:aID]];
+    NSLog(@"contentByID--%@",sql);
+     NSArray<NSString *> *fields = [self getContentField];
+     __block NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+    [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull aID, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        FMResultSet *rs = [aDB executeQuery:sql,
+                           [self checkEmpty:aID]];
+        if ([rs next]) {
+            id content = [[self.contentClass alloc] init];
+            id value = [rs stringForColumn:[self contentId]];
+            [content setValue:value forKey:[self contentId]];
+            [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                id value = [rs objectForKeyedSubscript:obj];
+                if (value != [NSNull null]) {
+                    [content setValue:value forKey:obj];
+                }
+            }];
+            [arrayM addObject:content];
+        }
+        [rs close];
+    }];
     
-    if ([rs next]) {
-        content = [[self.contentClass alloc] init];
-        id value = [rs stringForColumn:[self contentId]];
-        [content setValue:value forKey:[self contentId]];
-        [[self getContentField] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            id value = [rs objectForKeyedSubscript:obj];
-            if (value != [NSNull null]) {
-               [content setValue:value forKey:obj];
-            }
-        }];
-    }
-    [rs close];
     [self checkError:aDB];
-    return content;
+    return [arrayM copy];
 }
 
 - (NSArray *)getAllContent:(FMDatabase *)aDB{
@@ -346,10 +351,18 @@
     return [arrayM copy];
 }
 
+- (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs{
+    __block id contents = nil;
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        contents = [self getDB:db contentByIDs:aIDs];
+    }];
+    return contents;
+}
+
 - (id)getContentByID:(NSString*)aID{
     __block id content = nil;
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        content = [self getDB:db contentByID:aID];
+        content = [self getDB:db contentByIDs:@[aID]].firstObject;
     }];
     return content;
 }

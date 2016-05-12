@@ -36,9 +36,14 @@
     [self.personDB.personTable insertContents:aPersonInfos];
 }
 
-- (JYPersonInfo *)getPersonInfo:(NSString*)aPersonInfo{
-    return [self.personDB.personTable getContentByID:aPersonInfo];
+- (JYPersonInfo *)getPersonInfo:(NSString*)aPersonInfoID{
+    return [self.personDB.personTable getContentByID:aPersonInfoID];
 }
+
+- (NSArray<JYPersonInfo *> *)getPersonInfos:(NSArray<NSString *> *)aPersonInfoIDs{
+    return [self.personDB.personTable getContentByIDs:aPersonInfoIDs];
+}
+
 - (NSArray<JYPersonInfo *> *)getAllPersonInfo{
     return [self.personDB.personTable getAllContent];
 }

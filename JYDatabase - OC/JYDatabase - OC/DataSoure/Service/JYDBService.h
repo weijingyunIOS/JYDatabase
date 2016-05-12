@@ -14,7 +14,8 @@
 + (instancetype)shared;
 - (void)insertPersonInfo:(JYPersonInfo *)aPersonInfo;
 - (void)insertPersonInfos:(NSArray<JYPersonInfo *> *)aPersonInfos;
-- (JYPersonInfo *)getPersonInfo:(NSString*)aPersonInfo;
+- (JYPersonInfo *)getPersonInfo:(NSString*)aPersonInfoID;
+- (NSArray<JYPersonInfo *> *)getPersonInfos:(NSArray<NSString *> *)aPersonInfoIDs;
 - (NSArray<JYPersonInfo *> *)getAllPersonInfo;
 - (void)deletePersonInfo:(NSString *)aPersonInfoid;
 
