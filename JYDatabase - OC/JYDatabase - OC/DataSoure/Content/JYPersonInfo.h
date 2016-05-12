@@ -12,21 +12,13 @@
 
 //存数据库属性
 @property (nonatomic, copy) NSString * personnumber;   // 人员编号
-@property (nonatomic, copy) NSMutableString *mutableStringDB;
-@property (nonatomic, assign) NSInteger integertDB;
-@property (nonatomic, assign) NSUInteger uIntegerDB;
-@property (nonatomic, assign) int intDB;
-@property (nonatomic, assign) BOOL boolDB;
-@property (nonatomic, assign) double doubleDB;
-@property (nonatomic, assign) float floatDB;
-
-//@property (nonatomic, copy) NSMutableString *mutableString1DB;
-//@property (nonatomic, assign) NSInteger integert1DB;
-//@property (nonatomic, assign) NSUInteger uInteger1DB;
-//@property (nonatomic, assign) int int1DB;
-//@property (nonatomic, assign) BOOL bool1DB;
-@property (nonatomic, assign) double double3DB;
-//@property (nonatomic, assign) float float1DB;
+@property (nonatomic, copy) NSMutableString *mutableString1;
+@property (nonatomic, assign) NSInteger integer1;
+@property (nonatomic, assign) NSUInteger uInteger1;
+@property (nonatomic, assign) int int1;
+@property (nonatomic, assign) BOOL bool1;
+@property (nonatomic, assign) double double1;
+@property (nonatomic, assign) float float1;
 
 
 @end

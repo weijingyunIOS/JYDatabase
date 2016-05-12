@@ -22,9 +22,9 @@
     for (int i = 0; i < 200; i++) {
         JYPersonInfo *info = [[JYPersonInfo alloc] init];
         info.personnumber = [NSString stringWithFormat:@"123456%tu",i];
-        info.floatDB = 10.10111;
-        info.intDB = i;
-        info.boolDB = i % 2 == 0;
+        info.float1 = 10.10111;
+        info.int1 = i;
+        info.bool1 = i % 2 == 0;
         [arrayM addObject:info];
     }
     [[JYDBService shared] insertPersonInfos:arrayM];
