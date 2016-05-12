@@ -37,6 +37,27 @@
     
     UIButton *button3 = [self addButtonTitle:@"查询多条" action:@selector(getConttents:)];
     button3.frame = CGRectMake(200, 64, 80, 50);
+    
+    UIButton *button4 = [self addButtonTitle:@"删除单条" action:@selector(deleteConttent:)];
+    button4.frame = CGRectMake(0, 164, 80, 50);
+    
+    UIButton *button5 = [self addButtonTitle:@"删除所有" action:@selector(deleteAllConttent:)];
+    button5.frame = CGRectMake(100, 164, 80, 50);
+    
+    UIButton *button6 = [self addButtonTitle:@"删除多条" action:@selector(deleteConttents:)];
+    button6.frame = CGRectMake(200, 164, 80, 50);
+}
+
+- (void)deleteConttent:(UIButton*)but{
+    [[JYDBService shared] deletePersonInfo:@"1234560"];
+}
+
+- (void)deleteConttents:(UIButton*)but{
+    [[JYDBService shared] deletePersonInfos:@[@"1234560",@"12345610",@"12345611",@"1234562"]];
+}
+
+- (void)deleteAllConttent:(UIButton*)but{
+    [[JYDBService shared] deleteAllPersonInfo];
 }
 
 - (void)getConttent:(UIButton*)but{
@@ -45,7 +66,7 @@
 }
 
 - (void)getConttents:(UIButton*)but{
-    NSArray* infos = [[JYDBService shared] getPersonInfos:@[@"1234560",@"12345610",@"123456011",@"1234562"]];
+    NSArray* infos = [[JYDBService shared] getPersonInfos:@[@"1234560",@"12345610",@"12345611",@"1234562"]];
     NSLog(@"%@",infos);
 }
 

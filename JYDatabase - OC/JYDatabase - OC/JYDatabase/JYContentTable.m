@@ -302,7 +302,7 @@
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = ?", self.tableName, [self contentId]];
     NSLog(@"contentByID--%@",sql);
      NSArray<NSString *> *fields = [self getContentField];
-     __block NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+     __block NSMutableArray *arrayM = nil;
     [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull aID, NSUInteger idx, BOOL * _Nonnull stop) {
         
         FMResultSet *rs = [aDB executeQuery:sql,
@@ -317,6 +317,9 @@
                     [content setValue:value forKey:obj];
                 }
             }];
+            if (arrayM == nil) {
+                arrayM = [[NSMutableArray alloc] init];
+            }
             [arrayM addObject:content];
         }
         [rs close];
@@ -329,7 +332,7 @@
 - (NSArray *)getAllContent:(FMDatabase *)aDB{
     [self configTableName];
     __block id content = nil;
-    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+    NSMutableArray *arrayM = nil;
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@", self.tableName];
     NSLog(@"getAllContent--%@",sql);
     FMResultSet *rs = [aDB executeQuery:sql];
@@ -344,6 +347,9 @@
                 [content setValue:value forKey:obj];
             }
         }];
+        if (arrayM == nil) {
+            arrayM = [[NSMutableArray alloc] init];
+        }
         [arrayM addObject:content];
     }
     [rs close];
@@ -376,26 +382,40 @@
 }
 
 #pragma mark - delete 删除
-- (void)deleteContent:(NSString *)aID{
+- (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
     [self configTableName];
-    
-    NSLog(@"deleteContent %@",aID);
-    __weak JYContentTable *weakSelf = self;
-    [self.dbQueue inDatabase:^(FMDatabase *aDB) {
-        NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = ?", weakSelf.tableName, [weakSelf contentId]];
+    NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = ?", self.tableName, [self contentId]];
+    NSLog(@"delete--%@",sql);
+    [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull aID, NSUInteger idx, BOOL * _Nonnull stop) {
         [aDB executeUpdate:sql,
-         [weakSelf checkEmpty:aID]];
-        [weakSelf checkError:aDB];
+        [self checkEmpty:aID]];
+    }];
+    [self checkError:aDB];
+}
+
+- (void)deleteAllContent:(FMDatabase *)aDB{
+    [self configTableName];
+    NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
+    [aDB executeUpdate:sql];
+    NSLog(@"delete--%@",sql);
+    [self checkError:aDB];
+}
+
+- (void)deleteContentByID:(NSString *)aID{
+    [self.dbQueue inDatabase:^(FMDatabase *aDB) {
+        [self deleteDB:aDB contentByIDs:@[aID]];
     }];
 }
 
-- (void)deleteContents{
-    [self configTableName];
-    __weak JYContentTable *weakSelf = self;
+- (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs{
     [self.dbQueue inDatabase:^(FMDatabase *aDB) {
-        NSString *sql = [NSString stringWithFormat:@"DROP TABLE IF EXISTS %@", weakSelf.tableName];
-        [aDB executeUpdate:sql];
-        [weakSelf checkError:aDB];
+        [self deleteDB:aDB contentByIDs:aIDs];
+    }];
+}
+
+- (void)deleteAllContent{
+    [self.dbQueue inDatabase:^(FMDatabase *db) {
+        [self deleteAllContent:db];
     }];
 }
 

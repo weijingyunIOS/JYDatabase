@@ -17,6 +17,8 @@
 - (JYPersonInfo *)getPersonInfo:(NSString*)aPersonInfoID;
 - (NSArray<JYPersonInfo *> *)getPersonInfos:(NSArray<NSString *> *)aPersonInfoIDs;
 - (NSArray<JYPersonInfo *> *)getAllPersonInfo;
+- (void)deletePersonInfos:(NSArray<NSString *>*)aPersonInfoids;
 - (void)deletePersonInfo:(NSString *)aPersonInfoid;
+- (void)deleteAllPersonInfo;
 
 @end

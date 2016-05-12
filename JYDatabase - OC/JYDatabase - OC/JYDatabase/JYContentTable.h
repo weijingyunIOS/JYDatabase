@@ -38,8 +38,11 @@
 - (id)getContentByID:(NSString*)aID;
 - (NSArray *)getAllContent;
 #pragma mark - delete 删除
-- (void)deleteContent:(NSString *)aID;
-- (void)deleteContents;
+- (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
+- (void)deleteAllContent:(FMDatabase *)aDB;
+- (void)deleteContentByID:(NSString *)aID;
+- (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs;
+- (void)deleteAllContent;
 
 // 重写该方法 在建表时插入默认数据
 - (void)insertDefaultData:(FMDatabase *)aDb;

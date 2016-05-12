@@ -48,8 +48,16 @@
     return [self.personDB.personTable getAllContent];
 }
 
+- (void)deletePersonInfos:(NSArray<NSString *>*)aPersonInfoids{
+    [self.personDB.personTable deleteContentByIDs:aPersonInfoids];
+}
+
 - (void)deletePersonInfo:(NSString *)aPersonInfoid{
-    [self.personDB.personTable deleteContent:aPersonInfoid];
+    [self.personDB.personTable deleteContentByID:aPersonInfoid];
+}
+
+- (void)deleteAllPersonInfo{
+    [self.personDB.personTable deleteAllContent];
 }
 
 @end
