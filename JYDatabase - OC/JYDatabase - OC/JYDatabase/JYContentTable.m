@@ -41,14 +41,12 @@
 }
 
 - (NSArray<NSString *> *)getContentField{
-    
     NSMutableArray *arrayM = [[NSMutableArray alloc] init];
     unsigned int outCount;
     NSLog(@"%@",NSStringFromClass(self.contentClass));
     objc_property_t *properties = class_copyPropertyList(self.contentClass, &outCount);
     for (NSInteger index = 0; index < outCount; index++) {
         NSString *tmpName = [NSString stringWithFormat:@"%s",property_getName(properties[index])];
-        
         NSString* prefix = @"DB";
         if ([tmpName hasSuffix:prefix]) {
             [arrayM addObject:tmpName];
@@ -64,6 +62,83 @@
     return [arrayM copy];
 }
 
+#pragma mark - field Attributes 获取准备处理 如 personid varchar(64)
+- (NSDictionary*)attributeTypeDic{
+    NSMutableDictionary *dicM = [[NSMutableDictionary alloc] init];
+    unsigned int outCount;
+    NSLog(@"%@",NSStringFromClass(self.contentClass));
+    objc_property_t *properties = class_copyPropertyList(self.contentClass, &outCount);
+    for (NSInteger index = 0; index < outCount; index++) {
+        NSString *tmpName = [NSString stringWithFormat:@"%s",property_getName(properties[index])];
+        NSString *tmpAttributes = [NSString stringWithFormat:@"%s",property_getAttributes(properties[index])];
+        NSArray<NSString*> *attributes = [tmpAttributes componentsSeparatedByString:@","];
+        dicM[tmpName] = attributes.firstObject;
+    }
+    
+    if (properties) {
+        free(properties);
+    }
+    return [dicM copy];
+}
+
+- (NSDictionary*)fieldLenght{
+    return nil;
+}
+
+// 类型的映射
+- (NSArray *)conversionAttributeType:(NSString *)aType{
+    NSArray<NSString *> *array = @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\""];
+    NSString *str = nil;
+    NSString *length = nil;
+    switch ([array indexOfObject:aType]) {
+        case 0:
+            str = @"BOOL";
+            length = @"1";
+            break;
+            
+        case 1:
+            str = @"DOUBLE";
+            length = @"10";
+            break;
+            
+        case 2:
+            str = @"FLOAT";
+            length = @"10";
+            break;
+            
+        case 3:
+            str = @"INTEGER";
+            length = @"10";
+            break;
+            
+        case 4:
+            str = @"INTEGER";
+            length = @"10";
+            break;
+            
+        case 5:
+            str = @"INTEGER";
+            length = @"10";
+            break;
+            
+        case 6:
+            str = @"VARCHAR";
+            length = @"1";
+            break;
+            
+        case 7:
+            str = @"VARCHAR";
+            length = @"1";
+            break;
+            
+        default:
+            NSAssert(YES, @"当前类型不支持");
+            break;
+    }
+    return @[str,length];
+}
+
+#pragma mark - 查询的处理函数
 - (void)checkError:(FMDatabase *)aDb
 {
     if ([aDb hadError]) {
@@ -79,10 +154,13 @@
 #pragma mark - Create Table
 - (void)createTable:(FMDatabase *)aDB{
     [self configTableName];
+    NSDictionary * typeDict = [self attributeTypeDic];
     NSMutableString *strM = [[NSMutableString alloc] init];
     [strM appendFormat:@"CREATE TABLE if not exists %@ (%@ varchar(64) NOT NULL, ",self.tableName,[self contentId]];
     [[self getContentField] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [strM appendFormat:@"%@ varchar(256), ",obj];
+        NSArray *array = [self conversionAttributeType:typeDict[obj]];
+        NSString *lenght = [self fieldLenght][obj] == nil ? array.lastObject : [self fieldLenght][obj];
+        [strM appendFormat:@"%@ %@(%@), ",obj,array.firstObject,lenght];
     }];
     [strM appendFormat:@"PRIMARY KEY (%@) ON CONFLICT REPLACE)",[self contentId]];
     NSLog(@"----------%@",strM);
@@ -126,8 +204,11 @@
 
 // 新增字段数组
 - (void)updateDB:(FMDatabase *)aDB addFieldS:(NSArray<NSString*>*)aFields{
+    NSDictionary * typeDict = [self attributeTypeDic];
     [aFields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ varchar(128)", self.tableName,obj];
+        NSArray *array = [self conversionAttributeType:typeDict[obj]];
+        NSString *lenght = [self fieldLenght][obj] == nil ? array.lastObject : [self fieldLenght][obj];
+        NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ %@(%@)", self.tableName,obj,array.firstObject,lenght];
         [aDB executeUpdate:sql];
         [self checkError:aDB];
     }];
@@ -152,14 +233,14 @@
     sql = [NSString stringWithFormat:@"drop table if exists %@", self.tableName];
     [aDB executeUpdate:sql];
     [self checkError:aDB];
-
-    // 3.为新表添加唯一索引
-    sql = [NSString stringWithFormat:@"create unique index '%@_key' on  %@(%@)", tempTableName,tempTableName,[self contentId]];
+    
+    // 3.将tempTableName 该名为 table
+    sql = [NSString stringWithFormat:@"alter table %@ rename to %@",tempTableName ,self.tableName];
     [aDB executeUpdate:sql];
     [self checkError:aDB];
     
-    // 4.将tempTableName 该名为 table
-    sql = [NSString stringWithFormat:@"alter table %@ rename to %@",tempTableName ,self.tableName];
+    // 4.为新表添加唯一索引
+    sql = [NSString stringWithFormat:@"create unique index '%@_key' on  %@(%@)", self.tableName,self.tableName,[self contentId]];
     [aDB executeUpdate:sql];
     [self checkError:aDB];
 }
