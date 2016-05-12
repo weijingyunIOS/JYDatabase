@@ -7,7 +7,7 @@
 	2.封装简单常用的查询语句，让使用者只用关注特殊的SQL查询，基本查询不用重复写直接使用即可。
 
 一、JYDatabase 的使用
-![enter image description here](http://imgdata.hoop8.com/1605/6473412352730.png)
+![enter image description here](http://imgdata.hoop8.com/1605/2283412352730.jpg)
 
 啊啊
 	
