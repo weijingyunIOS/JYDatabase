@@ -10,15 +10,6 @@
 
 @implementation JYPersonTable
 
-- (instancetype)init{
-    
-    if (self = [super init]) {
-        [self configTableName];
-    }
-    
-    return self;
-}
-
 - (void)configTableName{
     
     self.contentClass = [JYPersonInfo class];

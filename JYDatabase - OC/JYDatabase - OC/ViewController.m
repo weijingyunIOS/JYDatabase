@@ -25,6 +25,7 @@
         info.float1 = 10.10111;
         info.int1 = i;
         info.bool1 = i % 2 == 0;
+        info.integer1 = -100;
         [arrayM addObject:info];
     }
     [[JYDBService shared] insertPersonInfos:arrayM];
