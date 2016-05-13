@@ -154,6 +154,34 @@
 	}
 	在数据库的创建 升级 以及 多数据的插入，我都使用了该方法。
 	
+2.3 条件查询的实现
+	
+	关于复杂查询我提供了一个简单的方法 
+	- (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block;
+	可以看下它的使用
+	NSArray*infos = [[JYDBService shared] getPersonInfoByConditions:^(JYQueryConditions *make) {
+        make.field(@"personnumber").greaterThanOrEqualTo(@"12345620");
+        make.field(@"bool1").equalTo(@"1");
+        make.field(@"personnumber").lessTo(@"12345630");
+        make.asc(@"bool1").desc(@"int1");
+    }];
+    其实它不过产生了如下一条查询语句：
+    SELECT * FROM JYPersonTable WHERE personnumber >= 12345620 AND bool1 = 1 AND personnumber < 12345630  order by  bool1 asc , int1 desc 
+    
+    make.field(@"personnumber").greaterThanOrEqualTo(@"12345620"); 就代表了 personnumber >= 12345620
+    
+    实现实际相当简单，先用 JYQueryConditions 记录下所描描述的参数，最后再拼接出完整的sql语句。
+    至于通过点语法的链式调用则参考了 Masonry 的声明方式
+    - (JYQueryConditions * (^)(NSString *compare))equalTo;
+    - (JYQueryConditions * (^)(NSString *field))field{
+    return ^id(NSString *field) {
+        NSMutableDictionary *dicM = [[NSMutableDictionary alloc] init];
+        dicM[kField] = field;
+        [self.conditions addObject:dicM];
+        return self;
+    };
+}
+	
 三、提供的查询方法
 	
 	在JYContentTable默认实现了部分查询方法如下：
@@ -163,8 +191,10 @@
 	- (void)insertContents:(NSArray *)aContents;
 	
 	#pragma mark - get 查询
+	- (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 	- (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
 	- (NSArray *)getAllContent:(FMDatabase *)aDB;
+	- (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block;
 	- (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs;
 	- (id)getContentByID:(NSString*)aID;
 	- (NSArray *)getAllContent;
