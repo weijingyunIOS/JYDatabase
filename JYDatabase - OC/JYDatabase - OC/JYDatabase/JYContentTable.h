@@ -56,8 +56,10 @@
 - (NSArray *)getAllContent;
 
 #pragma mark - delete 删除
+- (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
 - (void)deleteAllContent:(FMDatabase *)aDB;
+- (void)deleteContentByConditions:(void (^)(JYQueryConditions *make))block;
 - (void)deleteContentByID:(NSString *)aID;
 - (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs;
 - (void)deleteAllContent;

@@ -14,10 +14,13 @@
 + (instancetype)shared;
 - (void)insertPersonInfo:(JYPersonInfo *)aPersonInfo;
 - (void)insertPersonInfos:(NSArray<JYPersonInfo *> *)aPersonInfos;
+
 - (NSArray<JYPersonInfo *> *)getPersonInfoByConditions:(void (^)(JYQueryConditions *make))block;
 - (JYPersonInfo *)getPersonInfo:(NSString*)aPersonInfoID;
 - (NSArray<JYPersonInfo *> *)getPersonInfos:(NSArray<NSString *> *)aPersonInfoIDs;
 - (NSArray<JYPersonInfo *> *)getAllPersonInfo;
+
+- (void)deletePersonInfoByConditions:(void (^)(JYQueryConditions *make))block;
 - (void)deletePersonInfos:(NSArray<NSString *>*)aPersonInfoids;
 - (void)deletePersonInfo:(NSString *)aPersonInfoid;
 - (void)deleteAllPersonInfo;

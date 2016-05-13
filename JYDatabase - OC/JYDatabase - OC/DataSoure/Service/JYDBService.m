@@ -52,6 +52,10 @@
     return [self.personDB.personTable getAllContent];
 }
 
+- (void)deletePersonInfoByConditions:(void (^)(JYQueryConditions *make))block{
+    return [self.personDB.personTable deleteContentByConditions:block];
+}
+
 - (void)deletePersonInfos:(NSArray<NSString *>*)aPersonInfoids{
     [self.personDB.personTable deleteContentByIDs:aPersonInfoids];
 }

@@ -58,14 +58,25 @@
     UIButton *button7 = [self addButtonTitle:@"条件查询" action:@selector(compareConttents:)];
     button7.frame = CGRectMake(0, 264, 80, 50);
     
+    UIButton *button8 = [self addButtonTitle:@"条件删除" action:@selector(deleteCompareConttents:)];
+    button8.frame = CGRectMake(200, 264, 80, 50);
+    
     self.imageView.frame = CGRectMake(0, 350, 200, 100);
+}
+
+- (void)deleteCompareConttents:(UIButton*)but{
+    [[JYDBService shared] deletePersonInfoByConditions:^(JYQueryConditions *make) {
+        make.field(@"personnumber").greaterThanOrEqualTo(@"12345620");
+        make.field(@"bool1").equalTo(@"1");
+        make.field(@"personnumber").lessTo(@"12345630");
+    }];
 }
 
 - (void)compareConttents:(UIButton*)but{
    NSArray*infos = [[JYDBService shared] getPersonInfoByConditions:^(JYQueryConditions *make) {
-//        make.field(@"personnumber").greaterThanOrEqualTo(@"12345620");
-////        make.field(@"bool1").equalTo(@"1");
-//        make.field(@"personnumber").lessTo(@"12345630");
+        make.field(@"personnumber").greaterThanOrEqualTo(@"12345620");
+        make.field(@"bool1").equalTo(@"1");
+        make.field(@"personnumber").lessTo(@"12345630");
         make.asc(@"bool1").desc(@"int1");
     }];
     

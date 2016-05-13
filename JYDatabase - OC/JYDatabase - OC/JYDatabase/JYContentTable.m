@@ -13,7 +13,8 @@
 
 #define kAttributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\"",@"T@\"NSData\"",@"T@\"UIImage\""]
 #define kTypeArray      @[@"BOOL",@"DOUBLE",@"FLOAT",@"INTEGER",@"INTEGER",@"INTEGER",@"VARCHAR",@"VARCHAR",@"BLOB",@"BLOB"]
-#define kLenghtArray    @[@"1"   ,@"10"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128",    @"256",@"256"]
+#define kLenghtArray    @[@"1"   ,@"20"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128",    @"256",@"256"]
+
 @interface JYContentTable()
 
 @property (nonatomic, strong) NSCache *cache;
@@ -55,6 +56,10 @@
     return nil;
 }
 
+- (NSString *)insertTimeField{
+    return [NSString stringWithFormat:@"insertTimeField_%@",self.tableName];
+}
+
 - (NSArray<NSString *> *)getContentField{
     NSMutableArray *arrayM = [[NSMutableArray alloc] init];
     unsigned int outCount;
@@ -82,8 +87,52 @@
     // 保证 contentId 在第一个位置
     [arrayM addObject:[self contentId]];
     [arrayM addObjectsFromArray:[self getContentField]];
-    
+    [arrayM addObject:self.insertTimeField];
     return [arrayM copy];
+}
+
+#pragma mark - 查询的处理函数
+- (void)checkError:(FMDatabase *)aDb
+{
+    if ([aDb hadError]) {
+        NSLog(@"DB Err %d: %@", [aDb lastErrorCode], [aDb lastErrorMessage]);
+    }
+}
+
+// 数据预处理
+- (id)checkEmpty:(id)aObject
+{
+    return aObject == nil ? [NSNull null] : aObject;
+}
+
+// 插入时数据处理
+- (id)checkContent:(NSString *)aContent forKey:(NSString *)akey{
+    if ([akey isEqualToString:[self insertTimeField]]) {
+        return @([NSDate date].timeIntervalSince1970);
+    }
+    
+    id vaule = [aContent valueForKey:akey];
+    @autoreleasepool {
+        if ([vaule isKindOfClass:[UIImage class]]) {
+            vaule = UIImageJPEGRepresentation(vaule,1.0);
+        }
+    }
+    return [self checkEmpty:vaule];
+}
+
+// 查询出来的数据处理
+- (id)checkVaule:(id)aVaule forKey:(NSString*)aKey{
+    @autoreleasepool {
+        NSString *type = [self attributeTypeDic][aKey];
+        if ([type  isEqual: @"T@\"UIImage\""] && aVaule != [NSNull null]) {
+            aVaule = [UIImage imageWithData:aVaule];
+        }
+        
+        if ([aKey isEqualToString:[self insertTimeField]]) {
+            return [NSNull null];
+        }
+        return aVaule;
+    }
 }
 
 #pragma mark - field Attributes 获取准备处理 如 personid varchar(64)
@@ -101,6 +150,7 @@
     if (properties) {
         free(properties);
     }
+    dicM[[self insertTimeField]] = @"Td";
     return [dicM copy];
 }
 
@@ -113,35 +163,6 @@
     return @[str,length];
 }
 
-#pragma mark - 查询的处理函数
-- (void)checkError:(FMDatabase *)aDb
-{
-    if ([aDb hadError]) {
-        NSLog(@"DB Err %d: %@", [aDb lastErrorCode], [aDb lastErrorMessage]);
-    }
-}
-
-// 数据预处理
-- (id)checkEmpty:(id)aObject
-{
-    @autoreleasepool {
-        if ([aObject isKindOfClass:[UIImage class]]) {
-            aObject = UIImageJPEGRepresentation(aObject,1.0);
-        }
-        return aObject == nil ? [NSNull null] : aObject;
-    }
-}
-
-// 查询出来的数据处理
-- (id)checkVaule:(id)aVaule forKey:(NSString*)aKey{
-    @autoreleasepool {
-        NSString *type = [self attributeTypeDic][aKey];
-        if ([type  isEqual: @"T@\"UIImage\""] && aVaule != [NSNull null]) {
-            aVaule = [UIImage imageWithData:aVaule];
-        }
-        return aVaule;
-    }
-}
 
 #pragma mark - Create Table
 - (void)createTable:(FMDatabase *)aDB{
@@ -278,7 +299,7 @@
         // 2.1 获取参数
         NSMutableArray *arrayM = [[NSMutableArray alloc] init];
         [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [arrayM addObject:[self checkEmpty:[aContent valueForKey:obj]]];
+            [arrayM addObject:[self checkContent:aContent forKey:obj]];
         }];
         
         // 2.2 执行插入
@@ -452,6 +473,33 @@
 }
     
 #pragma mark - delete 删除
+- (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
+    [self configTableName];
+    JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
+    block(conditions);
+    __block NSMutableString *strM = [[NSMutableString alloc] init];
+    NSArray<NSString *> *fields = [self getAllContentField];
+    [conditions.conditions enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSAssert(([fields containsObject:obj[kField]]),@"该表不存在这个字段 -- %@",obj);
+        [strM appendFormat:@"%@ %@ %@",obj[kField],obj[kEqual],obj[kCompare]];
+        if (idx < conditions.conditions.count - 1) {
+            [strM appendFormat:@" AND "];
+        }
+    }];
+    
+    NSString *sql;
+    if (strM.length > 0) {
+        sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@", self.tableName, strM];
+    }else{
+        sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
+    }
+    
+    NSLog(@"delete conditions -- %@",sql);
+    [aDB executeUpdate:sql];
+    [self checkError:aDB];
+    [self removeAllCache];
+}
+
 - (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
     [self configTableName];
     NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = ?", self.tableName, [self contentId]];
@@ -471,6 +519,12 @@
     NSLog(@"delete--%@",sql);
     [self removeAllCache];
     [self checkError:aDB];
+}
+
+- (void)deleteContentByConditions:(void (^)(JYQueryConditions *make))block{
+    [self.dbQueue inDatabase:^(FMDatabase *aDB) {
+        [self deleteContentDB:aDB byconditions:block];
+    }];
 }
 
 - (void)deleteContentByID:(NSString *)aID{
