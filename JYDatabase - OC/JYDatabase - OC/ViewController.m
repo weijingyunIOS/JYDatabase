@@ -63,9 +63,9 @@
 
 - (void)compareConttents:(UIButton*)but{
    NSArray*infos = [[JYDBService shared] getPersonInfoByConditions:^(JYQueryConditions *make) {
-        make.field(@"personnumber").greaterThanOrEqualTo(@"12345620");
-//        make.field(@"bool1").equalTo(@"1");
-        make.field(@"personnumber").lessTo(@"12345630");
+//        make.field(@"personnumber").greaterThanOrEqualTo(@"12345620");
+////        make.field(@"bool1").equalTo(@"1");
+//        make.field(@"personnumber").lessTo(@"12345630");
         make.asc(@"bool1").desc(@"int1");
     }];
     
@@ -85,7 +85,7 @@
 }
 
 - (void)getConttent:(UIButton*)but{
-   JYPersonInfo* info = [[JYDBService shared] getPersonInfo:@"1234560"];
+   JYPersonInfo* info = [[JYDBService shared] getPersonInfo:@"aaa"];
     self.imageView.image = info.image;
    NSLog(@"%@",info);
 }

@@ -77,6 +77,15 @@
     return [arrayM copy];
 }
 
+- (NSArray<NSString *> *)getAllContentField{
+    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+    // 保证 contentId 在第一个位置
+    [arrayM addObject:[self contentId]];
+    [arrayM addObjectsFromArray:[self getContentField]];
+    
+    return [arrayM copy];
+}
+
 #pragma mark - field Attributes 获取准备处理 如 personid varchar(64)
 - (NSDictionary*)attributeTypeDic{
     NSMutableDictionary *dicM = [[NSMutableDictionary alloc] init];
@@ -139,11 +148,15 @@
     [self configTableName];
     NSDictionary * typeDict = [self attributeTypeDic];
     NSMutableString *strM = [[NSMutableString alloc] init];
-    [strM appendFormat:@"CREATE TABLE if not exists %@ (%@ varchar(64) NOT NULL, ",self.tableName,[self contentId]];
-    [[self getContentField] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [strM appendFormat:@"CREATE TABLE if not exists %@ ( ",self.tableName];
+    [[self getAllContentField] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSArray *array = [self conversionAttributeType:typeDict[obj]];
         NSString *lenght = [self fieldLenght][obj] == nil ? array.lastObject : [self fieldLenght][obj];
-        [strM appendFormat:@"%@ %@(%@), ",obj,array.firstObject,lenght];
+        [strM appendFormat:@"%@ %@(%@) ",obj,array.firstObject,lenght];
+        if ([obj isEqualToString:[self contentId]]) {
+            [strM appendString:@" NOT NULL"];
+        }
+        [strM appendString:@" , "];
     }];
     [strM appendFormat:@"PRIMARY KEY (%@) ON CONFLICT REPLACE)",[self contentId]];
     NSLog(@"----------%@",strM);
@@ -162,15 +175,13 @@
 - (void)updateDB:(FMDatabase *)aDB{
     [self configTableName];
     NSArray<NSString *> *tablefields = [self getCurrentFields:aDB];
-    NSArray<NSString *> *contentfields = [self getContentField];
+    NSArray<NSString *> *contentfields = [self getAllContentField];
     __block NSMutableArray *addfields = [contentfields mutableCopy];
-    [addfields addObject:[self contentId]];
     __block NSMutableArray *minusfields = [tablefields mutableCopy];
     [tablefields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [addfields removeObject:obj];
     }];
     
-    [minusfields removeObject:[self contentId]];
     [contentfields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [minusfields removeObject:obj];
     }];
@@ -211,10 +222,14 @@
     // 1.根据原表新建一个表
     NSString *tempTableName = [NSString stringWithFormat:@"temp_%@",self.tableName];
     __block NSMutableString *tableField = [[NSMutableString alloc] init];
-    [[self getContentField] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [tableField appendFormat:@",%@",obj];
+    
+    [[self getAllContentField] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![obj isEqualToString:[self contentId]]) {
+            [tableField appendString:@","];
+        }
+        [tableField appendFormat:@"%@",obj];
     }];
-    NSString *sql = [NSString stringWithFormat:@"create table %@ as select %@%@ from %@", tempTableName,[self contentId],tableField,self.tableName];
+    NSString *sql = [NSString stringWithFormat:@"create table %@ as select %@ from %@", tempTableName,tableField,self.tableName];
     [aDB executeUpdate:sql];
     [self checkError:aDB];
     // 2.删除原表
@@ -237,14 +252,18 @@
 - (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents{
     [self configTableName];
     NSLog(@"insert %@",[aContents.firstObject class]);
-    NSArray<NSString *> *fields = [self getContentField];
+    NSArray<NSString *> *fields = [self getAllContentField];
     // 1.插入语句拼接
     NSMutableString *strM = [[NSMutableString alloc] init];
-    NSMutableString *strM1 = [[NSMutableString alloc] initWithString:@"?"];
-    [strM appendFormat:@"INSERT OR REPLACE INTO %@(%@",self.tableName,[self contentId]];
+    NSMutableString *strM1 = [[NSMutableString alloc] init];
+    [strM appendFormat:@"INSERT OR REPLACE INTO %@(",self.tableName];
     [fields enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [strM appendFormat:@", %@",obj];
-        [strM1 appendFormat:@",?"];
+        if (![obj isEqualToString:[self contentId]]) {
+            [strM appendString:@","];
+            [strM1 appendString:@","];
+        }
+        [strM appendFormat:@" %@",obj];
+        [strM1 appendFormat:@" ?"];
     }];
     [strM appendFormat:@") VALUES (%@)",strM1];
     NSLog(@"-----%@",strM);
@@ -258,7 +277,6 @@
 
         // 2.1 获取参数
         NSMutableArray *arrayM = [[NSMutableArray alloc] init];
-        [arrayM addObject:[aContent valueForKey:[self contentId]]];
         [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [arrayM addObject:[self checkEmpty:[aContent valueForKey:obj]]];
         }];
@@ -289,17 +307,24 @@
     JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
     block(conditions);
     __block NSMutableString *strM = [[NSMutableString alloc] init];
+    NSArray<NSString *> *fields = [self getAllContentField];
     [conditions.conditions enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSAssert(([fields containsObject:obj[kField]]),@"该表不存在这个字段 -- %@",obj);
         [strM appendFormat:@"%@ %@ %@",obj[kField],obj[kEqual],obj[kCompare]];
         if (idx < conditions.conditions.count - 1) {
             [strM appendFormat:@" AND "];
         }
     }];
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ %@", self.tableName, strM,conditions.orderStr];
-    NSLog(@"conditions -- %@",sql);
     
+    NSString *sql;
+    if (strM.length > 0) {
+        sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ %@", self.tableName, strM,conditions.orderStr];
+    }else{
+        sql = [NSString stringWithFormat:@"SELECT * FROM %@ %@", self.tableName,conditions.orderStr];
+    }
+
+    NSLog(@"conditions -- %@",sql);
     FMResultSet *rs = [aDB executeQuery:sql];
-    NSArray<NSString *> *fields = [self getContentField];
     id content = nil;
     NSMutableArray *arrayM = nil;
     while([rs next]) {
@@ -328,7 +353,7 @@
     [self configTableName];
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = ?", self.tableName, [self contentId]];
     NSLog(@"contentByID--%@",sql);
-     NSArray<NSString *> *fields = [self getContentField];
+     NSArray<NSString *> *fields = [self getAllContentField];
      __block NSMutableArray *arrayM = nil;
     [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull aID, NSUInteger idx, BOOL * _Nonnull stop) {
         
@@ -344,8 +369,6 @@
                                [self checkEmpty:aID]];
             if ([rs next]) {
                 id content = [[self.contentClass alloc] init];
-                id value = [rs stringForColumn:[self contentId]];
-                [content setValue:value forKey:[self contentId]];
                 [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     id value = [rs objectForKeyedSubscript:obj];
                     value = [self checkVaule:value forKey:obj];
@@ -375,11 +398,9 @@
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@", self.tableName];
     NSLog(@"getAllContent--%@",sql);
     FMResultSet *rs = [aDB executeQuery:sql];
-    NSArray<NSString *> *fields = [self getContentField];
+    NSArray<NSString *> *fields = [self getAllContentField];
     while([rs next]) {
         content = [[self.contentClass alloc] init];
-        id value = [rs stringForColumn:[self contentId]];
-        [content setValue:value forKey:[self contentId]];
         [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             id value = [rs objectForKeyedSubscript:obj];
             value = [self checkVaule:value forKey:obj];
