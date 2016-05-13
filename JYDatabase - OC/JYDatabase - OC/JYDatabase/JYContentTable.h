@@ -19,6 +19,7 @@
 
 - (void)checkError:(FMDatabase *)aDb;
 - (id)checkEmpty:(id)aObject;
+- (id)checkVaule:(id)aVaule forKey:(NSString*)aKey;
 
 #pragma mark - 是否使用缓存默认使用 如果使用查找优先使用
 - (BOOL)enableCache;

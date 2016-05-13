@@ -11,6 +11,8 @@
 
 @interface ViewController ()
 
+@property (nonatomic, strong) UIImageView *imageView;
+
 @end
 
 @implementation ViewController
@@ -19,15 +21,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     NSMutableArray *arrayM = [[NSMutableArray alloc] init];
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 10; i++) {
             JYPersonInfo *info = [[JYPersonInfo alloc] init];
             info.personnumber = [NSString stringWithFormat:@"123456%tu",i];
             info.float1 = 10.10111;
             info.int1 = i;
             info.bool1 = i % 2 == 0;
             info.integer1 = -100;
-            UIImage *image = [UIImage imageNamed:@"www"];
-            info.data =  UIImageJPEGRepresentation(image,1.0);
+            info.image = [UIImage imageNamed:@"www"];
+            info.data = nil;
             [arrayM addObject:info];
     }
     
@@ -50,6 +52,8 @@
     
     UIButton *button6 = [self addButtonTitle:@"删除多条" action:@selector(deleteConttents:)];
     button6.frame = CGRectMake(200, 164, 80, 50);
+    
+    self.imageView.frame = CGRectMake(0, 300, 200, 100);
 }
 
 - (void)deleteConttent:(UIButton*)but{
@@ -66,6 +70,7 @@
 
 - (void)getConttent:(UIButton*)but{
    JYPersonInfo* info = [[JYDBService shared] getPersonInfo:@"1234560"];
+    self.imageView.image = info.image;
    NSLog(@"%@",info);
 }
 
@@ -91,6 +96,15 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - 懒加载
+- (UIImageView *)imageView{
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] init];
+        [self.view addSubview:_imageView];
+    }
+    return _imageView;
 }
 
 @end

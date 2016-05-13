@@ -20,6 +20,7 @@
 @property (nonatomic, assign) double double1;
 @property (nonatomic, assign) float float1;
 @property (nonatomic, strong) NSData *data;
+@property (nonatomic, strong) UIImage *image;
 
 
 @end

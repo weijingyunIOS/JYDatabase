@@ -7,12 +7,13 @@
 //
 
 #import "JYContentTable.h"
+#import <UIKit/UIKit.h>
 #import "FMDB.h"
 #import <objc/runtime.h>
 
-#define kAttributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\"",@"T@\"NSData\""]
-#define kTypeArray      @[@"BOOL",@"DOUBLE",@"FLOAT",@"INTEGER",@"INTEGER",@"INTEGER",@"VARCHAR",@"VARCHAR",@"BLOB"]
-#define kLenghtArray    @[@"1"   ,@"10"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128",    @"256"]
+#define kAttributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\"",@"T@\"NSData\"",@"T@\"UIImage\""]
+#define kTypeArray      @[@"BOOL",@"DOUBLE",@"FLOAT",@"INTEGER",@"INTEGER",@"INTEGER",@"VARCHAR",@"VARCHAR",@"BLOB",@"BLOB"]
+#define kLenghtArray    @[@"1"   ,@"10"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128",    @"256",@"256"]
 @interface JYContentTable()
 
 @property (nonatomic, strong) NSCache *cache;
@@ -111,9 +112,26 @@
     }
 }
 
+// 数据预处理
 - (id)checkEmpty:(id)aObject
 {
-    return aObject == nil ? [NSNull null] : aObject;
+    @autoreleasepool {
+        if ([aObject isKindOfClass:[UIImage class]]) {
+            aObject = UIImageJPEGRepresentation(aObject,1.0);
+        }
+        return aObject == nil ? [NSNull null] : aObject;
+    }
+}
+
+// 查询出来的数据处理
+- (id)checkVaule:(id)aVaule forKey:(NSString*)aKey{
+    @autoreleasepool {
+        NSString *type = [self attributeTypeDic][aKey];
+        if ([type  isEqual: @"T@\"UIImage\""] && aVaule != [NSNull null]) {
+            aVaule = [UIImage imageWithData:aVaule];
+        }
+        return aVaule;
+    }
 }
 
 #pragma mark - Create Table
@@ -290,6 +308,7 @@
                 [content setValue:value forKey:[self contentId]];
                 [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     id value = [rs objectForKeyedSubscript:obj];
+                    value = [self checkVaule:value forKey:obj];
                     if (value != [NSNull null]) {
                         [content setValue:value forKey:obj];
                     }
@@ -323,6 +342,7 @@
         [content setValue:value forKey:[self contentId]];
         [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             id value = [rs objectForKeyedSubscript:obj];
+            value = [self checkVaule:value forKey:obj];
             if (value != [NSNull null]) {
                 [content setValue:value forKey:obj];
             }
