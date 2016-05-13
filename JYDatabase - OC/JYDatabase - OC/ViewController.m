@@ -32,9 +32,11 @@
             info.data = nil;
             [arrayM addObject:info];
     }
-    
+    JYPersonInfo *info = [[JYPersonInfo alloc] init];
+    info.personnumber = @"aaa";
+    info.image = [UIImage imageNamed:@"www"];
+    [[JYDBService shared] insertPersonInfo:info];
     [[JYDBService shared] insertPersonInfos:arrayM];
-    
     UIButton *button1 = [self addButtonTitle:@"查询单条" action:@selector(getConttent:)];
     button1.frame = CGRectMake(0, 64, 80, 50);
     
@@ -75,7 +77,8 @@
 }
 
 - (void)getConttents:(UIButton*)but{
-    NSArray* infos = [[JYDBService shared] getPersonInfos:@[@"1234560",@"12345610",@"12345611",@"1234562"]];
+    NSArray<JYPersonInfo*>* infos = [[JYDBService shared] getPersonInfos:@[@"1234560",@"12345610",@"12345611",@"1234562"]];
+    self.imageView.image = infos.firstObject.image;
     NSLog(@"%@",infos);
 }
 
