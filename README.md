@@ -86,7 +86,23 @@
  
  2.1 数据库升级的实现 - (void)updateDB:(FMDatabase *)aDB 
  
- 	考虑到
+ 	对于每一张表，所谓的修改无非是 添加了一个 新的字段 或减少了几个字段（这种情况很少）。
+ 	2.2.1 字段的对比
+ 		PRAGMA table_info([tableName]) 可以获取一张表的所有字段
+ 		再与当前需要的字段做对比即可得到要增加的字段和减少的字段
+ 	2.2.2 字段的添加
+ 		sqlite有提供对应的SQL语句实现
+ 		ALTER TABLE tableName ADD 字段 type(lenght)
+ 	2.2.3 减少字段
+ 		sqlite并未提供对应的SQL语句实现但可通过以下方法实现
+ 		a.根据原表新建一个表
+ 		sql = [NSString stringWithFormat:@"create table %@ as select %@%@ from %@", tempTableName,[self contentId],tableField,self.tableName];
+ 		b.删除原表
+ 		sql = [NSString stringWithFormat:@"drop table if exists %@", self.tableName];
+ 		c.将表改名
+ 		sql = [NSString stringWithFormat:@"alter table %@ rename to %@",tempTableName ,self.tableName];
+ 		d.为新表添加唯一索引
+ 		sql = [NSString stringWithFormat:@"create unique index '%@_key' on  %@(%@)", self.tableName,self.tableName,[self contentId]];
   	
   	
       
