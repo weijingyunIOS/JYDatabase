@@ -25,10 +25,10 @@
 {
     self = [super init];
     if (self) {
-        self.cache = [[NSCache alloc] init];
+        [self configTableName];
         if ([self enableCache]) {
+            self.cache = [[NSCache alloc] init];
             self.cache.countLimit = 20;
-            [self configTableName];
         }
     }
     return self;
@@ -97,9 +97,7 @@
 // 类型的映射
 - (NSArray *)conversionAttributeType:(NSString *)aType{
     NSInteger index = [kAttributeArray indexOfObject:aType];
-    if (index > kAttributeArray.count) {
-        NSAssert(NO, @"当前类型不支持");
-    }
+    NSAssert(index <= kAttributeArray.count, @"当前类型不支持");
     NSString *str = kTypeArray[index];
     NSString *length = kLenghtArray[index];
     return @[str,length];
@@ -144,7 +142,7 @@
 }
 
 - (void)updateDB:(FMDatabase *)aDB{
-    
+    [self configTableName];
     NSArray<NSString *> *tablefields = [self getCurrentFields:aDB];
     NSArray<NSString *> *contentfields = [self getContentField];
     __block NSMutableArray *addfields = [contentfields mutableCopy];
