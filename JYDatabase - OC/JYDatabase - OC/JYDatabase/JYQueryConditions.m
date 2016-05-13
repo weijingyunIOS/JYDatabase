@@ -11,6 +11,7 @@
 @interface JYQueryConditions()
 
 @property (nonatomic, strong) NSMutableArray<NSMutableDictionary*> *conditions;
+@property (nonatomic, copy) NSMutableString *orderStr;
 
 @end
 
@@ -24,6 +25,31 @@
         return self;
     };
 }
+
+- (JYQueryConditions * (^)(NSString *field))asc{
+    return ^id(NSString *field) {
+        [self orderAppendType:@"asc" field:field];
+        return self;
+    };
+}
+
+- (JYQueryConditions * (^)(NSString *field))desc{
+    return ^id(NSString *field) {
+        [self orderAppendType:@"desc" field:field];
+        return self;
+    };
+}
+
+- (void)orderAppendType:(NSString *)aType field:(NSString *)aField{
+    if (self.orderStr.length <= 0) {
+        [self.orderStr appendString:@" order by "];
+    }else{
+        [self.orderStr appendString:@","];
+    }
+    [self.orderStr appendFormat:@" %@ %@ ",aField,aType];
+}
+
+
 
 - (JYQueryConditions * (^)(NSString *compare))equalTo{
     return ^id(NSString *compare) {
@@ -76,6 +102,13 @@
         _conditions = [[NSMutableArray alloc] init];
     }
     return _conditions;
+}
+
+- (NSMutableString *)orderStr{
+    if (!_orderStr) {
+        _orderStr = [[NSMutableString alloc] init];
+    }
+    return _orderStr;
 }
 
 @end

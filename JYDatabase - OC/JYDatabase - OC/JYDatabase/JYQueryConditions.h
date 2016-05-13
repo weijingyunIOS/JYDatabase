@@ -15,11 +15,16 @@
 @interface JYQueryConditions : NSObject
 
 @property (nonatomic, strong, readonly) NSMutableArray<NSMutableDictionary*> *conditions;
+@property (nonatomic, copy, readonly) NSMutableString *orderStr;
+
 - (JYQueryConditions * (^)(NSString *compare))equalTo;
 - (JYQueryConditions * (^)(NSString *compare))greaterThanOrEqualTo;
 - (JYQueryConditions * (^)(NSString *compare))lessThanOrEqualTo;
 - (JYQueryConditions * (^)(NSString *compare))greaterTo;
 - (JYQueryConditions * (^)(NSString *compare))lessTo;
+
 - (JYQueryConditions * (^)(NSString *field))field;
+- (JYQueryConditions * (^)(NSString *field))asc;
+- (JYQueryConditions * (^)(NSString *field))desc;
 
 @end

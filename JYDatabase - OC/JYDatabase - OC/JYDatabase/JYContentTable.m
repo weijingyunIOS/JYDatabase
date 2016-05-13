@@ -295,7 +295,7 @@
             [strM appendFormat:@" AND "];
         }
     }];
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", self.tableName, strM];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ %@", self.tableName, strM,conditions.orderStr];
     NSLog(@"conditions -- %@",sql);
     
     FMResultSet *rs = [aDB executeQuery:sql];
