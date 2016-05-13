@@ -19,6 +19,7 @@
 @property (nonatomic, assign) BOOL bool1;
 @property (nonatomic, assign) double double1;
 @property (nonatomic, assign) float float1;
+@property (nonatomic, strong) NSData *data;
 
 
 @end

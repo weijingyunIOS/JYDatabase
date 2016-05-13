@@ -10,9 +10,9 @@
 #import "FMDB.h"
 #import <objc/runtime.h>
 
-#define kAttributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\""]
-#define kTypeArray      @[@"BOOL",@"DOUBLE",@"FLOAT",@"INTEGER",@"INTEGER",@"INTEGER",@"VARCHAR",@"VARCHAR"]
-#define kLenghtArray    @[@"1"   ,@"10"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128"]
+#define kAttributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\"",@"T@\"NSData\""]
+#define kTypeArray      @[@"BOOL",@"DOUBLE",@"FLOAT",@"INTEGER",@"INTEGER",@"INTEGER",@"VARCHAR",@"VARCHAR",@"BLOB"]
+#define kLenghtArray    @[@"1"   ,@"10"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128",    @"256"]
 @interface JYContentTable()
 
 @property (nonatomic, strong) NSCache *cache;

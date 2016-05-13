@@ -19,15 +19,18 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     NSMutableArray *arrayM = [[NSMutableArray alloc] init];
-    for (int i = 0; i < 200; i++) {
-        JYPersonInfo *info = [[JYPersonInfo alloc] init];
-        info.personnumber = [NSString stringWithFormat:@"123456%tu",i];
-        info.float1 = 10.10111;
-        info.int1 = i;
-        info.bool1 = i % 2 == 0;
-        info.integer1 = -100;
-        [arrayM addObject:info];
+    for (int i = 0; i < 50; i++) {
+            JYPersonInfo *info = [[JYPersonInfo alloc] init];
+            info.personnumber = [NSString stringWithFormat:@"123456%tu",i];
+            info.float1 = 10.10111;
+            info.int1 = i;
+            info.bool1 = i % 2 == 0;
+            info.integer1 = -100;
+            UIImage *image = [UIImage imageNamed:@"www"];
+            info.data =  UIImageJPEGRepresentation(image,1.0);
+            [arrayM addObject:info];
     }
+    
     [[JYDBService shared] insertPersonInfos:arrayM];
     
     UIButton *button1 = [self addButtonTitle:@"查询单条" action:@selector(getConttent:)];

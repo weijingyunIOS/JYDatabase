@@ -11,7 +11,7 @@
 @implementation JYPersonTable
 
 - (void)configTableName{
-    
+
     self.contentClass = [JYPersonInfo class];
     self.tableName = @"JYPersonTable";
 }
@@ -21,7 +21,7 @@
 }
 
 - (NSArray<NSString *> *)getContentField{
-    return @[@"mutableString1",@"integer1",@"uInteger1",@"int1",@"bool1",@"double1"];
+    return @[@"mutableString1",@"integer1",@"uInteger1",@"int1",@"bool1",@"double1",@"data"];
 }
 
 - (BOOL)enableCache{
