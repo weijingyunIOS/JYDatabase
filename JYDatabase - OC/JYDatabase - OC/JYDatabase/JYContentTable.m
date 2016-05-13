@@ -512,6 +512,15 @@
     }];
 }
 
+- (void)cleanContentBefore:(NSDate*)date{
+    NSTimeInterval time = [NSDate date].timeIntervalSince1970;
+    [self.dbQueue inDatabase:^(FMDatabase *db) {
+        [self deleteContentDB:db byconditions:^(JYQueryConditions *make) {
+            make.field([self insertTimeField]).lessTo([NSString stringWithFormat:@"%f",time]);
+        }];
+    }];
+}
+
 #pragma mark - 缓存存取删
 - (id)getCacheContentID:(NSString *)aID{
     if (aID.length <= 0 || ![self enableCache]) {

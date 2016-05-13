@@ -61,7 +61,14 @@
     UIButton *button8 = [self addButtonTitle:@"条件删除" action:@selector(deleteCompareConttents:)];
     button8.frame = CGRectMake(200, 264, 80, 50);
     
+    UIButton *button9 = [self addButtonTitle:@"清除" action:@selector(clearnCompareConttents:)];
+    button9.frame = CGRectMake(100, 264, 80, 50);
+    
     self.imageView.frame = CGRectMake(0, 350, 200, 100);
+}
+
+- (void)clearnCompareConttents:(UIButton*)but{
+    [[JYDBService shared] cleanPersonBefore:[NSDate date]];
 }
 
 - (void)deleteCompareConttents:(UIButton*)but{

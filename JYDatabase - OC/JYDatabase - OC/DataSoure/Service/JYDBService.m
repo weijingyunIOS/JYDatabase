@@ -68,4 +68,8 @@
     [self.personDB.personTable deleteAllContent];
 }
 
+- (void)cleanPersonBefore:(NSDate*)date{
+    [self.personDB.personTable cleanContentBefore:date];
+}
+
 @end

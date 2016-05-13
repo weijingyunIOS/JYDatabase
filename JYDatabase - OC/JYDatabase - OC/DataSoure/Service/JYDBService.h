@@ -24,5 +24,6 @@
 - (void)deletePersonInfos:(NSArray<NSString *>*)aPersonInfoids;
 - (void)deletePersonInfo:(NSString *)aPersonInfoid;
 - (void)deleteAllPersonInfo;
+- (void)cleanPersonBefore:(NSDate*)date;
 
 @end

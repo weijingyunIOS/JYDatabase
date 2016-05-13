@@ -61,6 +61,7 @@
 - (void)deleteContentByID:(NSString *)aID;
 - (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs;
 - (void)deleteAllContent;
+- (void)cleanContentBefore:(NSDate*)date;
 
 #pragma mark - 缓存存取删
 - (id)getCacheContentID:(NSString *)aID;
