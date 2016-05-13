@@ -326,7 +326,9 @@
 - (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
     [self configTableName];
     JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
-    block(conditions);
+    if (block) {
+        block(conditions);
+    }
     __block NSMutableString *strM = [[NSMutableString alloc] init];
     NSArray<NSString *> *fields = [self getAllContentField];
     [conditions.conditions enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -412,34 +414,6 @@
     return [arrayM copy];
 }
 
-- (NSArray *)getAllContent:(FMDatabase *)aDB{
-    [self configTableName];
-    __block id content = nil;
-    NSMutableArray *arrayM = nil;
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@", self.tableName];
-    NSLog(@"getAllContent--%@",sql);
-    FMResultSet *rs = [aDB executeQuery:sql];
-    NSArray<NSString *> *fields = [self getAllContentField];
-    while([rs next]) {
-        content = [[self.contentClass alloc] init];
-        [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            id value = [rs objectForKeyedSubscript:obj];
-            value = [self checkVaule:value forKey:obj];
-            if (value != [NSNull null]) {
-                [content setValue:value forKey:obj];
-            }
-        }];
-        if (arrayM == nil) {
-            arrayM = [[NSMutableArray alloc] init];
-        }
-        [self saveCacheContent:content];
-        [arrayM addObject:content];
-    }
-    [rs close];
-    [self checkError:aDB];
-    return [arrayM copy];
-}
-
 - (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block{
     __block id contents = nil;
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -467,7 +441,7 @@
 - (NSArray *)getAllContent{
     __block NSArray *array = nil;
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        array = [self getAllContent:db];
+        array = [self getContentDB:db byconditions:nil];
     }];
     return array;
 }
@@ -476,7 +450,9 @@
 - (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
     [self configTableName];
     JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
-    block(conditions);
+    if (block) {
+        block(conditions);
+    }
     __block NSMutableString *strM = [[NSMutableString alloc] init];
     NSArray<NSString *> *fields = [self getAllContentField];
     [conditions.conditions enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -512,15 +488,6 @@
     [self checkError:aDB];
 }
 
-- (void)deleteAllContent:(FMDatabase *)aDB{
-    [self configTableName];
-    NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
-    [aDB executeUpdate:sql];
-    NSLog(@"delete--%@",sql);
-    [self removeAllCache];
-    [self checkError:aDB];
-}
-
 - (void)deleteContentByConditions:(void (^)(JYQueryConditions *make))block{
     [self.dbQueue inDatabase:^(FMDatabase *aDB) {
         [self deleteContentDB:aDB byconditions:block];
@@ -541,7 +508,7 @@
 
 - (void)deleteAllContent{
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-        [self deleteAllContent:db];
+        [self deleteContentDB:db byconditions:nil];
     }];
 }
 

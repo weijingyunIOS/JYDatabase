@@ -49,7 +49,6 @@
 #pragma mark - get 查询
 - (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
-- (NSArray *)getAllContent:(FMDatabase *)aDB;
 - (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block;
 - (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs;
 - (id)getContentByID:(NSString*)aID;
@@ -58,7 +57,6 @@
 #pragma mark - delete 删除
 - (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
-- (void)deleteAllContent:(FMDatabase *)aDB;
 - (void)deleteContentByConditions:(void (^)(JYQueryConditions *make))block;
 - (void)deleteContentByID:(NSString *)aID;
 - (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs;
