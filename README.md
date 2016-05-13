@@ -104,6 +104,82 @@
  		d.为新表添加唯一索引
  		sql = [NSString stringWithFormat:@"create unique index '%@_key' on  %@(%@)", self.tableName,self.tableName,[self contentId]];
   	
+ 2.2 FMDB部分方法说明
+ 	
+ 	- (void)inTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block;
+	- (void)inDatabase:(void (^)(FMDatabase *db))block;
+ 	以上 两个方法都是开启了事务操作的
+ 	- (BOOL)rollback {
+    BOOL b = [self executeUpdate:@"rollback transaction"];
+    
+    if (b) {
+        _inTransaction = NO;
+    }
+    
+    return b;
+	}
+	
+	- (BOOL)commit {
+	    BOOL b =  [self executeUpdate:@"commit transaction"];
+	    
+	    if (b) {
+	        _inTransaction = NO;
+	    }
+	    
+	    return b;
+	}
+	
+	- (BOOL)beginDeferredTransaction {
+	    
+	    BOOL b = [self executeUpdate:@"begin deferred transaction"];
+	    if (b) {
+	        _inTransaction = YES;
+	    }
+	    
+	    return b;
+	}
+	
+	- (BOOL)beginTransaction {
+	    
+	    BOOL b = [self executeUpdate:@"begin exclusive transaction"];
+	    if (b) {
+	        _inTransaction = YES;
+	    }
+	    
+	    return b;
+	}
+	
+	- (BOOL)inTransaction {
+	    return _inTransaction;
+	}
+	在数据库的创建 升级 以及 多数据的插入，我都使用了该方法。
+	
+三、提供的查询方法
+	
+	在JYContentTable默认实现了部分查询方法如下：
+	#pragma mark - insert 插入
+	- (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
+	- (void)insertContent:(id)aContent;
+	- (void)insertContents:(NSArray *)aContents;
+	
+	#pragma mark - get 查询
+	- (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
+	- (NSArray *)getAllContent:(FMDatabase *)aDB;
+	- (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs;
+	- (id)getContentByID:(NSString*)aID;
+	- (NSArray *)getAllContent;
+
+	#pragma mark - delete 删除
+	- (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
+	- (void)deleteAllContent:(FMDatabase *)aDB;
+	- (void)deleteContentByID:(NSString *)aID;
+	- (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs;
+	- (void)deleteAllContent;
+	
+四、工具的推荐
+	
+	在移动端使用SqLite，个人建议安装 火狐浏览器 的一个插件 SQLite Manager 多的就不说了。
+
   	
       
       
