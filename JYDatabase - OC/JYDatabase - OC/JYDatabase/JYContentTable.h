@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "JYQueryConditions.h"
+
 @class FMDatabaseQueue , FMDatabase;
 
 @interface JYContentTable : NSObject
@@ -45,8 +47,10 @@
 - (void)insertContents:(NSArray *)aContents;
 
 #pragma mark - get 查询
+- (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
 - (NSArray *)getAllContent:(FMDatabase *)aDB;
+- (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block;
 - (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs;
 - (id)getContentByID:(NSString*)aID;
 - (NSArray *)getAllContent;

@@ -21,14 +21,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     NSMutableArray *arrayM = [[NSMutableArray alloc] init];
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
             JYPersonInfo *info = [[JYPersonInfo alloc] init];
             info.personnumber = [NSString stringWithFormat:@"123456%tu",i];
             info.float1 = 10.10111;
             info.int1 = i;
             info.bool1 = i % 2 == 0;
             info.integer1 = -100;
-            info.image = [UIImage imageNamed:@"www"];
+//            info.image = [UIImage imageNamed:@"www"];
             info.data = nil;
             [arrayM addObject:info];
     }
@@ -55,7 +55,19 @@
     UIButton *button6 = [self addButtonTitle:@"删除多条" action:@selector(deleteConttents:)];
     button6.frame = CGRectMake(200, 164, 80, 50);
     
-    self.imageView.frame = CGRectMake(0, 300, 200, 100);
+    UIButton *button7 = [self addButtonTitle:@"条件查询" action:@selector(compareConttents:)];
+    button7.frame = CGRectMake(0, 264, 80, 50);
+    
+    self.imageView.frame = CGRectMake(0, 350, 200, 100);
+}
+
+- (void)compareConttents:(UIButton*)but{
+   NSArray*infos = [[JYDBService shared] getPersonInfoByConditions:^(JYQueryConditions *make) {
+        make.field(@"personnumber").greaterThanOrEqualTo(@"12345620");
+        make.field(@"bool1").equalTo(@"1");
+    }];
+    
+    NSLog(@"%@",infos);
 }
 
 - (void)deleteConttent:(UIButton*)but{

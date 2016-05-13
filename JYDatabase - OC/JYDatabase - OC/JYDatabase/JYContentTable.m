@@ -284,6 +284,13 @@
 }
 
 #pragma mark - get 查询
+- (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
+    JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
+    block(conditions);
+    
+    return nil;
+}
+
 - (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
     [self configTableName];
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = ?", self.tableName, [self contentId]];
@@ -356,6 +363,14 @@
     [rs close];
     [self checkError:aDB];
     return [arrayM copy];
+}
+
+- (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block{
+    __block id contents = nil;
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        contents = [self getContentDB:db byconditions:block];
+    }];
+    return contents;
 }
 
 - (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs{

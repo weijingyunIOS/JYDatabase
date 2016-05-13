@@ -27,6 +27,7 @@
 		5CE7DCAC1CE0615E00470171 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CE7DCAA1CE0615E00470171 /* LaunchScreen.storyboard */; };
 		5CE7DCB71CE0615E00470171 /* JYDatabase___OCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE7DCB61CE0615E00470171 /* JYDatabase___OCTests.m */; };
 		5CE7DCC21CE0615E00470171 /* JYDatabase___OCUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE7DCC11CE0615E00470171 /* JYDatabase___OCUITests.m */; };
+		5CFD4F7F1CE5BBB80062F1C5 /* JYQueryConditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CFD4F7E1CE5BBB80062F1C5 /* JYQueryConditions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,8 @@
 		5CE7DCBD1CE0615E00470171 /* JYDatabase - OCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "JYDatabase - OCUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CE7DCC11CE0615E00470171 /* JYDatabase___OCUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JYDatabase___OCUITests.m"; sourceTree = "<group>"; };
 		5CE7DCC31CE0615E00470171 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5CFD4F7D1CE5BBB80062F1C5 /* JYQueryConditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYQueryConditions.h; sourceTree = "<group>"; };
+		5CFD4F7E1CE5BBB80062F1C5 /* JYQueryConditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYQueryConditions.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,8 @@
 			isa = PBXGroup;
 			children = (
 				5C88CB0A1CE08CAE006EBC35 /* fmdb */,
+				5CFD4F7D1CE5BBB80062F1C5 /* JYQueryConditions.h */,
+				5CFD4F7E1CE5BBB80062F1C5 /* JYQueryConditions.m */,
 				5C88CB271CE09F00006EBC35 /* JYContentTable.h */,
 				5C88CB281CE09F00006EBC35 /* JYContentTable.m */,
 				5C88CB1D1CE08EF0006EBC35 /* JYDataBase.h */,
@@ -388,6 +393,7 @@
 				5C88CB291CE09F00006EBC35 /* JYContentTable.m in Sources */,
 				5C88CB331CE0A258006EBC35 /* JYPersonInfo.m in Sources */,
 				5C88CB3C1CE0A43E006EBC35 /* JYPersonDB.m in Sources */,
+				5CFD4F7F1CE5BBB80062F1C5 /* JYQueryConditions.m in Sources */,
 				5CE7DCA11CE0615E00470171 /* AppDelegate.m in Sources */,
 				5C88CB1A1CE08CAE006EBC35 /* FMDatabaseQueue.m in Sources */,
 				5CE7DC9E1CE0615E00470171 /* main.m in Sources */,

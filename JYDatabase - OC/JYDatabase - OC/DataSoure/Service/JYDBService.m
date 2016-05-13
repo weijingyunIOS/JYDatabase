@@ -36,6 +36,10 @@
     [self.personDB.personTable insertContents:aPersonInfos];
 }
 
+- (NSArray<JYPersonInfo *> *)getPersonInfoByConditions:(void (^)(JYQueryConditions *make))block{
+    return [self.personDB.personTable getContentByConditions:block];
+}
+
 - (JYPersonInfo *)getPersonInfo:(NSString*)aPersonInfoID{
     return [self.personDB.personTable getContentByID:aPersonInfoID];
 }
