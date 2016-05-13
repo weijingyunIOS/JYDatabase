@@ -62,7 +62,7 @@
 	// 该方法会根据当前版本判断 是创建数据库表还是 数据表升级
 	- (void)buildWithPath:(NSString *)aPath mode:(ArtDatabaseMode)aMode;
 	
-	// 返回当前数据库版本，只要数据表有修改 返回版本号请 ＋1
+	// 返回当前数据库版本，只要数据表有修改 返回版本号请 ＋1 默认返回 1
 	- (NSInteger)getCurrentDBVersion{
 	    return 4;
 	}
