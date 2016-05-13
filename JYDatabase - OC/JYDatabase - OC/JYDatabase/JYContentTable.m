@@ -285,10 +285,43 @@
 
 #pragma mark - get 查询
 - (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
+    [self configTableName];
     JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
     block(conditions);
+    __block NSMutableString *strM = [[NSMutableString alloc] init];
+    [conditions.conditions enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [strM appendFormat:@"%@ %@ %@",obj[kField],obj[kEqual],obj[kCompare]];
+        if (idx < conditions.conditions.count - 1) {
+            [strM appendFormat:@" AND "];
+        }
+    }];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", self.tableName, strM];
+    NSLog(@"conditions -- %@",sql);
     
-    return nil;
+    FMResultSet *rs = [aDB executeQuery:sql];
+    NSArray<NSString *> *fields = [self getContentField];
+    id content = nil;
+    NSMutableArray *arrayM = nil;
+    while([rs next]) {
+        content = [[self.contentClass alloc] init];
+        id value = [rs stringForColumn:[self contentId]];
+        [content setValue:value forKey:[self contentId]];
+        [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            id value = [rs objectForKeyedSubscript:obj];
+            value = [self checkVaule:value forKey:obj];
+            if (value != [NSNull null]) {
+                [content setValue:value forKey:obj];
+            }
+        }];
+        if (arrayM == nil) {
+            arrayM = [[NSMutableArray alloc] init];
+        }
+        [self saveCacheContent:content];
+        [arrayM addObject:content];
+    }
+    [rs close];
+    [self checkError:aDB];
+    return [arrayM copy];
 }
 
 - (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
