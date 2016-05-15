@@ -1,0 +1,59 @@
+- (void)insertHHContent:(HHClass *)aHHContent;
+- (void)insertHHContents:(NSArray<HHClass *> *)aHHContents;
+
+- (NSArray<HHClass *> *)getHHContentByConditions:(void (^)(JYQueryConditions *make))block;
+- (HHClass *)getHHContent:(NSString*)aHHContentID;
+- (NSArray<HHClass *> *)getHHContents:(NSArray<NSString *> *)aHHContentIDs;
+- (NSArray<HHClass *> *)getAllHHContent;
+
+- (void)deleteHHContentByConditions:(void (^)(JYQueryConditions *make))block;
+- (void)deleteHHContents:(NSArray<NSString *>*)aHHContents;
+- (void)deleteHHContent:(NSString *)aHHContentID;
+- (void)deleteAllHHContent;
+- (void)cleanHHContentBefore:(NSDate*)date;
+
+# pragma mark HHClass operation
+- (void)insertHHContent:(HHClass *)aHHContent{
+    [self.HHDBName.HHTableName insertContent:aHHContent];
+}
+
+- (void)insertHHContents:(NSArray<HHClass *> *)aHHContents{
+    [self.HHDBName.HHTableName insertContents:aHHContents];
+}
+
+- (NSArray<HHClass *> *)getHHContentByConditions:(void (^)(JYQueryConditions *make))block{
+    return [self.HHDBName.HHTableName getContentByConditions:block];
+}
+
+- (HHClass *)getHHContent:(NSString*)aHHContentID{
+    return [self.HHDBName.HHTableName getContentByID:aHHContentID];
+}
+
+- (NSArray<HHClass *> *)getHHContents:(NSArray<NSString *> *)aHHContentIDs{
+    return [self.HHDBName.HHTableName getContentByIDs:aHHContentIDs];
+}
+
+- (NSArray<HHClass *> *)getAllHHContent{
+    return [self.HHDBName.HHTableName getAllContent];
+}
+
+- (void)deleteHHContentByConditions:(void (^)(JYQueryConditions *make))block{
+    return [self.HHDBName.HHTableName deleteContentByConditions:block];
+}
+
+- (void)deleteHHContents:(NSArray<NSString *>*)aHHContents{
+    [self.HHDBName.HHTableName deleteContentByIDs:aHHContents];
+}
+
+- (void)deleteHHContent:(NSString *)aHHContentID{
+    [self.HHDBName.HHTableName deleteContentByID:aHHContentID];
+}
+
+- (void)deleteAllHHContent{
+    [self.HHDBName.HHTableName deleteAllContent];
+}
+
+- (void)cleanHHContentBefore:(NSDate*)date{
+    [self.HHDBName.HHTableName cleanContentBefore:date];
+}
+
