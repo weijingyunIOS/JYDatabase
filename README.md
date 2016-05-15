@@ -10,7 +10,7 @@
 ![enter image description here](http://imgdata.hoop8.com/1605/2283412352730.jpg)
 
 	如图：是Demo中创建本地数据库的一个框图。
-	BS1: JYDBService类 提供了所有对外的查询方法，数据库的增删查改都通过这个单利调用。
+	BS1: JYDBService类 提供了所有对外的查询方法，数据库的增删查改都通过这个单例调用。
 	BS2: JYPersonDB 是JYDBService 所包含的其中一个数据库，他管理着 该库所有表的创建和升级。
 	BS3: JYPersonTable 是JYPersonDB库下的其中一张表，它管理了该表的所有 增删查改 操作。
 	BS4: JYPersonInfo 是映射JYPersonTable表的列的对象。JYPersonTable表查询出来的数据都会转换成JYPersonInfo对象。
@@ -192,19 +192,21 @@
 	
 	#pragma mark - get 查询
 	- (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
-	- (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
-	- (NSArray *)getAllContent:(FMDatabase *)aDB;
+    - (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
 	- (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block;
 	- (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs;
 	- (id)getContentByID:(NSString*)aID;
 	- (NSArray *)getAllContent;
 
 	#pragma mark - delete 删除
+	- (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 	- (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
-	- (void)deleteAllContent:(FMDatabase *)aDB;
+	- (void)deleteContentByConditions:(void (^)(JYQueryConditions *make))block;
 	- (void)deleteContentByID:(NSString *)aID;
 	- (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs;
 	- (void)deleteAllContent;
+	- (void)cleanContentBefore:(NSDate*)date;
+
 	
 四、工具的推荐
 	
