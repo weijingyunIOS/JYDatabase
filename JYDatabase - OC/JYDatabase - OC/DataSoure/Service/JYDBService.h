@@ -21,9 +21,9 @@
 - (NSArray<JYPersonInfo *> *)getAllPersonInfo;
 
 - (void)deletePersonInfoByConditions:(void (^)(JYQueryConditions *make))block;
-- (void)deletePersonInfos:(NSArray<NSString *>*)aPersonInfoids;
-- (void)deletePersonInfo:(NSString *)aPersonInfoid;
+- (void)deletePersonInfos:(NSArray<NSString *>*)aPersonInfoIDs;
+- (void)deletePersonInfo:(NSString *)aPersonInfoID;
 - (void)deleteAllPersonInfo;
-- (void)cleanPersonBefore:(NSDate*)date;
+- (void)cleanPersonInfoBefore:(NSDate*)date;
 
 @end

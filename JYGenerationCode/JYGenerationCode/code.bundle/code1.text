@@ -7,7 +7,7 @@
 - (NSArray<HHClass *> *)getAllHHContent;
 
 - (void)deleteHHContentByConditions:(void (^)(JYQueryConditions *make))block;
-- (void)deleteHHContents:(NSArray<NSString *>*)aHHContents;
+- (void)deleteHHContents:(NSArray<NSString *>*)aHHContentIDs;
 - (void)deleteHHContent:(NSString *)aHHContentID;
 - (void)deleteAllHHContent;
 - (void)cleanHHContentBefore:(NSDate*)date;
@@ -41,8 +41,8 @@
     return [self.HHDBName.HHTableName deleteContentByConditions:block];
 }
 
-- (void)deleteHHContents:(NSArray<NSString *>*)aHHContents{
-    [self.HHDBName.HHTableName deleteContentByIDs:aHHContents];
+- (void)deleteHHContents:(NSArray<NSString *>*)aHHContentIDs{
+    [self.HHDBName.HHTableName deleteContentByIDs:aHHContentIDs];
 }
 
 - (void)deleteHHContent:(NSString *)aHHContentID{

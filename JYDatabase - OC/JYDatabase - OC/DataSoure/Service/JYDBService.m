@@ -27,7 +27,6 @@
 }
 
 # pragma mark JYPersonInfo operation
-
 - (void)insertPersonInfo:(JYPersonInfo *)aPersonInfo{
     [self.personDB.personTable insertContent:aPersonInfo];
 }
@@ -56,20 +55,21 @@
     return [self.personDB.personTable deleteContentByConditions:block];
 }
 
-- (void)deletePersonInfos:(NSArray<NSString *>*)aPersonInfoids{
-    [self.personDB.personTable deleteContentByIDs:aPersonInfoids];
+- (void)deletePersonInfos:(NSArray<NSString *>*)aPersonInfoIDs{
+    [self.personDB.personTable deleteContentByIDs:aPersonInfoIDs];
 }
 
-- (void)deletePersonInfo:(NSString *)aPersonInfoid{
-    [self.personDB.personTable deleteContentByID:aPersonInfoid];
+- (void)deletePersonInfo:(NSString *)aPersonInfoID{
+    [self.personDB.personTable deleteContentByID:aPersonInfoID];
 }
 
 - (void)deleteAllPersonInfo{
     [self.personDB.personTable deleteAllContent];
 }
 
-- (void)cleanPersonBefore:(NSDate*)date{
+- (void)cleanPersonInfoBefore:(NSDate*)date{
     [self.personDB.personTable cleanContentBefore:date];
 }
+
 
 @end

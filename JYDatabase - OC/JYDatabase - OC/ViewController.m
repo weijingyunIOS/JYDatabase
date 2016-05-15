@@ -68,7 +68,7 @@
 }
 
 - (void)clearnCompareConttents:(UIButton*)but{
-    [[JYDBService shared] cleanPersonBefore:[NSDate date]];
+    [[JYDBService shared] cleanPersonInfoBefore:[NSDate date]];
 }
 
 - (void)deleteCompareConttents:(UIButton*)but{
