@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) NSString * documentDirectory ;
 @property (nonatomic, strong) JYPersonTable * personTable;
+@property (nonatomic, strong) JYTest1Table * test1Table;
 
 @end
 
@@ -32,15 +33,17 @@
 #pragma mark - 创建更新表
 - (NSInteger)getCurrentDBVersion
 {
-    return 1;
+    return 3;
 }
 
 - (void)createAllTable:(FMDatabase *)aDB{
     [self.personTable createTable:aDB];
+    [self.test1Table createTable:aDB];
 }
 
 - (void)updateDB:(FMDatabase *)aDB{
     [self.personTable updateDB:aDB];
+    [self.test1Table updateDB:aDB];
 }
 
 #pragma make - 懒加载
@@ -66,6 +69,14 @@
         _personTable.dbQueue = self.dbQueue;
     }
     return _personTable;
+}
+
+- (JYTest1Table *)test1Table{
+    if (!_test1Table) {
+        _test1Table = [[JYTest1Table alloc] init];
+        _test1Table.dbQueue = self.dbQueue;
+    }
+    return _test1Table;
 }
 
 @end

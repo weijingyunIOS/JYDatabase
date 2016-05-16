@@ -196,6 +196,10 @@
 - (void)updateDB:(FMDatabase *)aDB{
     [self configTableName];
     NSArray<NSString *> *tablefields = [self getCurrentFields:aDB];
+    if (tablefields.count <= 0) { // 表示该表未创建
+        [self createTable:aDB];
+        return;
+    }
     NSArray<NSString *> *contentfields = [self getAllContentField];
     __block NSMutableArray *addfields = [contentfields mutableCopy];
     __block NSMutableArray *minusfields = [tablefields mutableCopy];
