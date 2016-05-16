@@ -72,4 +72,51 @@
 }
 
 
+# pragma mark JYTest1Content operation
+- (void)insertTest1Content:(JYTest1Content *)aTest1Content{
+    [self.personDB.test1Table insertContent:aTest1Content];
+}
+
+- (void)insertTest1Contents:(NSArray<JYTest1Content *> *)aTest1Contents{
+    [self.personDB.test1Table insertContents:aTest1Contents];
+}
+
+- (NSArray<JYTest1Content *> *)getTest1ContentByConditions:(void (^)(JYQueryConditions *make))block{
+    return [self.personDB.test1Table getContentByConditions:block];
+}
+
+- (JYTest1Content *)getTest1Content:(NSString*)aTest1ContentID{
+    return [self.personDB.test1Table getContentByID:aTest1ContentID];
+}
+
+- (NSArray<JYTest1Content *> *)getTest1Contents:(NSArray<NSString *> *)aTest1ContentIDs{
+    return [self.personDB.test1Table getContentByIDs:aTest1ContentIDs];
+}
+
+- (NSArray<JYTest1Content *> *)getAllTest1Content{
+    return [self.personDB.test1Table getAllContent];
+}
+
+- (void)deleteTest1ContentByConditions:(void (^)(JYQueryConditions *make))block{
+    return [self.personDB.test1Table deleteContentByConditions:block];
+}
+
+- (void)deleteTest1Contents:(NSArray<NSString *>*)aTest1ContentIDs{
+    [self.personDB.test1Table deleteContentByIDs:aTest1ContentIDs];
+}
+
+- (void)deleteTest1Content:(NSString *)aTest1ContentID{
+    [self.personDB.test1Table deleteContentByID:aTest1ContentID];
+}
+
+- (void)deleteAllTest1Content{
+    [self.personDB.test1Table deleteAllContent];
+}
+
+- (void)cleanTest1ContentBefore:(NSDate*)date{
+    [self.personDB.test1Table cleanContentBefore:date];
+}
+
+
+
 @end

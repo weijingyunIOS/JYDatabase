@@ -26,4 +26,19 @@
 - (void)deleteAllPersonInfo;
 - (void)cleanPersonInfoBefore:(NSDate*)date;
 
+
+- (void)insertTest1Content:(JYTest1Content *)aTest1Content;
+- (void)insertTest1Contents:(NSArray<JYTest1Content *> *)aTest1Contents;
+
+- (NSArray<JYTest1Content *> *)getTest1ContentByConditions:(void (^)(JYQueryConditions *make))block;
+- (JYTest1Content *)getTest1Content:(NSString*)aTest1ContentID;
+- (NSArray<JYTest1Content *> *)getTest1Contents:(NSArray<NSString *> *)aTest1ContentIDs;
+- (NSArray<JYTest1Content *> *)getAllTest1Content;
+
+- (void)deleteTest1ContentByConditions:(void (^)(JYQueryConditions *make))block;
+- (void)deleteTest1Contents:(NSArray<NSString *>*)aTest1ContentIDs;
+- (void)deleteTest1Content:(NSString *)aTest1ContentID;
+- (void)deleteAllTest1Content;
+- (void)cleanTest1ContentBefore:(NSDate*)date;
+
 @end
