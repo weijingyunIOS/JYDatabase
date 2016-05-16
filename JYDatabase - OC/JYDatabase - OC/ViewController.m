@@ -20,7 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+    NSMutableArray *arrayM1 = [[NSMutableArray alloc] init];
+    NSMutableArray *arrayM2 = [[NSMutableArray alloc] init];
     for (int i = 0; i < 100; i++) {
             JYPersonInfo *info = [[JYPersonInfo alloc] init];
             info.personnumber = [NSString stringWithFormat:@"123456%tu",i];
@@ -30,13 +31,20 @@
             info.integer1 = -100;
 //            info.image = [UIImage imageNamed:@"www"];
             info.data = nil;
-            [arrayM addObject:info];
+            [arrayM1 addObject:info];
+        
+        JYTest1Content *test = [[JYTest1Content alloc] init];
+        test.testID = [NSString stringWithFormat:@"%3tu",i];
+        test.acgfloatDB = i * 1.5;
+        [arrayM2 addObject:test];
     }
     JYPersonInfo *info = [[JYPersonInfo alloc] init];
     info.personnumber = @"aaa";
     info.image = [UIImage imageNamed:@"www"];
     [[JYDBService shared] insertPersonInfo:info];
-    [[JYDBService shared] insertPersonInfos:arrayM];
+    [[JYDBService shared] insertPersonInfos:arrayM1];
+    
+    [[JYDBService shared] insertTest1Contents:arrayM2];
     UIButton *button1 = [self addButtonTitle:@"查询单条" action:@selector(getConttent:)];
     button1.frame = CGRectMake(0, 64, 80, 50);
     
