@@ -11,9 +11,9 @@
 #import "FMDB.h"
 #import <objc/runtime.h>
 
-#define kAttributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\"",@"T@\"NSData\"",@"T@\"UIImage\""]
-#define kTypeArray      @[@"BOOL",@"DOUBLE",@"FLOAT",@"INTEGER",@"INTEGER",@"INTEGER",@"VARCHAR",@"VARCHAR",@"BLOB",@"BLOB"]
-#define kLenghtArray    @[@"1"   ,@"20"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128",    @"256",@"256"]
+#define kAttributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\"",@"T@\"NSData\"",@"T@\"UIImage\"",@"T@\"NSNumber\""]
+#define kTypeArray      @[@"BOOL",@"DOUBLE",@"FLOAT",@"INTEGER",@"INTEGER",@"INTEGER",@"VARCHAR",@"VARCHAR",@"BLOB",@"BLOB",@"BLOB"]
+#define kLenghtArray    @[@"1"   ,@"20"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128",    @"256",@"256",@"64"]
 
 @interface JYContentTable()
 

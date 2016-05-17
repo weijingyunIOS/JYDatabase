@@ -36,6 +36,7 @@
         JYTest1Content *test = [[JYTest1Content alloc] init];
         test.testID = [NSString stringWithFormat:@"%3tu",i];
         test.acgfloatDB = i * 1.5;
+        test.numberDB = [NSNumber numberWithInteger:i];
         [arrayM2 addObject:test];
     }
     JYPersonInfo *info = [[JYPersonInfo alloc] init];
@@ -113,7 +114,8 @@
 - (void)getConttent:(UIButton*)but{
    JYPersonInfo* info = [[JYDBService shared] getPersonInfo:@"aaa"];
     self.imageView.image = info.image;
-   NSLog(@"%@",info);
+    NSArray* infos = [[JYDBService shared] getAllTest1Content];
+   NSLog(@"%@",infos);
 }
 
 - (void)getConttents:(UIButton*)but{

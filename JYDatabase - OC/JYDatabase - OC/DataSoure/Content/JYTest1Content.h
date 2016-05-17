@@ -12,5 +12,6 @@
 
 @property (nonatomic, copy) NSString *testID;
 @property (nonatomic, assign) CGFloat acgfloatDB;
+@property (nonatomic, strong) NSNumber *numberDB;
 
 @end

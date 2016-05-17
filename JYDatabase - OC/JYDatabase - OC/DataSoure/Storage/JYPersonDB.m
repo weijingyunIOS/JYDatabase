@@ -33,7 +33,7 @@
 #pragma mark - 创建更新表
 - (NSInteger)getCurrentDBVersion
 {
-    return 3;
+    return 4;
 }
 
 - (void)createAllTable:(FMDatabase *)aDB{
