@@ -6,6 +6,10 @@
 	1.自动处理数据库升级，让使用者不用考虑数据库升级带来烦劳。
 	2.封装简单常用的查询语句，让使用者只用关注特殊的SQL查询，基本查询不用重复写直接使用即可。
 
+已支持 CocoaPods
+	
+	pod 'JYDatabase', '~> 1.0.0'
+	
 一、JYDatabase 的使用
 ![enter image description here](http://imgdata.hoop8.com/1605/2283412352730.jpg)
 
