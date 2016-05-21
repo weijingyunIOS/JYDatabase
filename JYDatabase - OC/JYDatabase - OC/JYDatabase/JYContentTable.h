@@ -21,7 +21,7 @@
 
 - (void)checkError:(FMDatabase *)aDb;
 - (id)checkEmpty:(id)aObject;
-- (id)checkVaule:(id)aVaule forKey:(NSString*)aKey;
+- (id)checkVaule:(id)aVaule forKey:(NSString*)aKey; // 查询出来的数据进行处理
 
 #pragma mark - 是否使用缓存默认使用 如果使用查找优先使用
 - (BOOL)enableCache;
@@ -62,6 +62,13 @@
 - (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs;
 - (void)deleteAllContent;
 - (void)cleanContentBefore:(NSDate*)date;
+
+#pragma mark - getCount
+- (NSInteger)getCountContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
+- (NSInteger)getCountByConditions:(void (^)(JYQueryConditions *make))block;
+- (NSInteger)getAllCount;
+
+
 
 #pragma mark - 缓存存取删
 - (id)getCacheContentID:(NSString *)aID;
