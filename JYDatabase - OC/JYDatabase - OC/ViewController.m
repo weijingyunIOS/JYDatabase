@@ -92,8 +92,9 @@
    NSArray*infos = [[JYDBService shared] getPersonInfoByConditions:^(JYQueryConditions *make) {
         make.field(@"personnumber").greaterThanOrEqualTo(@"12345620");
         make.field(@"bool1").equalTo(@"1");
-        make.field(@"personnumber").lessTo(@"12345630");
-        make.asc(@"bool1").desc(@"int1");
+//        make.field(@"personnumber").lessTo(@"12345630");
+       make.sqlStr(@"personnumber < 12345630");
+//        make.asc(@"bool1").desc(@"int1");
     }];
     
     NSLog(@"%@",infos);

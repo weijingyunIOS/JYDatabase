@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) NSMutableArray<NSMutableDictionary*> *conditions;
 @property (nonatomic, copy) NSMutableString *orderStr;
+@property (nonatomic, strong) NSMutableArray<NSString *> *sqlStrings;
 
 @end
 
@@ -105,6 +106,13 @@
     };
 }
 
+- (JYQueryConditions * (^)(NSString *str))sqlStr{
+    return ^id(NSString *str) {
+        [self.sqlStrings addObject:str];
+        return self;
+    };
+}
+
 - (NSMutableString *)conditionStr{
     __block NSMutableString *strM = [[NSMutableString alloc] init];
     [self.conditions enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -113,6 +121,16 @@
             [strM appendFormat:@" AND "];
         }
     }];
+    
+    if (self.sqlStrings.count > 0) {
+        
+        [self.sqlStrings enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (!(idx == 0 && self.conditions.count <= 0)) {
+                [strM appendFormat:@" AND "];
+            }
+            [strM appendString:obj];
+        }];
+    }
     return strM;
 }
 
@@ -129,6 +147,13 @@
         _orderStr = [[NSMutableString alloc] init];
     }
     return _orderStr;
+}
+
+- (NSMutableArray<NSString *> *)sqlStrings{
+    if (!_sqlStrings) {
+        _sqlStrings = [[NSMutableArray alloc] init];
+    }
+    return _sqlStrings;
 }
 
 @end

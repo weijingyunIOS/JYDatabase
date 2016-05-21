@@ -29,4 +29,6 @@
 - (JYQueryConditions * (^)(NSString *field))asc;
 - (JYQueryConditions * (^)(NSString *field))desc;
 
+- (JYQueryConditions * (^)(NSString *str))sqlStr;
+
 @end
