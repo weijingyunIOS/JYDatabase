@@ -8,7 +8,7 @@
 
 已支持 CocoaPods
 	
-	pod 'JYDataBase', '~> 1.0.0'
+	pod 'JYDataBase'
 	
 一、JYDatabase 的使用
 ![enter image description here](http://imgdata.hoop8.com/1605/2283412352730.jpg)
