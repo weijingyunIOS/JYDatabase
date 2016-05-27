@@ -64,20 +64,22 @@
 - (NSArray<NSString *> *)getContentField{
     NSMutableArray *arrayM = [[NSMutableArray alloc] init];
     unsigned int outCount;
-    NSLog(@"%@",NSStringFromClass(self.contentClass));
-    objc_property_t *properties = class_copyPropertyList(self.contentClass, &outCount);
-    for (NSInteger index = 0; index < outCount; index++) {
-        NSString *tmpName = [NSString stringWithFormat:@"%s",property_getName(properties[index])];
-        NSString* prefix = @"DB";
-        if ([tmpName hasSuffix:prefix]) {
-            [arrayM addObject:tmpName];
+    Class aClass = self.contentClass;
+    while (class_getSuperclass(aClass) != nil) {
+        objc_property_t *properties = class_copyPropertyList(aClass, &outCount);
+        for (NSInteger index = 0; index < outCount; index++) {
+            NSString *tmpName = [NSString stringWithFormat:@"%s",property_getName(properties[index])];
+            NSString* prefix = @"DB";
+            if ([tmpName hasSuffix:prefix]) {
+                [arrayM addObject:tmpName];
+            }
         }
+        
+        if (properties) {
+            free(properties);
+        }
+        aClass = class_getSuperclass(aClass);
     }
-    
-    if (properties) {
-        free(properties);
-    }
-    
     NSAssert([self contentId].length > 0, @"主键不能为空");
     [arrayM removeObject:[self contentId]];
     return [arrayM copy];
@@ -159,19 +161,22 @@
 #pragma mark - field Attributes 获取准备处理 如 personid varchar(64)
 - (NSDictionary*)attributeTypeDic{
     if (!_attributeTypeDic) {
-        
         NSMutableDictionary *dicM = [[NSMutableDictionary alloc] init];
-        unsigned int outCount;
-        objc_property_t *properties = class_copyPropertyList(self.contentClass, &outCount);
-        for (NSInteger index = 0; index < outCount; index++) {
-            NSString *tmpName = [NSString stringWithFormat:@"%s",property_getName(properties[index])];
-            NSString *tmpAttributes = [NSString stringWithFormat:@"%s",property_getAttributes(properties[index])];
-            NSArray<NSString*> *attributes = [tmpAttributes componentsSeparatedByString:@","];
-            dicM[tmpName] = attributes.firstObject;
-        }
-        
-        if (properties) {
-            free(properties);
+        Class aClass = self.contentClass;
+        while (class_getSuperclass(aClass) != nil) {
+            unsigned int outCount;
+            objc_property_t *properties = class_copyPropertyList(aClass, &outCount);
+            for (NSInteger index = 0; index < outCount; index++) {
+                NSString *tmpName = [NSString stringWithFormat:@"%s",property_getName(properties[index])];
+                NSString *tmpAttributes = [NSString stringWithFormat:@"%s",property_getAttributes(properties[index])];
+                NSArray<NSString*> *attributes = [tmpAttributes componentsSeparatedByString:@","];
+                dicM[tmpName] = attributes.firstObject;
+            }
+            
+            if (properties) {
+                free(properties);
+            }
+            aClass = class_getSuperclass(aClass);
         }
         dicM[[self insertTimeField]] = @"Td";
         _attributeTypeDic = [dicM copy];
