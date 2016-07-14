@@ -11,6 +11,8 @@
 #import "FMDB.h"
 #import <objc/runtime.h>
 
+#define NSLog(...)
+
 #define kAttributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\"",@"T@\"NSData\"",@"T@\"UIImage\"",@"T@\"NSNumber\"",@"T@\"NSDictionary\"",@"T@\"NSMutableDictionary\"",@"T@\"NSMutableArray\"",@"T@\"NSArray\""]
 #define kTypeArray      @[@"BOOL",@"DOUBLE",@"FLOAT",@"INTEGER",@"INTEGER",@"INTEGER",@"VARCHAR",@"VARCHAR",@"BLOB",@"BLOB",@"BLOB",@"BLOB",@"BLOB",@"BLOB",@"BLOB"]
 #define kLenghtArray    @[@"1"   ,@"20"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128",    @"256",@"256",@"64",@"512",@"512",@"512",@"512"]

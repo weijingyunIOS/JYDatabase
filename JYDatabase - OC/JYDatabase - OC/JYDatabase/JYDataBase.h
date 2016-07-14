@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "JYContentTable.h"
+#import "JYQueryConditions.h"
 
 @class FMDatabase;
 @class FMDatabaseQueue;
