@@ -7,15 +7,12 @@
 //
 
 #import "JYContentTable.h"
+#import "JYDataBaseConfig.h"
 #import <UIKit/UIKit.h>
 #import "FMDB.h"
 #import <objc/runtime.h>
 
 #define NSLog(...)
-
-#define kAttributeArray @[@"TB",@"Td",@"Tf",@"Ti",@"Tq",@"TQ",@"T@\"NSMutableString\"",@"T@\"NSString\"",@"T@\"NSData\"",@"T@\"UIImage\"",@"T@\"NSNumber\"",@"T@\"NSDictionary\"",@"T@\"NSMutableDictionary\"",@"T@\"NSMutableArray\"",@"T@\"NSArray\""]
-#define kTypeArray      @[@"BOOL",@"DOUBLE",@"FLOAT",@"INTEGER",@"INTEGER",@"INTEGER",@"VARCHAR",@"VARCHAR",@"BLOB",@"BLOB",@"BLOB",@"BLOB",@"BLOB",@"BLOB",@"BLOB"]
-#define kLenghtArray    @[@"1"   ,@"20"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128",    @"256",@"256",@"64",@"512",@"512",@"512",@"512"]
 
 @interface JYContentTable()
 
@@ -188,10 +185,13 @@
 
 // 类型的映射
 - (NSArray *)conversionAttributeType:(NSString *)aType{
-    NSInteger index = [kAttributeArray indexOfObject:aType];
-    NSAssert(index <= kAttributeArray.count, @"当前类型不支持");
-    NSString *str = kTypeArray[index];
-    NSString *length = kLenghtArray[index];
+    
+    NSString *str = correspondingDic()[aType];
+    NSAssert(str != nil, @"当前类型不支持");
+    if (str == nil) {
+        str = @"INTEGER";
+    }
+    NSString *length = defaultDic()[str];
     return @[str,length];
 }
 

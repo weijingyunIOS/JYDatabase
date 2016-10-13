@@ -50,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C2A9D771DAFBFE6000AADE3 /* JYDataBaseConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYDataBaseConfig.h; sourceTree = "<group>"; };
 		5C88CB0B1CE08CAE006EBC35 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		5C88CB0C1CE08CAE006EBC35 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		5C88CB0D1CE08CAE006EBC35 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -135,6 +136,7 @@
 				5C88CB281CE09F00006EBC35 /* JYContentTable.m */,
 				5C88CB1D1CE08EF0006EBC35 /* JYDataBase.h */,
 				5C88CB1E1CE08EF0006EBC35 /* JYDataBase.m */,
+				5C2A9D771DAFBFE6000AADE3 /* JYDataBaseConfig.h */,
 			);
 			path = JYDatabase;
 			sourceTree = "<group>";
