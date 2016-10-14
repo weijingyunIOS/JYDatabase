@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "JYDataBaseConfig.h"
 #import "JYQueryConditions.h"
 #import "NSObject+JYContentTableClass.h"
 
@@ -24,24 +25,34 @@
 - (id)checkEmpty:(id)aObject;
 - (id)checkVaule:(id)aVaule forKey:(NSString*)aKey; // 查询出来的数据进行处理
 
-#pragma mark - 是否使用缓存默认使用 如果使用查找优先使用
-- (BOOL)enableCache;
+#pragma mark - 需要重写实现的一些功能
+- (BOOL)enableCache; // 是否使用缓存默认使用 如果使用查找优先使用
 - (NSDictionary *)correspondingDic;  // 自定义数据类型映射
 
 #pragma mark - 创建表
 - (NSString *)contentId;                    // 表的主键
 - (NSArray<NSString *> *)getContentField;   // 表除主键外其它的列 默认取 @“DB” 结尾的属性
 - (NSDictionary*)fieldLenght;               // 创建表 对应列默认长度  默认取默认值
+
 // 不重写 该方法会 通过 contentId getContentField fieldLenght 进行表的创建
 - (void)createTable:(FMDatabase *)aDB;
+
+// 重写该方法  在创建和更新表时添加额外的数据 比如为某些字段添加索引
+- (void)addOtherOperationForTable:(FMDatabase *)aDB;
+
 // 重写该方法 在建表时插入默认数据
 - (void)insertDefaultData:(FMDatabase *)aDb;
 
 #pragma mark - 更新表
-// 1-2 2-3 3-4 一步步升级 不建议使用 - (void)updateDB:(FMDatabase *)aDB 已经实现一步到位
+// 1-2 2-3 3-4 一步步升级 不建议使用  // - (void)updateDB:(FMDatabase *)aDB 已经实现一步到位
 - (void)updateDB:(FMDatabase *)aDB fromVersion:(NSInteger)aFromVersion toVersion:(NSInteger)aToVersion;
 // 默认通过 getContentField 来进行对比 从而新增 删除对应列
 - (void)updateDB:(FMDatabase *)aDB;
+
+#pragma mark - 索引添加
+- (void)addUniques:(NSArray<NSString *>*)indexs; // 默认添加 非聚集索引
+- (void)addDB:(FMDatabase *)aDB uniques:(NSArray<NSString *>*)indexs; // 默认添加 非聚集索引
+- (void)addDB:(FMDatabase *)aDB type:(EJYDataBaseIndex)aType uniques:(NSArray<NSString *>*)indexs;
 
 #pragma mark - insert 插入
 - (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
@@ -69,8 +80,6 @@
 - (NSInteger)getCountContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (NSInteger)getCountByConditions:(void (^)(JYQueryConditions *make))block;
 - (NSInteger)getAllCount;
-
-
 
 #pragma mark - 缓存存取删
 - (id)getCacheContentID:(NSString *)aID;

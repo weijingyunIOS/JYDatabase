@@ -10,7 +10,6 @@
 #import <UIKit/UIKit.h>
 #import "FMDB.h"
 #import <objc/runtime.h>
-#import "JYDataBaseConfig.h"
 
 #if DEBUG
 
@@ -47,6 +46,10 @@
 }
 
 - (void)insertDefaultData:(FMDatabase *)aDb{
+    
+}
+
+- (void)addOtherOperationForTable:(FMDatabase *)aDB{
     
 }
 
@@ -106,9 +109,15 @@
 #pragma mark - 查询的处理函数
 - (void)checkError:(FMDatabase *)aDb
 {
+#if DEBUG
+    
     if ([aDb hadError]) {
         NSLog(@"DB Err %d: %@", [aDb lastErrorCode], [aDb lastErrorMessage]);
     }
+    
+#else
+    
+#endif
 }
 
 // 数据预处理
@@ -224,6 +233,9 @@
     [aDB executeUpdate:[strM copy]];
     [self checkError:aDB];
     
+    // 添加额外的操作
+    [self addOtherOperationForTable:aDB];
+    
     // 插入默认数据
     [self insertDefaultData:aDB];
 }
@@ -311,6 +323,47 @@
     sql = [NSString stringWithFormat:@"create unique index '%@_key' on  %@(%@)", self.tableName,self.tableName,[self contentId]];
     [aDB executeUpdate:sql];
     [self checkError:aDB];
+
+    // 5.添加额外的操作 如索引
+    [self addOtherOperationForTable:aDB];
+}
+
+#pragma mark - 索引添加
+// 默认添加 非聚集索引
+- (void)addUniques:(NSArray<NSString *>*)indexs{
+    [self.dbQueue inDatabase:^(FMDatabase *db) {
+       [self addDB:db uniques:indexs];
+    }];
+}
+
+// 默认添加 非聚集索引
+- (void)addDB:(FMDatabase *)aDB uniques:(NSArray<NSString *>*)indexs{
+    [self addDB:aDB type:EJYDataBaseIndexNonclustered uniques:indexs];
+}
+
+- (void)addDB:(FMDatabase *)aDB type:(EJYDataBaseIndex)aType uniques:(NSArray<NSString *>*)indexs{
+    NSString *str = @"create unique index";
+    switch (aType) {
+        case EJYDataBaseIndexNonclustered:
+            str = @"create unique nonclustered index";
+            break;
+            
+        case EJYDataBaseIndexClustered:
+            str = @"create unique clustered index";
+            break;
+            
+        case EJYDataBaseIndexOnlyIndex:
+            str = @"create unique index";
+            break;
+            
+        default:
+            break;
+    }
+    [indexs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *sql = [NSString stringWithFormat:@"%@ '%@_%@_key' on  %@(%@)",str,self.tableName,obj,self.tableName,obj];
+        [aDB executeUpdate:sql];
+        [self checkError:aDB];
+    }];
 }
 
 #pragma mark - insert 插入
