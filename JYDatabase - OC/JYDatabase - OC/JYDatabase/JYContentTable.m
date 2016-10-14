@@ -264,6 +264,9 @@
     }];
     [self updateDB:aDB addFieldS:addfields];
     [self updateDB:aDB minusFieldS:minusfields];
+
+    // 5.添加额外的操作 如索引
+    [self addOtherOperationForTable:aDB];
 }
 
 - (NSArray<NSString*> *)getCurrentFields:(FMDatabase *)aDB{
@@ -323,9 +326,6 @@
     sql = [NSString stringWithFormat:@"create unique index '%@_key' on  %@(%@)", self.tableName,self.tableName,[self contentId]];
     [aDB executeUpdate:sql];
     [self checkError:aDB];
-
-    // 5.添加额外的操作 如索引
-    [self addOtherOperationForTable:aDB];
 }
 
 #pragma mark - 索引添加
@@ -344,12 +344,10 @@
 - (void)addDB:(FMDatabase *)aDB type:(EJYDataBaseIndex)aType uniques:(NSArray<NSString *>*)indexs{
     NSString *str = @"create unique index";
     switch (aType) {
-        case EJYDataBaseIndexNonclustered:
-            str = @"create unique nonclustered index";
-            break;
             
-        case EJYDataBaseIndexClustered:
-            str = @"create unique clustered index";
+        case EJYDataBaseIndexCompositeIndex:
+        case EJYDataBaseIndexNonclustered:
+            str = @"CREATE INDEX";
             break;
             
         case EJYDataBaseIndexOnlyIndex:
@@ -359,11 +357,27 @@
         default:
             break;
     }
+    
+    if (aType != EJYDataBaseIndexCompositeIndex) {
+        [indexs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *sql = [NSString stringWithFormat:@"%@ '%@%@_key' on  %@(%@)",str,self.tableName,obj,self.tableName,obj];
+            [aDB executeUpdate:sql];
+            [self checkError:aDB];
+        }];
+        return;
+    }
+    
+    NSMutableString *strM = [[NSMutableString alloc] init];
     [indexs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *sql = [NSString stringWithFormat:@"%@ '%@_%@_key' on  %@(%@)",str,self.tableName,obj,self.tableName,obj];
-        [aDB executeUpdate:sql];
-        [self checkError:aDB];
+        if (idx != 0) {
+            [strM appendString:@","];
+        }
+        [strM appendString:obj];
     }];
+    
+    NSString *sql = [NSString stringWithFormat:@"%@ '%@CompositeIndex_key' on  %@(%@)",str,self.tableName,self.tableName,strM];
+    [aDB executeUpdate:sql];
+    [self checkError:aDB];
 }
 
 #pragma mark - insert 插入
