@@ -54,6 +54,10 @@
     return YES;
 }
 
+- (NSDictionary *)correspondingDic{
+    return nil;
+}
+
 - (NSDictionary*)fieldLenght{
     return nil;
 }
@@ -193,13 +197,12 @@
 - (NSArray *)conversionAttributeType:(NSString *)aType{
     NSString *str = jy_correspondingDic()[aType];
     if (str == nil) {
-        
-        //    NSLog(@"%@",aType);
+        if (self.correspondingDic) {
+            str = self.correspondingDic[aType];
+        }
     }
     NSAssert(str != nil, @"当前类型不支持");
-    if (str == nil) {
-        str = @"INTEGER";
-    }
+    
     NSString *length = jy_defaultDic()[str];
     return @[str,length];
 }

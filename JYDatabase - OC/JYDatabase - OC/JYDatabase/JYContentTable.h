@@ -25,6 +25,7 @@
 
 #pragma mark - 是否使用缓存默认使用 如果使用查找优先使用
 - (BOOL)enableCache;
+- (NSDictionary *)correspondingDic;  // 自定义数据类型映射
 
 #pragma mark - 创建表
 - (NSString *)contentId;                    // 表的主键

@@ -130,13 +130,13 @@
 			isa = PBXGroup;
 			children = (
 				5C88CB0A1CE08CAE006EBC35 /* fmdb */,
+				5C2A9D771DAFBFE6000AADE3 /* JYDataBaseConfig.h */,
 				5CFD4F7D1CE5BBB80062F1C5 /* JYQueryConditions.h */,
 				5CFD4F7E1CE5BBB80062F1C5 /* JYQueryConditions.m */,
 				5C88CB271CE09F00006EBC35 /* JYContentTable.h */,
 				5C88CB281CE09F00006EBC35 /* JYContentTable.m */,
 				5C88CB1D1CE08EF0006EBC35 /* JYDataBase.h */,
 				5C88CB1E1CE08EF0006EBC35 /* JYDataBase.m */,
-				5C2A9D771DAFBFE6000AADE3 /* JYDataBaseConfig.h */,
 			);
 			path = JYDatabase;
 			sourceTree = "<group>";
