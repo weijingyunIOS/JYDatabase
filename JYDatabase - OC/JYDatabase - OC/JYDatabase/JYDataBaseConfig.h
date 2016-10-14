@@ -10,14 +10,19 @@
 #define JYDataBaseConfig_h
 #import <UIKit/UIKit.h>
 
-static inline NSDictionary * correspondingDic(){
-    return @{@"TB":@"BOOL",
+static inline NSDictionary * jy_correspondingDic(){
+    return @{@"Tb":@"BOOL",
+             @"TB":@"BOOL",
              @"Tc":@"BOOL",
+             @"TC":@"BOOL",
              @"Td":@"DOUBLE",
+             @"TD":@"DOUBLE",
              @"Tf":@"FLOAT",
+             @"TF":@"INTEGER",
              @"Ti":@"INTEGER",
              @"TI":@"INTEGER",
              @"Tq":@"INTEGER",
+             @"TQ":@"INTEGER",
              @"T@\"NSMutableString\"":@"VARCHAR",
              @"T@\"NSString\"":@"VARCHAR",
              @"T@\"NSData\"":@"BLOB",
@@ -29,7 +34,7 @@ static inline NSDictionary * correspondingDic(){
              @"T@\"NSArray\"":@"BLOB",};
 }
 
-static inline NSDictionary * defaultDic(){
+static inline NSDictionary * jy_defaultDic(){
     return @{@"BOOL":@"1",
              @"DOUBLE":@"20",
              @"FLOAT":@"10",

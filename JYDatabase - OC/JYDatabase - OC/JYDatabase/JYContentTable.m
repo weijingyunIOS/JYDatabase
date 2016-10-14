@@ -7,12 +7,18 @@
 //
 
 #import "JYContentTable.h"
-#import "JYDataBaseConfig.h"
 #import <UIKit/UIKit.h>
 #import "FMDB.h"
 #import <objc/runtime.h>
+#import "JYDataBaseConfig.h"
+
+#if DEBUG
+
+#else
 
 #define NSLog(...)
+
+#endif
 
 @interface JYContentTable()
 
@@ -185,13 +191,16 @@
 
 // 类型的映射
 - (NSArray *)conversionAttributeType:(NSString *)aType{
-    
-    NSString *str = correspondingDic()[aType];
+    NSString *str = jy_correspondingDic()[aType];
+    if (str == nil) {
+        
+        //    NSLog(@"%@",aType);
+    }
     NSAssert(str != nil, @"当前类型不支持");
     if (str == nil) {
         str = @"INTEGER";
     }
-    NSString *length = defaultDic()[str];
+    NSString *length = jy_defaultDic()[str];
     return @[str,length];
 }
 
@@ -212,7 +221,7 @@
         [strM appendString:@" , "];
     }];
     [strM appendFormat:@"PRIMARY KEY (%@) ON CONFLICT REPLACE)",[self contentId]];
-    NSLog(@"----------%@",strM);
+//    //    NSLog(@"----------%@",strM);
     [aDB executeUpdate:[strM copy]];
     [self checkError:aDB];
     
@@ -275,7 +284,7 @@
     if (aFields.count <= 0) {
         return;
     }
-    NSLog(@"多余字段%@",aFields);
+//    //    NSLog(@"多余字段%@",aFields);
     // 1.根据原表新建一个表
     NSString *tempTableName = [NSString stringWithFormat:@"temp_%@",self.tableName];
     __block NSMutableString *tableField = [[NSMutableString alloc] init];
@@ -308,7 +317,7 @@
 #pragma mark - insert 插入
 - (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents{
     [self configTableName];
-    NSLog(@"insert %@",[aContents.firstObject class]);
+//    //    NSLog(@"insert %@",[aContents.firstObject class]);
     NSArray<NSString *> *fields = [self getAllContentField];
     // 1.插入语句拼接
     NSMutableString *strM = [[NSMutableString alloc] init];
@@ -323,8 +332,8 @@
         [strM1 appendFormat:@" ?"];
     }];
     [strM appendFormat:@") VALUES (%@)",strM1];
-    NSLog(@"-----%@",strM);
-        
+//    //    NSLog(@"-----%@",strM);
+    
     // 2.一条条插入
     [aContents enumerateObjectsUsingBlock:^(id  _Nonnull aContent, NSUInteger idx, BOOL * _Nonnull stop) {
         
@@ -382,7 +391,7 @@
         sql = [NSString stringWithFormat:@"SELECT * FROM %@ %@", self.tableName,conditions.orderStr];
     }
 
-    NSLog(@"conditions -- %@",sql);
+    //    NSLog(@"conditions -- %@",sql);
     FMResultSet *rs = [aDB executeQuery:sql];
     id content = nil;
     NSMutableArray *arrayM = nil;
@@ -411,7 +420,7 @@
 - (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
     [self configTableName];
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = ?", self.tableName, [self contentId]];
-    NSLog(@"contentByID--%@",sql);
+    //    NSLog(@"contentByID--%@",sql);
      NSArray<NSString *> *fields = [self getAllContentField];
      __block NSMutableArray *arrayM = nil;
     [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull aID, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -506,7 +515,7 @@
         sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
     }
     
-    NSLog(@"delete conditions -- %@",sql);
+    //    NSLog(@"delete conditions -- %@",sql);
     [aDB executeUpdate:sql];
     [self checkError:aDB];
     [self removeAllCache];
@@ -515,7 +524,7 @@
 - (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
     [self configTableName];
     NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = ?", self.tableName, [self contentId]];
-    NSLog(@"delete--%@",sql);
+    //    NSLog(@"delete--%@",sql);
     [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull aID, NSUInteger idx, BOOL * _Nonnull stop) {
         [aDB executeUpdate:sql,
         [self checkEmpty:aID]];
@@ -582,7 +591,7 @@
         sql = [NSString stringWithFormat:@"select count(1) from %@ ", self.tableName];
     }
     
-    NSLog(@"conditions -- %@",sql);
+    //    NSLog(@"conditions -- %@",sql);
     NSInteger count = 0;
     FMResultSet *rs = [aDB executeQuery:sql];
     while([rs next]) {
@@ -639,7 +648,7 @@
 }
 
 - (void)dealloc{
-    NSLog(@"%@ dealloc", NSStringFromClass([self class]));
+    //    NSLog(@"%@ dealloc", NSStringFromClass([self class]));
 }
 
 @end
