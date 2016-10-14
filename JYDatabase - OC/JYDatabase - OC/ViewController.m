@@ -114,6 +114,7 @@
 
 - (void)getConttent:(UIButton*)but{
    JYPersonInfo* info = [[JYDBService shared] getPersonInfo:@"aaa"];
+    NSLog(@"%f",info.lastInsertTime);
     self.imageView.image = info.image;
     NSArray* infos = [[JYDBService shared] getAllTest1Content];
    NSLog(@"%@",infos);

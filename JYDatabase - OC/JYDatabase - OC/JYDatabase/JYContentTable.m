@@ -67,7 +67,7 @@
 }
 
 - (NSString *)insertTimeField{
-    return [NSString stringWithFormat:@"insertTimeField_%@",self.tableName];
+    return @"lastInsertTime";
 }
 
 - (NSArray<NSString *> *)getContentField{
@@ -148,10 +148,6 @@
     
         if ([self jSONSerializationForType:type] && aVaule != [NSNull null]) {
             aVaule =  [NSJSONSerialization JSONObjectWithData:aVaule options:NSJSONReadingMutableContainers error:nil];
-        }
-        
-        if ([aKey isEqualToString:[self insertTimeField]]) {
-            return [NSNull null];
         }
         return aVaule;
     }

@@ -21,6 +21,7 @@
 		5C88CB3F1CE0A671006EBC35 /* JYDBService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB3E1CE0A671006EBC35 /* JYDBService.m */; };
 		5CDD93211CE961510005E430 /* JYTest1Content.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDD93201CE961510005E430 /* JYTest1Content.m */; };
 		5CDD93241CE961B00005E430 /* JYTest1Table.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDD93231CE961B00005E430 /* JYTest1Table.m */; };
+		5CE32C281DB0BCCD00284931 /* NSObject+JYContentTableClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE32C271DB0BCCD00284931 /* NSObject+JYContentTableClass.m */; };
 		5CE7DC9E1CE0615E00470171 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE7DC9D1CE0615E00470171 /* main.m */; };
 		5CE7DCA11CE0615E00470171 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE7DCA01CE0615E00470171 /* AppDelegate.m */; };
 		5CE7DCA41CE0615E00470171 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE7DCA31CE0615E00470171 /* ViewController.m */; };
@@ -80,6 +81,8 @@
 		5CDD93201CE961510005E430 /* JYTest1Content.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYTest1Content.m; sourceTree = "<group>"; };
 		5CDD93221CE961B00005E430 /* JYTest1Table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYTest1Table.h; sourceTree = "<group>"; };
 		5CDD93231CE961B00005E430 /* JYTest1Table.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYTest1Table.m; sourceTree = "<group>"; };
+		5CE32C261DB0BCCD00284931 /* NSObject+JYContentTableClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+JYContentTableClass.h"; sourceTree = "<group>"; };
+		5CE32C271DB0BCCD00284931 /* NSObject+JYContentTableClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JYContentTableClass.m"; sourceTree = "<group>"; };
 		5CE7DC991CE0615E00470171 /* JYDatabase - OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "JYDatabase - OC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CE7DC9D1CE0615E00470171 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5CE7DC9F1CE0615E00470171 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -131,6 +134,8 @@
 			children = (
 				5C88CB0A1CE08CAE006EBC35 /* fmdb */,
 				5C2A9D771DAFBFE6000AADE3 /* JYDataBaseConfig.h */,
+				5CE32C261DB0BCCD00284931 /* NSObject+JYContentTableClass.h */,
+				5CE32C271DB0BCCD00284931 /* NSObject+JYContentTableClass.m */,
 				5CFD4F7D1CE5BBB80062F1C5 /* JYQueryConditions.h */,
 				5CFD4F7E1CE5BBB80062F1C5 /* JYQueryConditions.m */,
 				5C88CB271CE09F00006EBC35 /* JYContentTable.h */,
@@ -412,6 +417,7 @@
 				5CDD93211CE961510005E430 /* JYTest1Content.m in Sources */,
 				5CE7DC9E1CE0615E00470171 /* main.m in Sources */,
 				5C88CB1F1CE08EF0006EBC35 /* JYDataBase.m in Sources */,
+				5CE32C281DB0BCCD00284931 /* NSObject+JYContentTableClass.m in Sources */,
 				5C88CB171CE08CAE006EBC35 /* FMDatabase.m in Sources */,
 				5C88CB1B1CE08CAE006EBC35 /* FMResultSet.m in Sources */,
 				5C88CB181CE08CAE006EBC35 /* FMDatabaseAdditions.m in Sources */,
