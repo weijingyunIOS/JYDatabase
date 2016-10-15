@@ -12,6 +12,8 @@
 
 //存数据库属性
 @property (nonatomic, copy) NSString * personnumber;   // 人员编号
+@property (nonatomic, copy) NSString * name;   
+@property (nonatomic, copy) NSString * desc;
 @property (nonatomic, copy) NSMutableString *mutableString1;
 @property (nonatomic, assign) NSInteger integer1;
 @property (nonatomic, assign) NSUInteger uInteger1;

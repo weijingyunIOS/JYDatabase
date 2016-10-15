@@ -21,7 +21,7 @@
 }
 
 - (NSArray<NSString *> *)getContentField{
-    return @[@"mutableString1",@"integer1",@"uInteger1",@"int1",@"bool1",@"double1",@"data",@"image"];
+    return @[@"mutableString1",@"integer1",@"uInteger1",@"int1",@"bool1",@"double1",@"data",@"image",@"name",@"desc"];
 }
 
 - (BOOL)enableCache{

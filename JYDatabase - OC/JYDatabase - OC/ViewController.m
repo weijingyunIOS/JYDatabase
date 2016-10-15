@@ -22,10 +22,12 @@
     // Do any additional setup after loading the view, typically from a nib.
     NSMutableArray *arrayM1 = [[NSMutableArray alloc] init];
     NSMutableArray *arrayM2 = [[NSMutableArray alloc] init];
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10000; i++) {
             JYPersonInfo *info = [[JYPersonInfo alloc] init];
             info.personnumber = [NSString stringWithFormat:@"123456%tu",i];
             info.float1 = 10.10111;
+            info.name = @"测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小";
+            info.desc = @"测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小";
             info.int1 = i;
             info.bool1 = i % 2 == 0;
             info.integer1 = -100;
@@ -42,10 +44,10 @@
     JYPersonInfo *info = [[JYPersonInfo alloc] init];
     info.personnumber = @"aaa";
     info.image = [UIImage imageNamed:@"www"];
-    [[JYDBService shared] insertPersonInfo:info];
+//    [[JYDBService shared] insertPersonInfo:info];
     [[JYDBService shared] insertPersonInfos:arrayM1];
     
-    [[JYDBService shared] insertTest1Contents:arrayM2];
+//    [[JYDBService shared] insertTest1Contents:arrayM2];
     UIButton *button1 = [self addButtonTitle:@"查询单条" action:@selector(getConttent:)];
     button1.frame = CGRectMake(0, 64, 80, 50);
     
