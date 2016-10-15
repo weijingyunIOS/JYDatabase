@@ -44,10 +44,10 @@
     JYPersonInfo *info = [[JYPersonInfo alloc] init];
     info.personnumber = @"aaa";
     info.image = [UIImage imageNamed:@"www"];
-//    [[JYDBService shared] insertPersonInfo:info];
+    [[JYDBService shared] insertPersonInfo:info];
     [[JYDBService shared] insertPersonInfos:arrayM1];
     
-//    [[JYDBService shared] insertTest1Contents:arrayM2];
+    [[JYDBService shared] insertTest1Contents:arrayM2];
     UIButton *button1 = [self addButtonTitle:@"查询单条" action:@selector(getConttent:)];
     button1.frame = CGRectMake(0, 64, 80, 50);
     

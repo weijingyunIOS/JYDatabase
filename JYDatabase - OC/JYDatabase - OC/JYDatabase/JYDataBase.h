@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, ArtDatabaseMode)
 @property (nonatomic, assign, readonly) ArtDatabaseMode mode;
 
 - (void)buildWithPath:(NSString *)aPath mode:(ArtDatabaseMode)aMode;
+- (void)buildWithPath:(NSString *)aPath mode:(ArtDatabaseMode)aMode registTable:(void(^)())aRegist;
 
 - (void)checkError:(FMDatabase *)aDb;
 - (id)checkEmpty:(id)aObject;
@@ -33,6 +34,7 @@ typedef NS_ENUM(NSInteger, ArtDatabaseMode)
 
 // 获取DB版本号, 默认返回 1
 - (NSInteger)getCurrentDBVersion;
+
 // 创建数据库
 - (void)createAllTable:(FMDatabase *)aDB;
 // 数据库升级 1-2 2-3 3-4 4-5 的升级
@@ -40,5 +42,12 @@ typedef NS_ENUM(NSInteger, ArtDatabaseMode)
 
 // 一次性升级
 - (void)updateDB:(FMDatabase *)aDB;
+
+#pragma mark - 简化创建的方法
+/*
+    - (void)buildWithPath:(NSString *)aPath mode:(ArtDatabaseMode)aMode registTable:(void(^)())aRegist;
+    使用该方法创建，写在aRegist 回调内
+ */
+- (JYContentTable *)registTableClass:(Class)aClass;
 
 @end

@@ -20,6 +20,7 @@
 @property (nonatomic, strong) FMDatabaseQueue *dbQueue;
 @property (nonatomic, strong) NSString* path;
 @property (nonatomic, assign) ArtDatabaseMode mode;
+@property (nonatomic, strong) NSMutableArray<JYContentTable *> *tableArray;
 
 @end
 
@@ -49,9 +50,12 @@
 }
 
 #pragma mark - init
+- (void)buildWithPath:(NSString *)aPath mode:(ArtDatabaseMode)aMode{
+    [self buildWithPath:aPath mode:aMode registTable:nil];
+}
 
-- (void)buildWithPath:(NSString *)aPath mode:(ArtDatabaseMode)aMode
-{
+- (void)buildWithPath:(NSString *)aPath mode:(ArtDatabaseMode)aMode registTable:(void(^)())aRegist{
+    
     self.path = aPath;
     self.mode = aMode;
     
@@ -64,6 +68,10 @@
     {
         // 读写 或 创建
         self.dbQueue = [[FMDatabaseQueue alloc] initWithPath:aPath];
+    }
+    
+    if (aRegist) {
+        aRegist();
     }
 
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -133,18 +141,41 @@
 }
 
 - (void)updateDB:(FMDatabase *)aDB{
-
+    [self.tableArray enumerateObjectsUsingBlock:^(JYContentTable * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj updateDB:aDB];
+    }];
 }
 
 #pragma mark - Create Table
 
 - (void)createAllTable:(FMDatabase *)aDB
 {
+    [self.tableArray enumerateObjectsUsingBlock:^(JYContentTable * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj createTable:aDB];
+    }];
 }
 
 - (void)createDBVersionTable:(FMDatabase *)aDB
 {
     [aDB executeUpdate:@"CREATE TABLE gkdb_version (Version varchar(20), Name varchar(10))"];
+}
+
+#pragma mark - 简化创建的方法
+- (JYContentTable *)registTableClass:(Class)aClass{
+    
+    JYContentTable *table = [[aClass alloc] init];
+    NSAssert([table isKindOfClass:[JYContentTable class]], @"必须是继承JYContentTable 的类");
+    table.dbQueue = self.dbQueue;
+    [self.tableArray addObject:table];
+    return table;
+}
+
+#pragma mark - 懒加载
+- (NSMutableArray<JYContentTable *> *)tableArray{
+    if (!_tableArray) {
+        _tableArray = [[NSMutableArray alloc] init];
+    }
+    return _tableArray;
 }
 
 @end

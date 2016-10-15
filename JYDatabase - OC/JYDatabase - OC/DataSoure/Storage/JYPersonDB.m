@@ -27,23 +27,18 @@
 
 - (void)construct{
     NSLog(@"%@",self.documentDirectory);
-    [self buildWithPath:self.documentDirectory mode:ArtDatabaseModeWrite];
+    [self buildWithPath:self.documentDirectory mode:ArtDatabaseModeWrite registTable:^{
+        //注册数据表 建议外引出来，用于其它位置调用封装
+        self.personTable = (JYPersonTable *)[self registTableClass:[JYPersonTable class]];
+        self.test1Table = (JYTest1Table *)[self registTableClass:[JYTest1Table class]];
+    }];
+    
 }
 
-#pragma mark - 创建更新表
+#pragma mark - 数据库版本
 - (NSInteger)getCurrentDBVersion
 {
-    return 8;
-}
-
-- (void)createAllTable:(FMDatabase *)aDB{
-    [self.personTable createTable:aDB];
-    [self.test1Table createTable:aDB];
-}
-
-- (void)updateDB:(FMDatabase *)aDB{
-    [self.personTable updateDB:aDB];
-    [self.test1Table updateDB:aDB];
+    return 10;
 }
 
 #pragma make - 懒加载
@@ -61,22 +56,6 @@
         
     }
     return _documentDirectory;
-}
-
-- (JYPersonTable *)personTable{
-    if (!_personTable) {
-        _personTable = [[JYPersonTable alloc] init];
-        _personTable.dbQueue = self.dbQueue;
-    }
-    return _personTable;
-}
-
-- (JYTest1Table *)test1Table{
-    if (!_test1Table) {
-        _test1Table = [[JYTest1Table alloc] init];
-        _test1Table.dbQueue = self.dbQueue;
-    }
-    return _test1Table;
 }
 
 @end
