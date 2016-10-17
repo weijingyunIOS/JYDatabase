@@ -393,6 +393,11 @@
 
 #pragma mark - insert 插入
 - (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents{
+    
+    if (aContents.count <= 0) {
+        return;
+    }
+    
     [self configTableName];
 //    //    NSLog(@"insert %@",[aContents.firstObject class]);
     NSArray<NSString *> *fields = [self getAllContentField];
@@ -433,12 +438,18 @@
 }
 
 - (void)insertContent:(id)aContent{
+    if (aContent == nil) {
+        return;
+    }
     [self.dbQueue inDatabase:^(FMDatabase *db) {
         [self insertDB:db contents:@[aContent]];
     }];
 }
 
 - (void)insertContents:(NSArray *)aContents{
+    if (aContents.count <= 0) {
+        return;
+    }
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         [self insertDB:db contents:aContents];
     }];
@@ -519,6 +530,9 @@
 }
 
 - (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs{
+    if (aIDs.count <= 0) {
+        return nil;
+    }
     __block id contents = nil;
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         contents = [self getDB:db contentByIDs:aIDs];
@@ -527,6 +541,9 @@
 }
 
 - (id)getContentByID:(NSString*)aID{
+    if (aID == nil) {
+        return nil;
+    }
     __block id content = nil;
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         content = [self getDB:db contentByIDs:@[aID]].firstObject;
@@ -548,6 +565,9 @@
     JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
     if (block) {
         block(conditions);
+    }
+    if (self.isDistinguish) {
+        conditions.field(self.jy_distinguish).equalTo([JYDataBaseConfig shared].distinguish);
     }
     
     NSArray<NSString *> *fields = [self getAllContentField];
@@ -573,15 +593,14 @@
 }
 
 - (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
-    [self configTableName];
-    NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = ?", self.tableName, [self contentId]];
-    //    NSLog(@"delete--%@",sql);
-    [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull aID, NSUInteger idx, BOOL * _Nonnull stop) {
-        [aDB executeUpdate:sql,
-        [self checkEmpty:aID]];
-        [self removeCacheContentID:aID];
+    if (aIDs.count <= 0) {
+        return;
+    }
+    return [self deleteContentDB:aDB byconditions:^(JYQueryConditions *make) {
+        [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            make.field(self.contentId).equalTo(obj).OR();
+        }];
     }];
-    [self checkError:aDB];
 }
 
 - (void)deleteContentByConditions:(void (^)(JYQueryConditions *make))block{
@@ -591,12 +610,18 @@
 }
 
 - (void)deleteContentByID:(NSString *)aID{
+    if (aID == nil) {
+        return;
+    }
     [self.dbQueue inDatabase:^(FMDatabase *aDB) {
         [self deleteDB:aDB contentByIDs:@[aID]];
     }];
 }
 
 - (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs{
+    if (aIDs.count <= 0) {
+        return;
+    }
     [self.dbQueue inDatabase:^(FMDatabase *aDB) {
         [self deleteDB:aDB contentByIDs:aIDs];
     }];
