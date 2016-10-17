@@ -19,6 +19,7 @@
 		5C88CB391CE0A2DA006EBC35 /* JYPersonTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB381CE0A2DA006EBC35 /* JYPersonTable.m */; };
 		5C88CB3C1CE0A43E006EBC35 /* JYPersonDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB3B1CE0A43E006EBC35 /* JYPersonDB.m */; };
 		5C88CB3F1CE0A671006EBC35 /* JYDBService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB3E1CE0A671006EBC35 /* JYDBService.m */; };
+		5CDAFA851DB4C840007752E0 /* JYDataBaseConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDAFA841DB4C840007752E0 /* JYDataBaseConfig.m */; };
 		5CDD93211CE961510005E430 /* JYTest1Content.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDD93201CE961510005E430 /* JYTest1Content.m */; };
 		5CDD93241CE961B00005E430 /* JYTest1Table.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDD93231CE961B00005E430 /* JYTest1Table.m */; };
 		5CE32C281DB0BCCD00284931 /* NSObject+JYContentTableClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE32C271DB0BCCD00284931 /* NSObject+JYContentTableClass.m */; };
@@ -51,7 +52,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5C2A9D771DAFBFE6000AADE3 /* JYDataBaseConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYDataBaseConfig.h; sourceTree = "<group>"; };
 		5C88CB0B1CE08CAE006EBC35 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		5C88CB0C1CE08CAE006EBC35 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		5C88CB0D1CE08CAE006EBC35 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -77,6 +77,8 @@
 		5C88CB3B1CE0A43E006EBC35 /* JYPersonDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYPersonDB.m; sourceTree = "<group>"; };
 		5C88CB3D1CE0A671006EBC35 /* JYDBService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYDBService.h; sourceTree = "<group>"; };
 		5C88CB3E1CE0A671006EBC35 /* JYDBService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYDBService.m; sourceTree = "<group>"; };
+		5CDAFA831DB4C840007752E0 /* JYDataBaseConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYDataBaseConfig.h; sourceTree = "<group>"; };
+		5CDAFA841DB4C840007752E0 /* JYDataBaseConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYDataBaseConfig.m; sourceTree = "<group>"; };
 		5CDD931F1CE961510005E430 /* JYTest1Content.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYTest1Content.h; sourceTree = "<group>"; };
 		5CDD93201CE961510005E430 /* JYTest1Content.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYTest1Content.m; sourceTree = "<group>"; };
 		5CDD93221CE961B00005E430 /* JYTest1Table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYTest1Table.h; sourceTree = "<group>"; };
@@ -133,7 +135,8 @@
 			isa = PBXGroup;
 			children = (
 				5C88CB0A1CE08CAE006EBC35 /* fmdb */,
-				5C2A9D771DAFBFE6000AADE3 /* JYDataBaseConfig.h */,
+				5CDAFA831DB4C840007752E0 /* JYDataBaseConfig.h */,
+				5CDAFA841DB4C840007752E0 /* JYDataBaseConfig.m */,
 				5CE32C261DB0BCCD00284931 /* NSObject+JYContentTableClass.h */,
 				5CE32C271DB0BCCD00284931 /* NSObject+JYContentTableClass.m */,
 				5CFD4F7D1CE5BBB80062F1C5 /* JYQueryConditions.h */,
@@ -414,6 +417,7 @@
 				5CDD93241CE961B00005E430 /* JYTest1Table.m in Sources */,
 				5CE7DCA11CE0615E00470171 /* AppDelegate.m in Sources */,
 				5C88CB1A1CE08CAE006EBC35 /* FMDatabaseQueue.m in Sources */,
+				5CDAFA851DB4C840007752E0 /* JYDataBaseConfig.m in Sources */,
 				5CDD93211CE961510005E430 /* JYTest1Content.m in Sources */,
 				5CE7DC9E1CE0615E00470171 /* main.m in Sources */,
 				5C88CB1F1CE08EF0006EBC35 /* JYDataBase.m in Sources */,

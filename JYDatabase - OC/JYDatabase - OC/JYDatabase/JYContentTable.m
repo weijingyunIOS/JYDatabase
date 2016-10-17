@@ -7,6 +7,7 @@
 //
 
 #import "JYContentTable.h"
+#import "JYDataBaseConfig.h"
 #import <UIKit/UIKit.h>
 #import "FMDB.h"
 #import <objc/runtime.h>
@@ -55,10 +56,6 @@
 
 - (BOOL)enableCache{
     return YES;
-}
-
-- (NSDictionary *)correspondingDic{
-    return nil;
 }
 
 - (NSDictionary*)fieldLenght{
@@ -202,8 +199,8 @@
 - (NSArray *)conversionAttributeType:(NSString *)aType{
     NSString *str = jy_correspondingDic()[aType];
     if (str == nil) {
-        if (self.correspondingDic) {
-            str = self.correspondingDic[aType];
+        if ([JYDataBaseConfig shared].corresponding) {
+            str = [JYDataBaseConfig shared].corresponding[aType];
         }
     }
     NSAssert(str != nil, @"当前类型不支持");
