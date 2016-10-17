@@ -24,6 +24,8 @@
 
 @property (nonatomic, strong) NSCache *cache;
 @property (nonatomic, strong) NSDictionary *attributeTypeDic;
+@property (nonatomic, strong, readonly) NSString *insertTimeField;
+@property (nonatomic, strong, readonly) NSString *jy_distinguish;
 
 @end
 
@@ -70,6 +72,10 @@
     return @"lastInsertTime";
 }
 
+- (NSString *)jy_distinguish{
+    return @"jy_distinguish";
+}
+
 - (NSArray<NSString *> *)getContentField{
     NSMutableArray *arrayM = [[NSMutableArray alloc] init];
     unsigned int outCount;
@@ -100,6 +106,9 @@
     [arrayM addObject:[self contentId]];
     [arrayM addObjectsFromArray:[self getContentField]];
     [arrayM addObject:self.insertTimeField];
+    if (self.isDistinguish) {
+        [arrayM addObject:self.jy_distinguish];
+    }
     return [arrayM copy];
 }
 
@@ -125,6 +134,11 @@
 
 // 插入时数据处理
 - (id)checkContent:(NSString *)aContent forKey:(NSString *)akey{
+    
+    if ([akey isEqualToString:self.jy_distinguish]) {
+        return [JYDataBaseConfig shared].distinguish;
+    }
+    
     if ([akey isEqualToString:[self insertTimeField]]) {
         return @([NSDate date].timeIntervalSince1970);
     }
@@ -437,6 +451,10 @@
     if (block) {
         block(conditions);
     }
+    
+    if (self.isDistinguish) {
+        conditions.field(self.jy_distinguish).equalTo([JYDataBaseConfig shared].distinguish);
+    }
     NSArray<NSString *> *fields = [self getAllContentField];
     
 #if DEBUG
@@ -446,6 +464,7 @@
 #endif
     
     NSMutableString *strM = conditions.conditionStr;
+  
     
     NSString *sql;
     if (strM.length > 0) {
@@ -481,45 +500,14 @@
 }
 
 - (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
-    [self configTableName];
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = ?", self.tableName, [self contentId]];
-    //    NSLog(@"contentByID--%@",sql);
-     NSArray<NSString *> *fields = [self getAllContentField];
-     __block NSMutableArray *arrayM = nil;
-    [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull aID, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        id content = [self getCacheContentID:aID];
-        if (content != nil) {
-            if (arrayM == nil) {
-                arrayM = [[NSMutableArray alloc] init];
-            }
-            [arrayM addObject:content];
-        }else{
-            
-            FMResultSet *rs = [aDB executeQuery:sql,
-                               [self checkEmpty:aID]];
-            if ([rs next]) {
-                id content = [[self.contentClass alloc] init];
-                [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    id value = [rs objectForKeyedSubscript:obj];
-                    value = [self checkVaule:value forKey:obj];
-                    if (value != [NSNull null]) {
-                        [content setValue:value forKey:obj];
-                    }
-                }];
-                if (arrayM == nil) {
-                    arrayM = [[NSMutableArray alloc] init];
-                }
-                [self saveCacheContent:content];
-                [arrayM addObject:content];
-            }
-            [rs close];
-        }
-        
+    if (aIDs.count <= 0) {
+        return nil;
+    }
+    return [self getContentDB:aDB byconditions:^(JYQueryConditions *make) {
+       [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+           make.field(self.contentId).equalTo(obj).OR();
+       }];
     }];
-    
-    [self checkError:aDB];
-    return [arrayM copy];
 }
 
 - (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block{

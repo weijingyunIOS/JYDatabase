@@ -8,11 +8,16 @@
 
 #import "JYQueryConditions.h"
 
+#define kEqual      @"kequal"
+#define kCompare    @"kcompare"
+#define kOR         @"kOR"
+#define kSqlStr     @"kSqlStr"
+
 @interface JYQueryConditions()
 
 @property (nonatomic, strong) NSMutableArray<NSMutableDictionary*> *conditions;
 @property (nonatomic, copy) NSMutableString *orderStr;
-@property (nonatomic, strong) NSMutableArray<NSString *> *sqlStrings;
+@property (nonatomic, strong) NSMutableArray<NSMutableDictionary *> *sqlStrings;
 
 @end
 
@@ -51,6 +56,13 @@
 }
 
 
+- (JYQueryConditions * (^)())OR{
+    return ^id(NSString *compare) {
+        NSMutableDictionary *dicM = self.conditions.lastObject;
+        dicM[kOR] = @"OR";
+        return self;
+    };
+}
 
 - (JYQueryConditions * (^)(NSString *compare))equalTo{
     return ^id(NSString *compare) {
@@ -106,9 +118,19 @@
     };
 }
 
+- (JYQueryConditions * (^)())sqlOR{
+    return ^id(NSString *compare) {
+        NSMutableDictionary *dicM = self.sqlStrings.lastObject;
+        dicM[kOR] = @"OR";
+        return self;
+    };
+}
+
 - (JYQueryConditions * (^)(NSString *str))sqlStr{
     return ^id(NSString *str) {
-        [self.sqlStrings addObject:str];
+        NSMutableDictionary *dicM = [[NSMutableDictionary alloc] init];
+        dicM[kSqlStr] = kSqlStr;
+        [self.sqlStrings addObject:dicM];
         return self;
     };
 }
@@ -118,17 +140,26 @@
     [self.conditions enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [strM appendFormat:@"%@ %@ \"%@\"",obj[kField],obj[kEqual],obj[kCompare]];
         if (idx < self.conditions.count - 1) {
-            [strM appendFormat:@" AND "];
+            if (obj[kOR] != nil) {
+                [strM appendFormat:@" OR "];
+            }else{
+                [strM appendFormat:@" AND "];
+            }
         }
     }];
     
     if (self.sqlStrings.count > 0) {
         
-        [self.sqlStrings enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.sqlStrings enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if (!(idx == 0 && self.conditions.count <= 0)) {
-                [strM appendFormat:@" AND "];
+                
+                if (obj[kOR] != nil) {
+                    [strM appendFormat:@" OR "];
+                }else{
+                    [strM appendFormat:@" AND "];
+                }
             }
-            [strM appendString:obj];
+            [strM appendString:obj[kSqlStr]];
         }];
     }
     return strM;
@@ -149,7 +180,7 @@
     return _orderStr;
 }
 
-- (NSMutableArray<NSString *> *)sqlStrings{
+- (NSMutableArray<NSMutableDictionary *> *)sqlStrings{
     if (!_sqlStrings) {
         _sqlStrings = [[NSMutableArray alloc] init];
     }

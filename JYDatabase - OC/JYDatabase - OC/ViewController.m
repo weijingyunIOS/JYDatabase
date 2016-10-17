@@ -107,7 +107,7 @@
 }
 
 - (void)deleteConttents:(UIButton*)but{
-    [[JYDBService shared] deletePersonInfos:@[@"1234560",@"12345610",@"12345611",@"1234562"]];
+    [[JYDBService shared] deletePersonInfos:@[@"1234560",@"12345610",@"12345611",@"1234562",@"abcde"]];
 }
 
 - (void)deleteAllConttent:(UIButton*)but{
@@ -123,7 +123,7 @@
 }
 
 - (void)getConttents:(UIButton*)but{
-    NSArray<JYPersonInfo*>* infos = [[JYDBService shared] getPersonInfos:@[@"1234560",@"12345610",@"12345611",@"1234562"]];
+    NSArray<JYPersonInfo*>* infos = [[JYDBService shared] getPersonInfos:@[@"1234560",@"12345610",@"12345611",@"1234562",@"abcde"]];
     self.imageView.image = infos.firstObject.image;
     NSLog(@"%@",infos);
 }

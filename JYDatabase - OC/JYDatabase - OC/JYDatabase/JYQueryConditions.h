@@ -9,14 +9,15 @@
 #import <Foundation/Foundation.h>
 
 #define kField      @"kField"
-#define kEqual      @"kequal"
-#define kCompare    @"kcompare"
 
 @interface JYQueryConditions : NSObject
 
 @property (nonatomic, strong, readonly) NSMutableArray<NSMutableDictionary*> *conditions;
 @property (nonatomic, copy, readonly) NSMutableString *orderStr;
 @property (nonatomic, strong) NSMutableString *conditionStr;
+
+//以该字段结尾，表示 条件是 或 如 userId = 1 或 userId = 2, 否则就是 AND
+- (JYQueryConditions * (^)())OR;
 
 - (JYQueryConditions * (^)(NSString *compare))notEqualTo;
 - (JYQueryConditions * (^)(NSString *compare))equalTo;
@@ -29,6 +30,8 @@
 - (JYQueryConditions * (^)(NSString *field))asc;
 - (JYQueryConditions * (^)(NSString *field))desc;
 
+//以该字段结尾，表示 条件是 或 如 userId = 1 或 userId = 2, 否则就是 AND 与sqlStr 配对
+- (JYQueryConditions * (^)())sqlOR;
 - (JYQueryConditions * (^)(NSString *str))sqlStr;
 
 @end
