@@ -14,6 +14,7 @@
 
     self.contentClass = [JYPersonInfo class];
     self.tableName = @"JYPersonTable";
+    self.isDistinguish = YES;
 }
 
 - (NSString *)contentId{

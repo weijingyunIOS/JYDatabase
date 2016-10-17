@@ -14,6 +14,7 @@
     
     self.contentClass = [JYTest1Content class];
     self.tableName = @"JYTest1Table";
+    self.isDistinguish = YES;
 }
 
 - (NSString *)contentId{

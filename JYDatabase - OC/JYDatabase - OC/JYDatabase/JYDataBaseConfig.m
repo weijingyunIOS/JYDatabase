@@ -21,7 +21,6 @@
     return shared;
 }
 
-
 #pragma mark - 静态方法
 NSDictionary * jy_correspondingDic(){
     return @{@"Tb":@"BOOL",
