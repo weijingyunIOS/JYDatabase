@@ -25,7 +25,6 @@
 @property (nonatomic, strong) NSCache *cache;
 @property (nonatomic, strong) NSDictionary *attributeTypeDic;
 @property (nonatomic, strong, readonly) NSString *insertTimeField;
-@property (nonatomic, strong, readonly) NSString *jy_distinguish;
 
 @end
 
@@ -72,10 +71,6 @@
     return @"lastInsertTime";
 }
 
-- (NSString *)jy_distinguish{
-    return @"jy_distinguish";
-}
-
 - (NSArray<NSString *> *)getContentField{
     NSMutableArray *arrayM = [[NSMutableArray alloc] init];
     unsigned int outCount;
@@ -106,9 +101,6 @@
     [arrayM addObject:[self contentId]];
     [arrayM addObjectsFromArray:[self getContentField]];
     [arrayM addObject:self.insertTimeField];
-    if (self.isDistinguish) {
-        [arrayM addObject:self.jy_distinguish];
-    }
     return [arrayM copy];
 }
 
@@ -134,10 +126,6 @@
 
 // 插入时数据处理
 - (id)checkContent:(NSString *)aContent forKey:(NSString *)akey{
-    
-    if ([akey isEqualToString:self.jy_distinguish]) {
-        return [JYDataBaseConfig shared].distinguish;
-    }
     
     if ([akey isEqualToString:[self insertTimeField]]) {
         return @([NSDate date].timeIntervalSince1970);
@@ -462,10 +450,6 @@
     if (block) {
         block(conditions);
     }
-    
-    if (self.isDistinguish) {
-        conditions.field(self.jy_distinguish).equalTo([JYDataBaseConfig shared].distinguish);
-    }
     NSArray<NSString *> *fields = [self getAllContentField];
     
 #if DEBUG
@@ -566,10 +550,6 @@
     if (block) {
         block(conditions);
     }
-    if (self.isDistinguish) {
-        conditions.field(self.jy_distinguish).equalTo([JYDataBaseConfig shared].distinguish);
-    }
-    
     NSArray<NSString *> *fields = [self getAllContentField];
     
 #if DEBUG

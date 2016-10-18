@@ -12,6 +12,5 @@
 
 // 最后插入时间
 @property (nonatomic, assign) NSTimeInterval lastInsertTime;
-@property (nonatomic, copy) NSString *jy_distinguish;
 
 @end

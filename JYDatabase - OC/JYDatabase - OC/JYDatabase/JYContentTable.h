@@ -19,8 +19,6 @@
 @property (nonatomic, strong) NSString *tableName;  //数据库表名
 @property (nonatomic, strong) Class contentClass;
 
-// 该表是否进行区分（如用户区分）需要设置 [JYDataBaseConfig share].distinguish的值为当前用户
-@property (nonatomic, assign) BOOL isDistinguish;
 @property (nonatomic, strong, readonly) NSCache *cache;     //默认缓存20条数据
 
 
