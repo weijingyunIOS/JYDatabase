@@ -50,8 +50,8 @@
 - (void)updateDB:(FMDatabase *)aDB;
 
 #pragma mark - 索引添加
-- (void)addUniques:(NSArray<NSString *>*)indexs; // 默认添加 非聚集索引
-- (void)addDB:(FMDatabase *)aDB uniques:(NSArray<NSString *>*)indexs; // 默认添加 非聚集索引
+- (void)addUniques:(NSArray<NSString *>*)indexs; // 默认添加 非唯一索引
+- (void)addDB:(FMDatabase *)aDB uniques:(NSArray<NSString *>*)indexs;
 - (void)addDB:(FMDatabase *)aDB type:(EJYDataBaseIndex)aType uniques:(NSArray<NSString *>*)indexs;
 
 #pragma mark - insert 插入

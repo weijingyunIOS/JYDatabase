@@ -187,34 +187,82 @@
 }
 	
 三、提供的查询方法
-	
-	在JYContentTable默认实现了部分查询方法如下：
-	#pragma mark - insert 插入
-	- (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
-	- (void)insertContent:(id)aContent;
-	- (void)insertContents:(NSArray *)aContents;
-	
-	#pragma mark - get 查询
-	- (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
-    - (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
-	- (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block;
-	- (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs;
-	- (id)getContentByID:(NSString*)aID;
-	- (NSArray *)getAllContent;
+#pragma mark - 索引添加
+- (void)addUniques:(NSArray<NSString *>*)indexs; // 默认添加 非唯一索引
+- (void)addDB:(FMDatabase *)aDB uniques:(NSArray<NSString *>*)indexs; 
+- (void)addDB:(FMDatabase *)aDB type:(EJYDataBaseIndex)aType uniques:(NSArray<NSString *>*)indexs;
 
-	#pragma mark - delete 删除
-	- (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
-	- (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
-	- (void)deleteContentByConditions:(void (^)(JYQueryConditions *make))block;
-	- (void)deleteContentByID:(NSString *)aID;
-	- (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs;
-	- (void)deleteAllContent;
-	- (void)cleanContentBefore:(NSDate*)date;
+#pragma mark - insert 插入
+- (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
+- (void)insertContent:(id)aContent;
+- (void)insertContents:(NSArray *)aContents;
+
+#pragma mark - get 查询
+- (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
+- (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
+- (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block;
+- (NSArray *)getContentByIDs:(NSArray<NSString*>*)aIDs;
+- (id)getContentByID:(NSString*)aID;
+- (NSArray *)getAllContent;
+
+#pragma mark - delete 删除
+- (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
+- (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
+- (void)deleteContentByConditions:(void (^)(JYQueryConditions *make))block;
+- (void)deleteContentByID:(NSString *)aID;
+- (void)deleteContentByIDs:(NSArray<NSString *>*)aIDs;
+- (void)deleteAllContent;
+- (void)cleanContentBefore:(NSDate*)date;
+
+#pragma mark - getCount
+- (NSInteger)getCountContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
+- (NSInteger)getCountByConditions:(void (^)(JYQueryConditions *make))block;
+- (NSInteger)getAllCount;
 
 	
 四、工具的推荐
 	
 	在移动端使用SqLite，个人建议安装 火狐浏览器 的一个插件 SQLite Manager 多的就不说了。
+	
+五、版本记录
+
+ tag - 1.0.6  谈下在移动端，数据库关于不同用户的区分问题
+
+		移动端缓存有个必须要注意的问题，那就是用户区分，要不把用户A的缓存数据显示到了用户B上
+	就比较尴尬了。一般来说有两种方法：
+	1.在每张表添加一个字段 userId 用于用户区分。在查询时要添加userId做为查询条件，插入时也要设置当前的userId。 
+	2.为每个用户创建一个数据库。
+	综合比较的话：方案一：优点是，可以为数据库的每一张表定义是否区分用户，缺点是，要多维护一个字段得不尝失。故而选择方案二。
+	
+	方案二的使用：
+		通过监听userId的改变重新绑定数据库。self.documentDirectory 使用懒加载生成与userId有关的 地址。
+	  - (void)construct{
+		    NSLog(@"%@",self.documentDirectory);
+		    [self buildWithPath:self.documentDirectory mode:ArtDatabaseModeWrite registTable:^{
+		        //注册数据表 建议外引出来，用于其它位置调用封装
+		        self.personTable = (JYPersonTable *)[self registTableClass:[JYPersonTable class]];
+		        self.test1Table = (JYTest1Table *)[self registTableClass:[JYTest1Table class]];
+		    }];
+		    
+		    @weakify(self)
+		    [RACObserve([ArtUserConfig shared], userId) subscribeNext:^(id x) {
+		        @strongify(self)
+		        self.documentDirectory = nil;
+		        [self construct];
+		    }];
+	}
+		这种使用方式本身是没有问题的，但在实际的业务使用场景可能照成一些问题，比如在使用用户数据存储时，我将用
+	户数据存入用户数据库，在程序中只传递userId 在需要使用时才从 数据库中读取。这时如果退出登录，此时访问的
+	数据库就不是插入的数据库，那么就取不到数据。
+		如何解决上述问题，我的建议是 建立 两种数据库，一种是公用数据库(该库不区分用户)，还有一种是 独立数据
+	(每个用户都建一个)。对于社交应用，缓存用户信息的表放倒 公用数据库 即可。
+	
+1.本版本主要修改了查询方法的使用，以及数据建立方法更为简便，不用用户写大量无用代码，具体可见JYPersonDB。
+
+2.OC属性字段与sqlite属性字段的映射是依赖与 JYDataBaseConfig 里 NSDictionary * jy_correspondingDic()的静态方法，但是在实际使用中可能无法全部覆盖，触发断言，大家遇到后可以自己设置 corresponding 属性添加额外的映射。
+
+3.宗旨就是让数据库的使用变的简单，后期会根据我所遇到的一些业务场景进行持续更新。
+ 
 
   	
       
