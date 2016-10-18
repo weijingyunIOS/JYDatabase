@@ -238,6 +238,7 @@
 		通过监听userId的改变重新绑定数据库。self.documentDirectory 使用懒加载生成与userId有关的 地址。
 	  - (void)construct{
 		    NSLog(@"%@",self.documentDirectory);
+		    self.userId = [ArtUserConfig shared].userId;
 		    [self buildWithPath:self.documentDirectory mode:ArtDatabaseModeWrite registTable:^{
 		        //注册数据表 建议外引出来，用于其它位置调用封装
 		        self.personTable = (JYPersonTable *)[self registTableClass:[JYPersonTable class]];
@@ -245,8 +246,11 @@
 		    }];
 		    
 		    @weakify(self)
-		    [RACObserve([ArtUserConfig shared], userId) subscribeNext:^(id x) {
-		        @strongify(self)
+		    [RACObserve([ArtUserConfig shared], userId)subscribeNext:^(NSString *x) {
+      @strongify(self)
+      if ([self.userId isEqualToString:x]) {
+        return;
+      }
 		        self.documentDirectory = nil;
 		        [self construct];
 		    }];
