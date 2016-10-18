@@ -25,10 +25,7 @@ typedef NS_ENUM(NSInteger, EJYDataBaseIndex) { //索引类型
 
 + (instancetype)shared;
 
-//数据库区分字段 如要使用  多登录用户区分 该字段 不要为 nil
-@property (nonatomic, copy) NSString *distinguish;
-
-// 额外的影射字段 jy_correspondingDic 可能无法全面覆盖，当遇到崩溃时可设置该属性添加影射
+// 额外的影射字段 jy_correspondingDic 可能无法全面覆盖，当遇到崩溃时可设置该属性添加映射
 @property (nonatomic, strong) NSDictionary<NSString*,NSString*> *corresponding;
 
 

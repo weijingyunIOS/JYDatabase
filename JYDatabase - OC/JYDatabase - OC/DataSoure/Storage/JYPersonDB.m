@@ -27,7 +27,6 @@
 
 - (void)construct{
     NSLog(@"%@",self.documentDirectory);
-    [JYDataBaseConfig shared].distinguish = @"aaaaaa";
     [self buildWithPath:self.documentDirectory mode:ArtDatabaseModeWrite registTable:^{
         //注册数据表 建议外引出来，用于其它位置调用封装
         self.personTable = (JYPersonTable *)[self registTableClass:[JYPersonTable class]];
