@@ -11,7 +11,7 @@
 	pod 'JYDataBase'
 	
 一、JYDatabase 的使用
-![enter image description here](http://i.niupic.com/images/2016/09/18/CG4mV3.jpg)
+![enter image description here](http://images2015.cnblogs.com/blog/737816/201611/737816-20161103101051924-1899693155.jpg)
 
 	如图：是Demo中创建本地数据库的一个框图。
 	BS1: JYDBService类 提供了所有对外的查询方法，数据库的增删查改都通过这个单例调用。
