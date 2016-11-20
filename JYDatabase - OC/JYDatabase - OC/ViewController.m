@@ -21,7 +21,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     NSMutableArray *personArrayM = [[NSMutableArray alloc] init];
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 1; i++) {
     
             JYPersonInfo *info = [[JYPersonInfo alloc] init];
             info.personnumber = [NSString stringWithFormat:@"123456%tu",i];
@@ -42,6 +42,14 @@
                 [testArrayM addObject:test];
             }
             info.test1Contents = [testArrayM copy];
+        
+            JYTest1Content *test1 = [[JYTest1Content alloc] init];
+            test1.testID = [NSString stringWithFormat:@"%tu-+-%tu",i,i];
+            test1.testPersonID = info.personnumber;
+            test1.acgfloatDB = i * 1.5;
+            test1.numberDB = [NSNumber numberWithInteger:i];
+            info.test1 = test1;
+        
             [personArrayM addObject:info];
     }
     [[JYDBService shared] insertPersonInfos:personArrayM];
@@ -128,7 +136,7 @@
 
 - (void)getAllConttent:(UIButton*)but{
     NSArray<JYPersonInfo *>* infos = [[JYDBService shared] getAllPersonInfo];
-    NSLog(@"%@ -- %@",infos,infos.firstObject.test1Contents);
+    NSLog(@"%@ -- %@ ++ %@",infos,infos.firstObject.test1Contents,infos.firstObject.test1);
 }
 
 - (UIButton *)addButtonTitle:(NSString*)aTitle action:(SEL)aSel{

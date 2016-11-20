@@ -21,7 +21,7 @@
 }
 
 - (NSArray<NSString *> *)getContentField{
-    return @[@"personID",@"acgfloatDB",@"numberDB"];
+    return @[@"personID",@"acgfloatDB",@"numberDB",@"testPersonID"];
 }
 
 - (BOOL)enableCache{

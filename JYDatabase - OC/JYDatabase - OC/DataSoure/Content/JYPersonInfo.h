@@ -26,5 +26,6 @@
 @property (nonatomic, strong) UIImage *image;
 
 @property (nonatomic, strong) NSArray<JYTest1Content *> *test1Contents;
+@property (nonatomic, strong) JYTest1Content *test1;
 
 @end

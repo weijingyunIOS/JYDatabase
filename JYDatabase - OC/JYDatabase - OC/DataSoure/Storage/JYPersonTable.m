@@ -35,7 +35,13 @@
                      tablePrimaryKey   : @"testID",
                      tableViceKey      : @"personID"
                      
-                              }
+                              },
+             @"test1":@{
+                     tableContentObject: table,
+                     tablePrimaryKey   : @"testID",
+                     tableViceKey      : @"testPersonID"
+                     
+                     }
              };
 }
 

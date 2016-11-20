@@ -41,9 +41,11 @@ static const NSString *tableViceKey = @"tableViceKey";            // 属于本�
 - (NSDictionary*)fieldLenght;               // 创建表 对应列默认长度  默认取默认值
 /*
  用于关联其它表的属性联系必须是 NSArray<ContentClass>* NSMutableArray<ContentClass>或者  ContentClass
+ JYTest1Table *table = [[JYTest1Table alloc] init];
+ table.dbQueue = self.dbQueue;
  @{
     @"field1":@{
-                tableContentClass : @[JYContentTable class],
+                tableContentClass : table,
                 tablePrimaryKey   : @"primaryKey",
                 tableViceKey      : @"viceKey"
               },
