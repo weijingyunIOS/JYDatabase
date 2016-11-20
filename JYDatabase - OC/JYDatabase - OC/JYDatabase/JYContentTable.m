@@ -20,6 +20,8 @@
 
 #endif
 
+static const NSInteger JYDeleteMaxCount = 500;
+
 @interface JYContentTable()
 
 @property (nonatomic, strong) NSCache *cache;
@@ -676,7 +678,7 @@
         NSDictionary*dic = self.associativeTableField[field];
         JYContentTable *table = dic[tableContentObject];
         NSString *viceKey = dic[tableViceKey];
-        [self togetherArray:aIDs maxCount:500 traverse:^(JYQueryConditions *make, NSString *contentID) {
+        [self togetherArray:aIDs maxCount:JYDeleteMaxCount traverse:^(JYQueryConditions *make, NSString *contentID) {
             make.field(viceKey).equalTo(contentID).OR();
         } complete:^(id block) {
             [table deleteContentDB:aDB byconditions:block];
@@ -718,10 +720,10 @@
     if (aIDs.count <= 0) {
         return;
     }
-    [self deleteIndependentContentDB:aDB byconditions:^(JYQueryConditions *make) {
-        [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            make.field(self.contentId).equalTo(obj).OR();
-        }];
+    [self togetherArray:aIDs maxCount:JYDeleteMaxCount traverse:^(JYQueryConditions *make, NSString *obj) {
+        make.field(self.contentId).equalTo(obj).OR();
+    } complete:^(id block) {
+        [self deleteContentDB:aDB byconditions:block];
     }];
     [self deleteSpecialContentDB:aDB contentByIDs:aIDs];
 }
