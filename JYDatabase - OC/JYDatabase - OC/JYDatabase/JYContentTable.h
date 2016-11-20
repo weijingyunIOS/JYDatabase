@@ -11,7 +11,7 @@
 #import "JYQueryConditions.h"
 #import "NSObject+JYContentTableClass.h"
 
-static const NSString *tableContentClass = @"tableContentClass";  // 对应模型类
+static const NSString *tableContentObject = @"tableContentObject";// 对应的字段 模型的 JYContentTable 对象
 static const NSString *tablePrimaryKey = @"tablePrimaryKey";      // 该 表 的主 key
 static const NSString *tableViceKey = @"tableViceKey";            // 属于本表的 副key
 
@@ -40,7 +40,7 @@ static const NSString *tableViceKey = @"tableViceKey";            // 属于本�
 - (NSArray<NSString *> *)getContentField;   // 表除主键外其它的列 默认取 @“DB” 结尾的属性
 - (NSDictionary*)fieldLenght;               // 创建表 对应列默认长度  默认取默认值
 /*
- 用于关联其它表的属性联系必须是 NSArray<contentClass>* 或者  contentClass
+ 用于关联其它表的属性联系必须是 NSArray<ContentClass>* NSMutableArray<ContentClass>或者  ContentClass
  @{
     @"field1":@{
                 tableContentClass : @[JYContentTable class],

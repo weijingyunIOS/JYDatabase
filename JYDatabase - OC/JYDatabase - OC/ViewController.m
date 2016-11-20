@@ -20,9 +20,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    NSMutableArray *arrayM1 = [[NSMutableArray alloc] init];
-    NSMutableArray *arrayM2 = [[NSMutableArray alloc] init];
-    for (int i = 0; i < 10000; i++) {
+    NSMutableArray *personArrayM = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 100; i++) {
+    
             JYPersonInfo *info = [[JYPersonInfo alloc] init];
             info.personnumber = [NSString stringWithFormat:@"123456%tu",i];
             info.float1 = 10.10111;
@@ -31,23 +31,21 @@
             info.int1 = i;
             info.bool1 = i % 2 == 0;
             info.integer1 = -100;
-//            info.image = [UIImage imageNamed:@"www"];
-            info.data = nil;
-            [arrayM1 addObject:info];
         
-        JYTest1Content *test = [[JYTest1Content alloc] init];
-        test.testID = [NSString stringWithFormat:@"%3tu",i];
-        test.acgfloatDB = i * 1.5;
-        test.numberDB = [NSNumber numberWithInteger:i];
-        [arrayM2 addObject:test];
+            NSMutableArray *testArrayM = [[NSMutableArray alloc] init];
+            for (int j = 0; j < 10; j++) {
+                JYTest1Content *test = [[JYTest1Content alloc] init];
+                test.testID = [NSString stringWithFormat:@"%tu--%tu",i,j];
+                test.personID = info.personnumber;
+                test.acgfloatDB = i * 1.5;
+                test.numberDB = [NSNumber numberWithInteger:i];
+                [testArrayM addObject:test];
+            }
+            info.test1Contents = [testArrayM copy];
+            [personArrayM addObject:info];
     }
-    JYPersonInfo *info = [[JYPersonInfo alloc] init];
-    info.personnumber = @"aaa";
-    info.image = [UIImage imageNamed:@"www"];
-    [[JYDBService shared] insertPersonInfo:info];
-    [[JYDBService shared] insertPersonInfos:arrayM1];
+    [[JYDBService shared] insertPersonInfos:personArrayM];
     
-    [[JYDBService shared] insertTest1Contents:arrayM2];
     UIButton *button1 = [self addButtonTitle:@"查询单条" action:@selector(getConttent:)];
     button1.frame = CGRectMake(0, 64, 80, 50);
     
@@ -129,8 +127,8 @@
 }
 
 - (void)getAllConttent:(UIButton*)but{
-    NSArray* infos = [[JYDBService shared] getAllPersonInfo];
-    NSLog(@"%@",infos);
+    NSArray<JYPersonInfo *>* infos = [[JYDBService shared] getAllPersonInfo];
+    NSLog(@"%@ -- %@",infos,infos.firstObject.test1Contents);
 }
 
 - (UIButton *)addButtonTitle:(NSString*)aTitle action:(SEL)aSel{

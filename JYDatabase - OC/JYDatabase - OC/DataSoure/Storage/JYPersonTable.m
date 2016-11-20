@@ -26,9 +26,12 @@
 }
 
 - (NSDictionary<NSString *, NSDictionary *> *)associativeTableField{
+    
+    JYTest1Table *table = [[JYTest1Table alloc] init];
+    table.dbQueue = self.dbQueue;
     return @{
              @"test1Contents":@{
-                     tableContentClass : [JYTest1Table class],
+                     tableContentObject: table,
                      tablePrimaryKey   : @"testID",
                      tableViceKey      : @"personID"
                      
