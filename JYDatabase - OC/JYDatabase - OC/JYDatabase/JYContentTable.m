@@ -680,15 +680,17 @@ static const NSInteger JYDeleteMaxCount = 500;
         NSString *viceKey = dic[tableViceKey];
         [self togetherArray:aIDs maxCount:JYDeleteMaxCount traverse:^(JYQueryConditions *make, NSString *contentID) {
             make.field(viceKey).equalTo(contentID).OR();
-        } complete:^(id block) {
+        } complete:^NSArray *(id block) {
             [table deleteContentDB:aDB byconditions:block];
+            return nil;
         }];
     }];
 }
 
-- (void)togetherArray:(NSArray<NSString *> *)aArray maxCount:(NSInteger)aMaxCount traverse:(void(^)(JYQueryConditions*,NSString *))aTraverse complete:(void(^)(id))aComplete{
+- (NSArray *)togetherArray:(NSArray<NSString *> *)aArray maxCount:(NSInteger)aMaxCount traverse:(void(^)(JYQueryConditions*,NSString *))aTraverse complete:(NSArray*(^)(id))aComplete{
     
     NSInteger traverseCount = 0;
+    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
     while ((NSInteger)aArray.count != traverseCount) {
         NSInteger count = traverseCount + aMaxCount;
         count = count > aArray.count ? aArray.count : count;
@@ -697,9 +699,13 @@ static const NSInteger JYDeleteMaxCount = 500;
                 aTraverse(make,aArray[i]);
             }
         };
-        aComplete(block);
+        NSArray* array = aComplete(block);
+        if (array != nil) {
+            [arrayM addObject:array];
+        }
         traverseCount = count;
     }
+    return [arrayM copy];
 }
 
 // 删除本表以及关联表内容
@@ -723,8 +729,9 @@ static const NSInteger JYDeleteMaxCount = 500;
     // 删除本表aIDs
     [self togetherArray:aIDs maxCount:JYDeleteMaxCount traverse:^(JYQueryConditions *make, NSString *obj) {
         make.field(self.contentId).equalTo(obj).OR();
-    } complete:^(id block) {
+    } complete:^NSArray *(id block) {
         [self deleteIndependentContentDB:aDB byconditions:block];
+        return nil;
     }];
     [self deleteSpecialContentDB:aDB contentByIDs:aIDs];
 }
