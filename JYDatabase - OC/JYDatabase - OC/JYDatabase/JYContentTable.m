@@ -676,12 +676,28 @@
         NSDictionary*dic = self.associativeTableField[field];
         JYContentTable *table = dic[tableContentObject];
         NSString *viceKey = dic[tableViceKey];
-        [table deleteContentDB:aDB byconditions:^(JYQueryConditions *make) {
-            [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull contentID, NSUInteger idx, BOOL * _Nonnull stop) {
-                make.field(viceKey).equalTo(contentID).OR();
-            }];
+        [self togetherArray:aIDs maxCount:500 traverse:^(JYQueryConditions *make, NSString *contentID) {
+            make.field(viceKey).equalTo(contentID).OR();
+        } complete:^(id block) {
+            [table deleteContentDB:aDB byconditions:block];
         }];
     }];
+}
+
+- (void)togetherArray:(NSArray<NSString *> *)aArray maxCount:(NSInteger)aMaxCount traverse:(void(^)(JYQueryConditions*,NSString *))aTraverse complete:(void(^)(id))aComplete{
+    
+    NSInteger traverseCount = 0;
+    while ((NSInteger)aArray.count != traverseCount) {
+        NSInteger count = traverseCount + aMaxCount;
+        count = count > aArray.count ? aArray.count : count;
+        id block = ^(JYQueryConditions*make){
+            for (NSInteger i = traverseCount; i < count; i ++) {
+                aTraverse(make,aArray[i]);
+            }
+        };
+        aComplete(block);
+        traverseCount = count;
+    }
 }
 
 // 删除本表以及关联表内容
@@ -749,7 +765,7 @@
 }
 
 - (void)cleanContentBefore:(NSDate*)date{
-    NSTimeInterval time = [NSDate date].timeIntervalSince1970;
+    NSTimeInterval time = date.timeIntervalSince1970;
     [self.dbQueue inDatabase:^(FMDatabase *db) {
         [self deleteContentDB:db byconditions:^(JYQueryConditions *make) {
             make.field([self insertTimeField]).lessTo([NSString stringWithFormat:@"%f",time]);

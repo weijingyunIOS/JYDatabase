@@ -12,7 +12,6 @@
 #import "NSObject+JYContentTableClass.h"
 
 static const NSString *tableContentObject = @"tableContentObject";// 对应的字段 模型的 JYContentTable 对象
-static const NSString *tablePrimaryKey = @"tablePrimaryKey";      // 该 表 的主 key
 static const NSString *tableViceKey = @"tableViceKey";            // 属于本表的 副key
 
 @class FMDatabaseQueue , FMDatabase;

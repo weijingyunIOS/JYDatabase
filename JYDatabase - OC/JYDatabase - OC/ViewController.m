@@ -19,13 +19,14 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 
-    NSDate *date = [NSDate new];
-  NSArray *aa = [[JYDBService shared] getPersonInfoByConditions:^(JYQueryConditions *make) {
-        make.field(@"personnumber").greaterThanOrEqualTo(@"123456000100");
-        make.field(@"bool1").equalTo(@"1");
-        make.field(@"personnumber").lessThanOrEqualTo(@"123456000200");
-    }];
-    NSLog(@"%f -- %tu",[date timeIntervalSinceNow],aa.count);
+//    NSDate *date = [NSDate new];
+//  NSArray *aa = [[JYDBService shared] getPersonInfoByConditions:^(JYQueryConditions *make) {
+//        make.field(@"personnumber").greaterThanOrEqualTo(@"123456000100");
+//        make.field(@"bool1").equalTo(@"1");
+//        make.field(@"personnumber").lessThanOrEqualTo(@"123456000200");
+//    }];
+//    NSLog(@"%f -- %tu",[date timeIntervalSinceNow],aa.count);
+    [self add];
 }
 
 - (void)add {
@@ -105,7 +106,9 @@
 }
 
 - (void)clearnCompareConttents:(UIButton*)but{
+    NSDate *date = [NSDate new];
     [[JYDBService shared] cleanPersonInfoBefore:[NSDate date]];
+    NSLog(@"%f",[date timeIntervalSinceNow]);
 }
 
 - (void)deleteCompareConttents:(UIButton*)but{
@@ -157,8 +160,9 @@
 }
 
 - (void)getAllConttent:(UIButton*)but{
+    NSDate *date = [NSDate new];
     NSArray<JYPersonInfo *>* infos = [[JYDBService shared] getAllPersonInfo];
-    NSLog(@"%@ -- %@ ++ %@",infos,infos.firstObject.test1Contents,infos.firstObject.test1);
+    NSLog(@"%f -- %tu",[date timeIntervalSinceNow],infos.count);
 }
 
 - (UIButton *)addButtonTitle:(NSString*)aTitle action:(SEL)aSel{
