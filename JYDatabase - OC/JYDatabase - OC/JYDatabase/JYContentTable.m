@@ -720,10 +720,11 @@ static const NSInteger JYDeleteMaxCount = 500;
     if (aIDs.count <= 0) {
         return;
     }
+    // 删除本表aIDs
     [self togetherArray:aIDs maxCount:JYDeleteMaxCount traverse:^(JYQueryConditions *make, NSString *obj) {
         make.field(self.contentId).equalTo(obj).OR();
     } complete:^(id block) {
-        [self deleteContentDB:aDB byconditions:block];
+        [self deleteIndependentContentDB:aDB byconditions:block];
     }];
     [self deleteSpecialContentDB:aDB contentByIDs:aIDs];
 }
