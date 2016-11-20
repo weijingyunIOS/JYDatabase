@@ -637,7 +637,9 @@
 }
     
 #pragma mark - delete 删除
-- (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
+// 只删除本表内容不删除关联表内容
+- (void)deleteIndependentContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
+
     [self configTableName];
     JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
     if (block) {
@@ -664,11 +666,33 @@
     [self removeAllCache];
 }
 
+// 删除本表以及关联表内容
+- (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
+    NSArray * deleteContents = [self getContentDB:aDB byconditions:block];
+    if (deleteContents.count <= 0) {
+        return; // 没数据不删除
+    }
+    NSArray<NSString *> *deleteIDs = [deleteContents valueForKeyPath:self.contentId];
+    // 删除本表
+    [self deleteIndependentContentDB:aDB byconditions:block];
+    // 删除关联表
+    [self.getSpecialContentField enumerateObjectsUsingBlock:^(NSString * _Nonnull field, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary*dic = self.associativeTableField[field];
+        JYContentTable *table = dic[tableContentObject];
+        NSString *viceKey = dic[tableViceKey];
+        [table deleteContentDB:aDB byconditions:^(JYQueryConditions *make) {
+           [deleteIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull contentID, NSUInteger idx, BOOL * _Nonnull stop) {
+               make.field(viceKey).equalTo(contentID).OR();
+           }];
+        }];
+    }];
+}
+
 - (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
     if (aIDs.count <= 0) {
         return;
     }
-    return [self deleteContentDB:aDB byconditions:^(JYQueryConditions *make) {
+    [self deleteContentDB:aDB byconditions:^(JYQueryConditions *make) {
         [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             make.field(self.contentId).equalTo(obj).OR();
         }];
