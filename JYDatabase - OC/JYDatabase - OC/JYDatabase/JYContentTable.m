@@ -356,6 +356,7 @@
         default:
             break;
     }
+    str = [NSString stringWithFormat:@"%@ if not exists",str];
     
     if (aType != EJYDataBaseIndexCompositeIndex) {
         [indexs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {

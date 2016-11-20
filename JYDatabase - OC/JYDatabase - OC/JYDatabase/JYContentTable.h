@@ -16,10 +16,12 @@
 @interface JYContentTable : NSObject
 
 @property (nonatomic, strong) FMDatabaseQueue *dbQueue;
-@property (nonatomic, strong) NSString *tableName;  //数据库表名
+//数据库表名
+@property (nonatomic, strong) NSString *tableName;
+//该表对应的模型类
 @property (nonatomic, strong) Class contentClass;
-
-@property (nonatomic, strong, readonly) NSCache *cache;     //默认缓存20条数据
+//默认缓存20条数据
+@property (nonatomic, strong, readonly) NSCache *cache;
 
 
 - (void)checkError:(FMDatabase *)aDb;
@@ -27,7 +29,7 @@
 - (id)checkVaule:(id)aVaule forKey:(NSString*)aKey; // 查询出来的数据进行处理
 
 #pragma mark - 需要重写实现的一些功能
-- (BOOL)enableCache; // 是否使用缓存默认使用 如果使用查找优先使用
+- (BOOL)enableCache; // 如果使用查找优先使用 默认 YES
 
 #pragma mark - 创建表
 - (NSString *)contentId;                    // 表的主键
