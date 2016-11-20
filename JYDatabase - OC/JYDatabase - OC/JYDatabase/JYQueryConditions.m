@@ -129,7 +129,7 @@
 - (JYQueryConditions * (^)(NSString *str))sqlStr{
     return ^id(NSString *str) {
         NSMutableDictionary *dicM = [[NSMutableDictionary alloc] init];
-        dicM[kSqlStr] = kSqlStr;
+        dicM[kSqlStr] = str;
         [self.sqlStrings addObject:dicM];
         return self;
     };

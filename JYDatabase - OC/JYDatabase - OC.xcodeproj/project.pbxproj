@@ -343,6 +343,7 @@
 				TargetAttributes = {
 					5CE7DC981CE0615E00470171 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = XWNPFKK4U5;
 					};
 					5CE7DCB11CE0615E00470171 = {
 						CreatedOnToolsVersion = 7.3;
@@ -567,6 +568,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = XWNPFKK4U5;
 				INFOPLIST_FILE = "JYDatabase - OC/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -579,6 +581,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = XWNPFKK4U5;
 				INFOPLIST_FILE = "JYDatabase - OC/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

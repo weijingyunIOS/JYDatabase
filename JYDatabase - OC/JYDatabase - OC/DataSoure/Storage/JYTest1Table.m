@@ -24,8 +24,12 @@
     return @[@"personID",@"acgfloatDB",@"numberDB",@"testPersonID"];
 }
 
-- (BOOL)enableCache{
-    return NO;
+- (void)addOtherOperationForTable:(FMDatabase *)aDB{
+    [self addDB:aDB uniques:@[@"testPersonID",@"personID"]];
 }
+
+//- (BOOL)enableCache{
+//    return NO;
+//}
 
 @end

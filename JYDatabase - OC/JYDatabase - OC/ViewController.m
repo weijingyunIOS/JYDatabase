@@ -17,44 +17,63 @@
 
 @implementation ViewController
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+
+    NSDate *date = [NSDate new];
+  NSArray *aa = [[JYDBService shared] getPersonInfoByConditions:^(JYQueryConditions *make) {
+        make.field(@"personnumber").greaterThanOrEqualTo(@"123456000100");
+        make.field(@"bool1").equalTo(@"1");
+        make.field(@"personnumber").lessThanOrEqualTo(@"123456000200");
+    }];
+    NSLog(@"%f -- %tu",[date timeIntervalSinceNow],aa.count);
+}
+
+- (void)add {
+    
+    static NSInteger bj = 0;
+    NSMutableArray *personArrayM = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < 2000; i++) {
+        
+        JYPersonInfo *info = [[JYPersonInfo alloc] init];
+        info.personnumber = [NSString stringWithFormat:@"123456%tu%05tu",bj,i];
+        info.float1 = 10.10111;
+        info.name = @"测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小";
+        info.desc = @"测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小";
+        info.int1 = i;
+        info.bool1 = i % 2 == 0;
+        info.integer1 = -100;
+        
+        NSMutableArray *testArrayM = [[NSMutableArray alloc] init];
+        for (int j = 0; j < 10; j++) {
+            JYTest1Content *test = [[JYTest1Content alloc] init];
+            test.testID = [NSString stringWithFormat:@"%tu-%tu-%tu",bj,i,j];
+            test.personID = info.personnumber;
+            test.acgfloatDB = i * 1.5;
+            test.numberDB = [NSNumber numberWithInteger:i];
+            [testArrayM addObject:test];
+        }
+        info.test1Contents = [testArrayM copy];
+        
+        JYTest1Content *test1 = [[JYTest1Content alloc] init];
+        test1.testID = [NSString stringWithFormat:@"%tu-%tu-%tu",bj,i,i];
+        test1.testPersonID = info.personnumber;
+        test1.acgfloatDB = i * 1.5;
+        test1.numberDB = [NSNumber numberWithInteger:i];
+        info.test1 = test1;
+        
+        [personArrayM addObject:info];
+    }
+    NSDate *date = [NSDate new];
+    [[JYDBService shared] insertPersonInfos:personArrayM];
+    NSLog(@"%f",[date timeIntervalSinceNow]);
+
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    NSMutableArray *personArrayM = [[NSMutableArray alloc] init];
-    for (int i = 0; i < 1; i++) {
-    
-            JYPersonInfo *info = [[JYPersonInfo alloc] init];
-            info.personnumber = [NSString stringWithFormat:@"123456%tu",i];
-            info.float1 = 10.10111;
-            info.name = @"测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小";
-            info.desc = @"测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小测试存储 1万条数据的大小";
-            info.int1 = i;
-            info.bool1 = i % 2 == 0;
-            info.integer1 = -100;
-        
-            NSMutableArray *testArrayM = [[NSMutableArray alloc] init];
-            for (int j = 0; j < 10; j++) {
-                JYTest1Content *test = [[JYTest1Content alloc] init];
-                test.testID = [NSString stringWithFormat:@"%tu--%tu",i,j];
-                test.personID = info.personnumber;
-                test.acgfloatDB = i * 1.5;
-                test.numberDB = [NSNumber numberWithInteger:i];
-                [testArrayM addObject:test];
-            }
-            info.test1Contents = [testArrayM copy];
-        
-            JYTest1Content *test1 = [[JYTest1Content alloc] init];
-            test1.testID = [NSString stringWithFormat:@"%tu-+-%tu",i,i];
-            test1.testPersonID = info.personnumber;
-            test1.acgfloatDB = i * 1.5;
-            test1.numberDB = [NSNumber numberWithInteger:i];
-            info.test1 = test1;
-        
-            [personArrayM addObject:info];
-    }
-    [[JYDBService shared] insertPersonInfos:personArrayM];
-    
-    UIButton *button1 = [self addButtonTitle:@"查询单条" action:@selector(getConttent:)];
+        UIButton *button1 = [self addButtonTitle:@"查询单条" action:@selector(getConttent:)];
     button1.frame = CGRectMake(0, 64, 80, 50);
     
     UIButton *button2 = [self addButtonTitle:@"查询所有" action:@selector(getAllConttent:)];

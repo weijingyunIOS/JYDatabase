@@ -206,6 +206,9 @@
     
     // 需要存入表的对象以及关系描述
     NSArray *fieldObject = [aContent valueForKey:akey];
+    if (fieldObject == nil) {
+        return;
+    }
     if (![fieldObject isKindOfClass:[NSArray class]]) {
         fieldObject = @[fieldObject];
     }
@@ -666,6 +669,23 @@
     [self removeAllCache];
 }
 
+// 删除关联表的数据
+- (void)deleteSpecialContentDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
+    if (aIDs.count <= 0) {
+        return;
+    }
+    [self.getSpecialContentField enumerateObjectsUsingBlock:^(NSString * _Nonnull field, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary*dic = self.associativeTableField[field];
+        JYContentTable *table = dic[tableContentObject];
+        NSString *viceKey = dic[tableViceKey];
+        [table deleteContentDB:aDB byconditions:^(JYQueryConditions *make) {
+            [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull contentID, NSUInteger idx, BOOL * _Nonnull stop) {
+                make.field(viceKey).equalTo(contentID).OR();
+            }];
+        }];
+    }];
+}
+
 // 删除本表以及关联表内容
 - (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
     NSArray * deleteContents = [self getContentDB:aDB byconditions:block];
@@ -676,27 +696,20 @@
     // 删除本表
     [self deleteIndependentContentDB:aDB byconditions:block];
     // 删除关联表
-    [self.getSpecialContentField enumerateObjectsUsingBlock:^(NSString * _Nonnull field, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSDictionary*dic = self.associativeTableField[field];
-        JYContentTable *table = dic[tableContentObject];
-        NSString *viceKey = dic[tableViceKey];
-        [table deleteContentDB:aDB byconditions:^(JYQueryConditions *make) {
-           [deleteIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull contentID, NSUInteger idx, BOOL * _Nonnull stop) {
-               make.field(viceKey).equalTo(contentID).OR();
-           }];
-        }];
-    }];
+    [self deleteSpecialContentDB:aDB contentByIDs:deleteIDs];
+ 
 }
 
 - (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs{
     if (aIDs.count <= 0) {
         return;
     }
-    [self deleteContentDB:aDB byconditions:^(JYQueryConditions *make) {
+    [self deleteIndependentContentDB:aDB byconditions:^(JYQueryConditions *make) {
         [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             make.field(self.contentId).equalTo(obj).OR();
         }];
     }];
+    [self deleteSpecialContentDB:aDB contentByIDs:aIDs];
 }
 
 - (void)deleteContentByConditions:(void (^)(JYQueryConditions *make))block{

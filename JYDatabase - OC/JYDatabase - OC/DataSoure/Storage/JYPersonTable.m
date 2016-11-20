@@ -45,13 +45,8 @@
              };
 }
 
-- (BOOL)enableCache{
-    return NO;
-}
-
-- (void)addOtherOperationForTable:(FMDatabase *)aDB{
-    [self addDB:aDB type:EJYDataBaseIndexCompositeIndex uniques:@[@"mutableString1",@"uInteger1"]];
-//    [self addDB:aDB uniques:@[@"mutableString1",@"uInteger1"]];
-}
+//- (BOOL)enableCache{
+//    return NO;
+//}
 
 @end
