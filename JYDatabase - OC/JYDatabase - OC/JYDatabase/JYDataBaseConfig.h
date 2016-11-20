@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, EJYDataBaseIndex) { //索引类型
 
 + (instancetype)shared;
 
-// 额外的影射字段 jy_correspondingDic 可能无法全面覆盖，当遇到崩溃时可设置该属性添加映射
+// 额外的映射字段 jy_correspondingDic 可能无法全面覆盖，当遇到崩溃时可设置该属性添加映射
 @property (nonatomic, strong) NSDictionary<NSString*,NSString*> *corresponding;
 
 
