@@ -146,7 +146,7 @@
 }
 
 - (void)getConttent:(UIButton*)but{
-   JYPersonInfo* info = [[JYDBService shared] getPersonInfo:@"aaa"];
+   JYPersonInfo* info = [[JYDBService shared] getPersonInfo:@"123456000000"];
     NSLog(@"%f",info.lastInsertTime);
     self.imageView.image = info.image;
 //    NSArray* infos = [[JYDBService shared] getAllTest1Content];
@@ -154,9 +154,13 @@
 }
 
 - (void)getConttents:(UIButton*)but{
-    NSArray<JYPersonInfo*>* infos = [[JYDBService shared] getPersonInfos:@[@"1234560",@"12345610",@"12345611",@"1234562",@"abcde"]];
-    self.imageView.image = infos.firstObject.image;
-    NSLog(@"%@",infos);
+    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 2000; i ++) {
+        [arrayM addObject:[NSString stringWithFormat:@"1234560%05tu",i]];
+    }
+    NSDate *date = [NSDate new];
+    NSArray<JYPersonInfo*>* infos = [[JYDBService shared] getPersonInfos:arrayM];
+    NSLog(@"%f  %tu",[date timeIntervalSinceNow],infos.count);
 }
 
 - (void)getAllConttent:(UIButton*)but{

@@ -595,10 +595,10 @@ static const NSInteger JYDeleteMaxCount = 500;
     if (aIDs.count <= 0) {
         return nil;
     }
-    return [self getContentDB:aDB byconditions:^(JYQueryConditions *make) {
-       [aIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-           make.field(self.contentId).equalTo(obj).OR();
-       }];
+    return [self togetherArray:aIDs maxCount:JYDeleteMaxCount traverse:^(JYQueryConditions *make, NSString *obj) {
+        make.field(self.contentId).equalTo(obj).OR();
+    } complete:^NSArray *(id block) {
+        return [self getContentDB:aDB byconditions:block];
     }];
 }
 
@@ -701,7 +701,7 @@ static const NSInteger JYDeleteMaxCount = 500;
         };
         NSArray* array = aComplete(block);
         if (array != nil) {
-            [arrayM addObject:array];
+            [arrayM addObjectsFromArray:array];
         }
         traverseCount = count;
     }
