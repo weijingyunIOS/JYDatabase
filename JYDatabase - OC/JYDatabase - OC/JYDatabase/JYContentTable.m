@@ -28,7 +28,9 @@
 
 @end
 
-@implementation JYContentTable
+@implementation JYContentTable{
+    NSArray *_allContentField;
+}
 
 - (instancetype)init
 {
@@ -67,6 +69,10 @@
     return nil;
 }
 
+- (NSDictionary<NSString *, NSDictionary *> *)associativeTableField{
+    return nil;
+}
+
 - (NSString *)insertTimeField{
     return @"lastInsertTime";
 }
@@ -96,12 +102,20 @@
 }
 
 - (NSArray<NSString *> *)getAllContentField{
-    NSMutableArray *arrayM = [[NSMutableArray alloc] init];
-    // 保证 contentId 在第一个位置
-    [arrayM addObject:[self contentId]];
-    [arrayM addObjectsFromArray:[self getContentField]];
-    [arrayM addObject:self.insertTimeField];
-    return [arrayM copy];
+    if (!_allContentField) {
+        NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+        // 保证 contentId 在第一个位置
+        [arrayM addObject:[self contentId]];
+        [arrayM addObjectsFromArray:[self getContentField]];
+        [arrayM addObject:self.insertTimeField];
+        NSArray<NSString *>* fields = self.associativeTableField.allKeys;
+        if (fields.count > 0) {
+            [arrayM addObjectsFromArray:fields];
+        }
+        _allContentField = [arrayM copy];
+    }
+   
+    return _allContentField;
 }
 
 #pragma mark - 查询的处理函数
@@ -198,28 +212,34 @@
 }
 
 // 类型的映射
-- (NSArray *)conversionAttributeType:(NSString *)aType{
+- (NSArray *)conversionAttributeName:(NSString *)aField{
+    NSString *aType = self.attributeTypeDic[aField];
+#if DEBUG
+    NSString *assertStr = [NSString stringWithFormat:@"该属性找不到对应类型 %@",aField];
+    NSAssert(aType != nil,assertStr);
+#endif
+    
     NSString *str = jy_correspondingDic()[aType];
     if (str == nil) {
         if ([JYDataBaseConfig shared].corresponding) {
             str = [JYDataBaseConfig shared].corresponding[aType];
         }
     }
-    NSAssert(str != nil, @"当前类型不支持");
-    
+#if DEBUG
+    NSString *assertStr1 = [NSString stringWithFormat:@"%@属性的对应类型%@ 找不到，请设置JYDataBaseConfig中的 corresponding 属性添加，并到gitHub留言告知我，谢谢",aField,aType];
+    NSAssert(str != nil,assertStr1);
+#endif
     NSString *length = jy_defaultDic()[str];
     return @[str,length];
 }
 
-
 #pragma mark - Create Table
 - (void)createTable:(FMDatabase *)aDB{
     [self configTableName];
-    NSDictionary * typeDict = [self attributeTypeDic];
     NSMutableString *strM = [[NSMutableString alloc] init];
     [strM appendFormat:@"CREATE TABLE if not exists %@ ( ",self.tableName];
     [[self getAllContentField] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSArray *array = [self conversionAttributeType:typeDict[obj]];
+        NSArray *array = [self conversionAttributeName:obj];
         NSString *lenght = [self fieldLenght][obj] == nil ? array.lastObject : [self fieldLenght][obj];
         [strM appendFormat:@"%@ %@(%@) ",obj,array.firstObject,lenght];
         if ([obj isEqualToString:[self contentId]]) {
@@ -282,9 +302,8 @@
 
 // 新增字段数组
 - (void)updateDB:(FMDatabase *)aDB addFieldS:(NSArray<NSString*>*)aFields{
-    NSDictionary * typeDict = [self attributeTypeDic];
     [aFields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSArray *array = [self conversionAttributeType:typeDict[obj]];
+        NSArray *array = [self conversionAttributeName:obj];
         NSString *lenght = [self fieldLenght][obj] == nil ? array.lastObject : [self fieldLenght][obj];
         NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ %@(%@)", self.tableName,obj,array.firstObject,lenght];
         [aDB executeUpdate:sql];

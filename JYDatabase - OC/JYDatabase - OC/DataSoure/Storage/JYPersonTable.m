@@ -7,6 +7,7 @@
 //
 
 #import "JYPersonTable.h"
+#import "JYTest1Table.h"
 
 @implementation JYPersonTable
 
@@ -22,6 +23,17 @@
 
 - (NSArray<NSString *> *)getContentField{
     return @[@"mutableString1",@"integer1",@"uInteger1",@"int1",@"bool1",@"double1",@"data",@"image",@"name",@"desc"];
+}
+
+- (NSDictionary<NSString *, NSDictionary *> *)associativeTableField{
+    return @{
+             @"test1Contents":@{
+                     tableContentClass : [JYTest1Table class],
+                     tablePrimaryKey   : @"testID",
+                     tableViceKey      : @"personID"
+                     
+                              }
+             };
 }
 
 - (BOOL)enableCache{

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "JYTest1Content.h"
 @interface JYPersonInfo : NSObject
 
 //存数据库属性
@@ -24,5 +25,6 @@
 @property (nonatomic, strong) NSData *data;
 @property (nonatomic, strong) UIImage *image;
 
+@property (nonatomic, strong) NSArray<JYTest1Content *> *test1Contents;
 
 @end

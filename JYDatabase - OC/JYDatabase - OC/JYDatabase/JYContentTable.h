@@ -11,6 +11,10 @@
 #import "JYQueryConditions.h"
 #import "NSObject+JYContentTableClass.h"
 
+static const NSString *tableContentClass = @"tableContentClass";  // 对应模型类
+static const NSString *tablePrimaryKey = @"tablePrimaryKey";      // 该 表 的主 key
+static const NSString *tableViceKey = @"tableViceKey";            // 属于本表的 副key
+
 @class FMDatabaseQueue , FMDatabase;
 
 @interface JYContentTable : NSObject
@@ -35,8 +39,20 @@
 - (NSString *)contentId;                    // 表的主键
 - (NSArray<NSString *> *)getContentField;   // 表除主键外其它的列 默认取 @“DB” 结尾的属性
 - (NSDictionary*)fieldLenght;               // 创建表 对应列默认长度  默认取默认值
+/*
+ 用于关联其它表的属性联系必须是 NSArray<contentClass>* 或者  contentClass
+ @{
+    @"field1":@{
+                tableContentClass : @[JYContentTable class],
+                tablePrimaryKey   : @"primaryKey",
+                tableViceKey      : @"viceKey"
+              },
+ }
+*/
+- (NSDictionary<NSString *, NSDictionary *> *)associativeTableField;
 
-// 不重写 该方法会 通过 contentId getContentField fieldLenght 进行表的创建
+
+// 不重写 该方法会 通过 contentId getContentField fieldLenght associativeTableField 进行表的创建
 - (void)createTable:(FMDatabase *)aDB;
 
 // 重写该方法  在创建和更新表时添加额外的数据 比如为某些字段添加索引

@@ -11,6 +11,7 @@
 @interface JYTest1Content : NSObject
 
 @property (nonatomic, copy) NSString *testID;
+@property (nonatomic, copy) NSString *personID;
 @property (nonatomic, assign) CGFloat acgfloatDB;
 @property (nonatomic, strong) NSNumber *numberDB;
 
