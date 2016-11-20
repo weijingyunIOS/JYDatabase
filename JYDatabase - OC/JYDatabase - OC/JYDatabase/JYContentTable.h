@@ -39,16 +39,16 @@ static const NSString *tableViceKey = @"tableViceKey";            // 属于本�
 - (NSArray<NSString *> *)getContentField;   // 表除主键外其它的列 默认取 @“DB” 结尾的属性
 - (NSDictionary*)fieldLenght;               // 创建表 对应列默认长度  默认取默认值
 /*
- 用于关联其它表的属性联系必须是 NSArray<ContentClass>* NSMutableArray<ContentClass>或者  ContentClass
- JYTest1Table *table = [[JYTest1Table alloc] init];
- table.dbQueue = self.dbQueue;
- @{
-    @"field1":@{
-                tableContentClass : table,
-                tablePrimaryKey   : @"primaryKey",
-                tableViceKey      : @"viceKey"
-              },
- }
+ * 用于关联其它表的属性联系必须是 NSArray<ContentClass>* NSMutableArray<ContentClass>或者  ContentClass
+ * JYTest1Table *table = [[JYTest1Table alloc] init];
+ * table.dbQueue = self.dbQueue;
+ * @{
+ *   @"field1":@{
+ *               tableContentClass : table,
+ *               tablePrimaryKey   : @"primaryKey",
+ *               tableViceKey      : @"viceKey"
+ *             },
+ * }
 */
 - (NSDictionary<NSString *, NSDictionary *> *)associativeTableField;
 
