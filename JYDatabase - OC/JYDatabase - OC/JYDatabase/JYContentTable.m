@@ -300,7 +300,7 @@
 
 #pragma mark - Create Table
 - (void)createTable:(FMDatabase *)aDB{
-    [self configTableName];
+   
     NSMutableString *strM = [[NSMutableString alloc] init];
     [strM appendFormat:@"CREATE TABLE if not exists %@ ( ",self.tableName];
     [self.getIndependentContentField enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -330,7 +330,7 @@
 }
 
 - (void)updateDB:(FMDatabase *)aDB{
-    [self configTableName];
+ 
     NSArray<NSString *> *tablefields = [self getCurrentFields:aDB];
     if (tablefields.count <= 0) { // 表示该表未创建
         [self createTable:aDB];
@@ -471,7 +471,6 @@
         return;
     }
     
-    [self configTableName];
     // 1.插入语句拼接
     NSMutableString *strM = [[NSMutableString alloc] init];
     NSMutableString *strM1 = [[NSMutableString alloc] init];
@@ -536,7 +535,7 @@
 
 #pragma mark - get 查询
 - (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
-    [self configTableName];
+ 
     JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
     if (block) {
         block(conditions);
@@ -643,7 +642,6 @@
 // 只删除本表内容不删除关联表内容
 - (void)deleteIndependentContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
 
-    [self configTableName];
     JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
     if (block) {
         block(conditions);
@@ -754,7 +752,6 @@
 #pragma mark - getCount
 - (NSInteger)getCountContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
     
-    [self configTableName];
     JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
     if (block) {
         block(conditions);
