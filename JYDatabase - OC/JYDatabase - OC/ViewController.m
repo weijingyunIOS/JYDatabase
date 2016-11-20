@@ -137,7 +137,9 @@
 }
 
 - (void)deleteAllConttent:(UIButton*)but{
+    NSDate *date = [NSDate new];
     [[JYDBService shared] deleteAllPersonInfo];
+    NSLog(@"%f",[date timeIntervalSinceNow]);
 }
 
 - (void)getConttent:(UIButton*)but{

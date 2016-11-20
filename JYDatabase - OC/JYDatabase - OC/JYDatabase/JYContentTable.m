@@ -736,7 +736,15 @@
 
 - (void)deleteAllContent{
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-        [self deleteContentDB:db byconditions:nil];
+        [self deleteIndependentContentDB:db byconditions:nil];
+        [self.getSpecialContentField enumerateObjectsUsingBlock:^(NSString * _Nonnull field, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary*dic = self.associativeTableField[field];
+            JYContentTable *table = dic[tableContentObject];
+            NSString *viceKey = dic[tableViceKey];
+            [table deleteContentDB:db byconditions:^(JYQueryConditions *make) {
+                make.field(viceKey).notEqualTo(@"");
+            }];
+        }];
     }];
 }
 
