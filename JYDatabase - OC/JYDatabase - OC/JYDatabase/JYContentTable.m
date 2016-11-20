@@ -29,7 +29,8 @@
 @end
 
 @implementation JYContentTable{
-    NSArray *_allContentField;
+    NSArray<NSString *> *_independentContentField; // 独立的字段表
+    NSArray<NSString *> *_allContentField;         // 所有字段表
 }
 
 - (instancetype)init
@@ -101,20 +102,35 @@
     return [arrayM copy];
 }
 
-- (NSArray<NSString *> *)getAllContentField{
-    if (!_allContentField) {
-        NSMutableArray *arrayM = [[NSMutableArray alloc] init];
+#pragma mark - 字段的获取
+// 独立字段
+- (NSArray<NSString *> *)getIndependentContentField{
+    if (!_independentContentField) {
+        NSMutableArray<NSString *> *arrayM = [[NSMutableArray alloc] init];
         // 保证 contentId 在第一个位置
         [arrayM addObject:[self contentId]];
         [arrayM addObjectsFromArray:[self getContentField]];
         [arrayM addObject:self.insertTimeField];
-        NSArray<NSString *>* fields = self.associativeTableField.allKeys;
+        _independentContentField = [arrayM copy];
+    }
+    return _independentContentField;
+}
+
+// 特殊字段 与其它表有关联的
+- (NSArray<NSString *> *)getSpecialContentField{
+    return self.associativeTableField.allKeys;
+}
+
+// 所有的字段
+- (NSArray<NSString *> *)getAllContentField{
+    if (!_allContentField) {
+        NSMutableArray<NSString *> *arrayM = [self.getIndependentContentField mutableCopy];
+        NSArray<NSString *>* fields = [self getSpecialContentField];
         if (fields.count > 0) {
             [arrayM addObjectsFromArray:fields];
         }
         _allContentField = [arrayM copy];
     }
-   
     return _allContentField;
 }
 
@@ -153,7 +169,6 @@
     }
     
     NSString *type = [self attributeTypeDic][akey];
-    
     if ([self jSONSerializationForType:type] && vaule != nil) {
         vaule = [NSJSONSerialization dataWithJSONObject:vaule options:NSJSONWritingPrettyPrinted error:nil];
     }
@@ -238,7 +253,7 @@
     [self configTableName];
     NSMutableString *strM = [[NSMutableString alloc] init];
     [strM appendFormat:@"CREATE TABLE if not exists %@ ( ",self.tableName];
-    [[self getAllContentField] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.getAllContentField enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSArray *array = [self conversionAttributeName:obj];
         NSString *lenght = [self fieldLenght][obj] == nil ? array.lastObject : [self fieldLenght][obj];
         [strM appendFormat:@"%@ %@(%@) ",obj,array.firstObject,lenght];
@@ -271,14 +286,14 @@
         [self createTable:aDB];
         return;
     }
-    NSArray<NSString *> *contentfields = [self getAllContentField];
-    __block NSMutableArray *addfields = [contentfields mutableCopy];
+    NSArray<NSString *> *allFields = self.getAllContentField;
+    __block NSMutableArray *addfields = [allFields mutableCopy];
     __block NSMutableArray *minusfields = [tablefields mutableCopy];
     [tablefields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [addfields removeObject:obj];
     }];
     
-    [contentfields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [allFields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [minusfields removeObject:obj];
     }];
     [self updateDB:aDB addFieldS:addfields];
@@ -321,7 +336,7 @@
     NSString *tempTableName = [NSString stringWithFormat:@"temp_%@",self.tableName];
     __block NSMutableString *tableField = [[NSMutableString alloc] init];
     
-    [[self getAllContentField] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.getAllContentField enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (![obj isEqualToString:[self contentId]]) {
             [tableField appendString:@","];
         }
@@ -407,13 +422,11 @@
     }
     
     [self configTableName];
-//    //    NSLog(@"insert %@",[aContents.firstObject class]);
-    NSArray<NSString *> *fields = [self getAllContentField];
     // 1.插入语句拼接
     NSMutableString *strM = [[NSMutableString alloc] init];
     NSMutableString *strM1 = [[NSMutableString alloc] init];
     [strM appendFormat:@"INSERT OR REPLACE INTO %@(",self.tableName];
-    [fields enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.getAllContentField enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (![obj isEqualToString:[self contentId]]) {
             [strM appendString:@","];
             [strM1 appendString:@","];
@@ -433,7 +446,7 @@
 
         // 2.1 获取参数
         NSMutableArray *arrayM = [[NSMutableArray alloc] init];
-        [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.getAllContentField enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [arrayM addObject:[self checkContent:aContent forKey:obj]];
         }];
         
@@ -470,11 +483,10 @@
     if (block) {
         block(conditions);
     }
-    NSArray<NSString *> *fields = [self getAllContentField];
     
 #if DEBUG
     [conditions.conditions enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSAssert(([fields containsObject:obj[kField]]),@"该表不存在这个字段 -- %@",obj);
+        NSAssert(([self.getAllContentField containsObject:obj[kField]]),@"该表不存在这个字段 -- %@",obj);
     }];
 #endif
     
@@ -496,7 +508,7 @@
         content = [[self.contentClass alloc] init];
         id value = [rs stringForColumn:[self contentId]];
         [content setValue:value forKey:[self contentId]];
-        [fields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.getAllContentField enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             id value = [rs objectForKeyedSubscript:obj];
             value = [self checkVaule:value forKey:obj];
             if (value != [NSNull null]) {
@@ -570,11 +582,10 @@
     if (block) {
         block(conditions);
     }
-    NSArray<NSString *> *fields = [self getAllContentField];
     
 #if DEBUG
     [conditions.conditions enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSAssert(([fields containsObject:obj[kField]]),@"该表不存在这个字段 -- %@",obj);
+        NSAssert(([self.getAllContentField containsObject:obj[kField]]),@"该表不存在这个字段 -- %@",obj);
     }];
 #endif
     
@@ -650,11 +661,10 @@
     if (block) {
         block(conditions);
     }
-    NSArray<NSString *> *fields = [self getAllContentField];
     
 #if DEBUG
     [conditions.conditions enumerateObjectsUsingBlock:^(NSMutableDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSAssert(([fields containsObject:obj[kField]]),@"该表不存在这个字段 -- %@",obj);
+        NSAssert(([self.getAllContentField containsObject:obj[kField]]),@"该表不存在这个字段 -- %@",obj);
     }];
 #endif
     
