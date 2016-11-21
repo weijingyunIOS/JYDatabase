@@ -14,6 +14,7 @@
 + (instancetype)shared;
 - (void)insertPersonInfo:(JYPersonInfo *)aPersonInfo;
 - (void)insertPersonInfos:(NSArray<JYPersonInfo *> *)aPersonInfos;
+- (void)insertIndependentPersonInfos:(NSArray<JYPersonInfo *> *)aPersonInfos;
 
 - (NSArray<JYPersonInfo *> *)getPersonInfoByConditions:(void (^)(JYQueryConditions *make))block;
 - (JYPersonInfo *)getPersonInfo:(NSString*)aPersonInfoID;

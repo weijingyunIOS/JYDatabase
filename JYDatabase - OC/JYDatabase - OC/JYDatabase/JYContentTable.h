@@ -74,9 +74,15 @@ static const NSString *tableViceKey = @"tableViceKey";            // 属于本�
 - (void)addDB:(FMDatabase *)aDB type:(EJYDataBaseIndex)aType uniques:(NSArray<NSString *>*)indexs;
 
 #pragma mark - insert 插入
+// 以下插入会更新该模型所有相关表
 - (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
 - (void)insertContent:(id)aContent;
 - (void)insertContents:(NSArray *)aContents;
+
+// 以下插入只会更新本表相关数据，不会更新关联表，请根据情况尽量调用以下方法
+- (void)insertIndependentDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
+- (void)insertIndependentContent:(id)aContent;
+- (void)insertIndependentContents:(NSArray *)aContents;
 
 #pragma mark - get 查询
 - (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;

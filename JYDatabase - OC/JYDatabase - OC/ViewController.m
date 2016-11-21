@@ -68,6 +68,10 @@
     NSDate *date = [NSDate new];
     [[JYDBService shared] insertPersonInfos:personArrayM];
     NSLog(@"%f",[date timeIntervalSinceNow]);
+    
+    date = [NSDate new];
+    [[JYDBService shared] insertIndependentPersonInfos:personArrayM];
+    NSLog(@"%f",[date timeIntervalSinceNow]);
 
 }
 

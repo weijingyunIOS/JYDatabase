@@ -35,6 +35,10 @@
     [self.personDB.personTable insertContents:aPersonInfos];
 }
 
+- (void)insertIndependentPersonInfos:(NSArray<JYPersonInfo *> *)aPersonInfos{
+    [self.personDB.personTable insertIndependentContents:aPersonInfos];
+}
+
 - (NSArray<JYPersonInfo *> *)getPersonInfoByConditions:(void (^)(JYQueryConditions *make))block{
     return [self.personDB.personTable getContentByConditions:block];
 }

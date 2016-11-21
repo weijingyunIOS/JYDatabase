@@ -471,7 +471,8 @@ static const NSInteger JYDeleteMaxCount = 500;
 }
 
 #pragma mark - insert 插入
-- (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents{
+// associatedTable 是否更新关联表
+- (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents associatedTable:(BOOL)associatedTable{
     
     if (aContents.count <= 0) {
         return;
@@ -499,11 +500,12 @@ static const NSInteger JYDeleteMaxCount = 500;
         NSString * ts = [NSString stringWithFormat:@"%@不能为空",[self contentId]];
         NSAssert([aContent valueForKey:[self contentId]], ts );
 #endif
-        // 特殊字段的参数处理
-        [self.getSpecialContentField enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [self insertSpecialFieldDB:aDB content:aContent forKey:obj];
-        }];
-        
+        if (associatedTable) { // 特殊字段的参数处理 更新关联表数据
+            [self.getSpecialContentField enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [self insertSpecialFieldDB:aDB content:aContent forKey:obj];
+            }];
+        }
+
         // 2.1 获取参数
         NSMutableArray *arrayM = [[NSMutableArray alloc] init];
         // 基本字段的参数处理
@@ -521,6 +523,10 @@ static const NSInteger JYDeleteMaxCount = 500;
     [self checkError:aDB];
 }
 
+- (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents{
+    [self insertDB:aDB contents:aContents associatedTable:YES];
+}
+
 - (void)insertContent:(id)aContent{
     if (aContent == nil) {
         return;
@@ -536,6 +542,28 @@ static const NSInteger JYDeleteMaxCount = 500;
     }
     [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
         [self insertDB:db contents:aContents];
+    }];
+}
+
+- (void)insertIndependentDB:(FMDatabase *)aDB contents:(NSArray *)aContents{
+    [self insertDB:aDB contents:aContents associatedTable:NO];
+}
+
+- (void)insertIndependentContent:(id)aContent{
+    if (aContent == nil) {
+        return;
+    }
+    [self.dbQueue inDatabase:^(FMDatabase *db) {
+        [self insertIndependentDB:db contents:@[aContent]];
+    }];
+}
+
+- (void)insertIndependentContents:(NSArray *)aContents{
+    if (aContents.count <= 0) {
+        return;
+    }
+    [self.dbQueue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        [self insertIndependentDB:db contents:aContents];
     }];
 }
 
