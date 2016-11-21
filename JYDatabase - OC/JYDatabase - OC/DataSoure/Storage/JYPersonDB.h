@@ -7,11 +7,15 @@
 //
 
 #import "JYDataBase.h"
-#import "JYPersonTable.h"
+
+@class JYGradeTable,JYPersonTable,JYClassTable;
+
 @interface JYPersonDB : JYDataBase
 
-@property (nonatomic, strong, readonly) NSString * documentDirectory ;
-@property (nonatomic, strong, readonly) JYPersonTable * personTable;
+@property (nonatomic, strong, readonly) NSString      *documentDirectory ;
+@property (nonatomic, strong, readonly) JYGradeTable  *gradeTable;
+@property (nonatomic, strong, readonly) JYClassTable  *classTable;
+@property (nonatomic, strong, readonly) JYPersonTable *personTable;
 
 + (instancetype)storage;
 

@@ -17,7 +17,7 @@
 }
 
 - (NSString *)contentId{
-    return @"personnumber";
+    return @"PersonID";
 }
 
 - (NSArray<NSString *> *)getContentField{
@@ -26,9 +26,14 @@
              @"data",@"number",@"image"];
 }
 
+// 为 studentClassID teacherClassID 加上索引
+- (void)addOtherOperationForTable:(FMDatabase *)aDB{
+    [self addDB:aDB uniques:@[@"teacherClassID",@"studentClassID"]];
+}
 
-//- (BOOL)enableCache{
-//    return NO;
-//}
+// 不使用缓存，开发中建议打开
+- (BOOL)enableCache{
+    return NO;
+}
 
 @end

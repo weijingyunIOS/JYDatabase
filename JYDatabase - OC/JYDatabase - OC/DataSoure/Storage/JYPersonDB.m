@@ -7,12 +7,21 @@
 //
 
 #import "JYPersonDB.h"
+#import "JYGradeTable.h"
+#import "JYGradeInfo.h"
+#import "JYClassTable.h"
+#import "JYClassInfo.h"
+#import "JYPersonTable.h"
+#import "JYPersonInfo.h"
+
 #define dataBaseName @"usersDataSource.db"
 
 @interface JYPersonDB()
 
 @property (nonatomic, strong) NSString * documentDirectory ;
-@property (nonatomic, strong) JYPersonTable * personTable;
+@property (nonatomic, strong) JYGradeTable  *gradeTable;
+@property (nonatomic, strong) JYClassTable  *classTable;
+@property (nonatomic, strong) JYPersonTable *personTable;
 
 @end
 
@@ -28,6 +37,8 @@
     NSLog(@"%@",self.documentDirectory);
     [self buildWithPath:self.documentDirectory mode:ArtDatabaseModeWrite registTable:^{
         //注册数据表 建议外引出来，用于其它位置调用封装
+        self.gradeTable = (JYGradeTable *)[self registTableClass:[JYGradeTable class]];
+        self.classTable = (JYClassTable *)[self registTableClass:[JYClassTable class]];
         self.personTable = (JYPersonTable *)[self registTableClass:[JYPersonTable class]];
     }];
     
@@ -36,7 +47,7 @@
 #pragma mark - 数据库版本
 - (NSInteger)getCurrentDBVersion
 {
-    return 3;
+    return 1;
 }
 
 #pragma make - 懒加载

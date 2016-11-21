@@ -8,6 +8,7 @@
 
 #import "JYContentTable.h"
 #import "JYPersonInfo.h"
+
 @interface JYPersonTable : JYContentTable
 
 @end

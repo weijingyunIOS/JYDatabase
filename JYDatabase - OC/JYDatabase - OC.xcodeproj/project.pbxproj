@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C3CC8061DE2A52000BC8C44 /* JYClassInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3CC8051DE2A52000BC8C44 /* JYClassInfo.m */; };
+		5C3CC8091DE2A5C800BC8C44 /* JYGradeInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3CC8081DE2A5C800BC8C44 /* JYGradeInfo.m */; };
+		5C3CC80C1DE2A93E00BC8C44 /* JYClassTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3CC80B1DE2A93E00BC8C44 /* JYClassTable.m */; };
+		5C3CC80F1DE2A95200BC8C44 /* JYGradeTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C3CC80E1DE2A95200BC8C44 /* JYGradeTable.m */; };
 		5C88CB171CE08CAE006EBC35 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB0C1CE08CAE006EBC35 /* FMDatabase.m */; };
 		5C88CB181CE08CAE006EBC35 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB0E1CE08CAE006EBC35 /* FMDatabaseAdditions.m */; };
 		5C88CB191CE08CAE006EBC35 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C88CB101CE08CAE006EBC35 /* FMDatabasePool.m */; };
@@ -50,6 +54,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C3CC8041DE2A52000BC8C44 /* JYClassInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYClassInfo.h; sourceTree = "<group>"; };
+		5C3CC8051DE2A52000BC8C44 /* JYClassInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYClassInfo.m; sourceTree = "<group>"; };
+		5C3CC8071DE2A5C800BC8C44 /* JYGradeInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYGradeInfo.h; sourceTree = "<group>"; };
+		5C3CC8081DE2A5C800BC8C44 /* JYGradeInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYGradeInfo.m; sourceTree = "<group>"; };
+		5C3CC80A1DE2A93E00BC8C44 /* JYClassTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYClassTable.h; sourceTree = "<group>"; };
+		5C3CC80B1DE2A93E00BC8C44 /* JYClassTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYClassTable.m; sourceTree = "<group>"; };
+		5C3CC80D1DE2A95200BC8C44 /* JYGradeTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYGradeTable.h; sourceTree = "<group>"; };
+		5C3CC80E1DE2A95200BC8C44 /* JYGradeTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYGradeTable.m; sourceTree = "<group>"; };
 		5C88CB0B1CE08CAE006EBC35 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		5C88CB0C1CE08CAE006EBC35 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		5C88CB0D1CE08CAE006EBC35 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -174,6 +186,10 @@
 		5C88CB2B1CE0A1AC006EBC35 /* Content */ = {
 			isa = PBXGroup;
 			children = (
+				5C3CC8071DE2A5C800BC8C44 /* JYGradeInfo.h */,
+				5C3CC8081DE2A5C800BC8C44 /* JYGradeInfo.m */,
+				5C3CC8041DE2A52000BC8C44 /* JYClassInfo.h */,
+				5C3CC8051DE2A52000BC8C44 /* JYClassInfo.m */,
 				5C88CB311CE0A258006EBC35 /* JYPersonInfo.h */,
 				5C88CB321CE0A258006EBC35 /* JYPersonInfo.m */,
 			);
@@ -194,6 +210,10 @@
 			children = (
 				5C88CB3A1CE0A43E006EBC35 /* JYPersonDB.h */,
 				5C88CB3B1CE0A43E006EBC35 /* JYPersonDB.m */,
+				5C3CC80D1DE2A95200BC8C44 /* JYGradeTable.h */,
+				5C3CC80E1DE2A95200BC8C44 /* JYGradeTable.m */,
+				5C3CC80A1DE2A93E00BC8C44 /* JYClassTable.h */,
+				5C3CC80B1DE2A93E00BC8C44 /* JYClassTable.m */,
 				5C88CB371CE0A2DA006EBC35 /* JYPersonTable.h */,
 				5C88CB381CE0A2DA006EBC35 /* JYPersonTable.m */,
 			);
@@ -399,6 +419,7 @@
 			files = (
 				5C88CB391CE0A2DA006EBC35 /* JYPersonTable.m in Sources */,
 				5CE7DCA41CE0615E00470171 /* ViewController.m in Sources */,
+				5C3CC80F1DE2A95200BC8C44 /* JYGradeTable.m in Sources */,
 				5C88CB3F1CE0A671006EBC35 /* JYDBService.m in Sources */,
 				5C88CB191CE08CAE006EBC35 /* FMDatabasePool.m in Sources */,
 				5C88CB291CE09F00006EBC35 /* JYContentTable.m in Sources */,
@@ -411,8 +432,11 @@
 				5CE7DC9E1CE0615E00470171 /* main.m in Sources */,
 				5C88CB1F1CE08EF0006EBC35 /* JYDataBase.m in Sources */,
 				5CE32C281DB0BCCD00284931 /* NSObject+JYContentTableClass.m in Sources */,
+				5C3CC80C1DE2A93E00BC8C44 /* JYClassTable.m in Sources */,
 				5C88CB171CE08CAE006EBC35 /* FMDatabase.m in Sources */,
+				5C3CC8061DE2A52000BC8C44 /* JYClassInfo.m in Sources */,
 				5C88CB1B1CE08CAE006EBC35 /* FMResultSet.m in Sources */,
+				5C3CC8091DE2A5C800BC8C44 /* JYGradeInfo.m in Sources */,
 				5C88CB181CE08CAE006EBC35 /* FMDatabaseAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
