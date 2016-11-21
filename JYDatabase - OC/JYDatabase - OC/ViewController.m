@@ -16,5 +16,9 @@
 
 @implementation ViewController
 
+- (void)viewDidLoad{
+    [super viewDidLoad];
+    [[JYDBService shared] getAllClassInfo];
+}
 
 @end

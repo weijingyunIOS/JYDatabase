@@ -1,5 +1,7 @@
 - (void)insertHHContent:(HHClass *)aHHContent;
 - (void)insertHHContents:(NSArray<HHClass *> *)aHHContents;
+- (void)insertIndependentHHContent:(HHClass *)aHHContent;
+- (void)insertIndependentHHContents:(NSArray<HHClass *> *)aHHContents;
 
 - (NSArray<HHClass *> *)getHHContentByConditions:(void (^)(JYQueryConditions *make))block;
 - (HHClass *)getHHContent:(NSString*)aHHContentID;
@@ -19,6 +21,14 @@
 
 - (void)insertHHContents:(NSArray<HHClass *> *)aHHContents{
     [self.HHDBName.HHTableName insertContents:aHHContents];
+}
+
+- (void)insertIndependentHHContent:(HHClass *)aHHContent{
+    [self.HHDBName.HHTableName insertIndependentContent:aHHContent];
+}
+
+- (void)insertIndependentHHContents:(NSArray<HHClass *> *)aHHContents{
+    [self.HHDBName.HHTableName insertIndependentContents:aHHContents];
 }
 
 - (NSArray<HHClass *> *)getHHContentByConditions:(void (^)(JYQueryConditions *make))block{

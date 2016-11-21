@@ -8,11 +8,8 @@
 
 #import "JYPersonDB.h"
 #import "JYGradeTable.h"
-#import "JYGradeInfo.h"
 #import "JYClassTable.h"
-#import "JYClassInfo.h"
 #import "JYPersonTable.h"
-#import "JYPersonInfo.h"
 
 #define dataBaseName @"usersDataSource.db"
 
