@@ -18,6 +18,6 @@
 @property (nonatomic, copy) NSString *gradeName;
 
 // 年级下的所有班级
-@property (nonatomic, strong) NSArray<JYClassInfo *> *allClass;
+@property (nonatomic, strong) NSMutableArray<JYClassInfo *> *allClass;
 
 @end

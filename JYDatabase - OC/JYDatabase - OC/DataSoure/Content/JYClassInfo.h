@@ -24,6 +24,6 @@
 @property (nonatomic, strong) JYPersonInfo *teacher;
 
 // 一群学生
-@property (nonatomic, strong) NSArray<JYPersonInfo *> *students;
+@property (nonatomic, strong) NSMutableArray<JYPersonInfo *> *students;
 
 @end

@@ -23,7 +23,8 @@
 - (NSArray<NSString *> *)getContentField{
     return @[@"mutableString1",@"array",@"arrayM",@"dic",@"dicM",@"integer1",
              @"uInteger1",@"int1",@"bool1",@"double1",@"float1",@"cgfloat1",
-             @"data",@"number",@"image"];
+             @"data",@"number",@"image",@"value",
+             @"teacherClassID",@"studentClassID"];
 }
 
 // 为 studentClassID teacherClassID 加上索引
