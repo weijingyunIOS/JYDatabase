@@ -19,6 +19,7 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     [[JYDBService shared] getAllGradeInfo];
+    NSLog(@"可跑JYContentTableTest测试用例");
 }
 
 @end
