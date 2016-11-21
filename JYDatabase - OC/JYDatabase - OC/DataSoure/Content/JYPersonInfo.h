@@ -35,6 +35,5 @@
 @property (nonatomic, assign) CGFloat                                   cgfloat1;
 @property (nonatomic, strong) NSData                                    *data;
 @property (nonatomic, strong) NSNumber                                  *number;
-@property (nonatomic, strong) NSValue                                   *value;
 
 @end

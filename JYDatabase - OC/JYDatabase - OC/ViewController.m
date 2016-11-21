@@ -18,6 +18,7 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    [[JYDBService shared] getAllGradeInfo];
 }
 
 @end
