@@ -10,7 +10,7 @@
 	
 	pod 'JYDataBase'
 	
-一、JYDatabase 的使用
+##一、JYDatabase 的使用
 ![enter image description here](http://images2015.cnblogs.com/blog/737816/201611/737816-20161103101051924-1899693155.jpg)
 
 	如图：是Demo中创建本地数据库的一个框图。
@@ -82,9 +82,7 @@
   1.3 JYDBService
   
   	这是一个单例，向外提供数据库的一切外部接口，具体实现大家可以看Demo。
-  	
-  	
- 二、内部部分代码的实现讲解
+##二、内部部分代码的实现讲解
  
  2.1 数据库升级的实现 - (void)updateDB:(FMDatabase *)aDB 
  
@@ -184,18 +182,23 @@
     };
 }
 	
-三、提供的查询方法
-#pragma mark - 索引添加
-- (void)addUniques:(NSArray<NSString *>*)indexs; // 默认添加 非唯一索引
-- (void)addDB:(FMDatabase *)aDB uniques:(NSArray<NSString *>*)indexs; 
-- (void)addDB:(FMDatabase *)aDB type:(EJYDataBaseIndex)aType uniques:(NSArray<NSString *>*)indexs;
+##三、提供的查询方法
+####pragma mark - 索引添加
 
-#pragma mark - insert 插入
+- (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
+- (void)insertContent:(id)aContent;
+- (void)insertContents:(NSArray *)aContents;
+- (void)insertIndependentDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
+- (void)insertIndependentContent:(id)aContent;
+- (void)insertIndependentContents:(NSArray *)aContents;
+
+####pragma mark - insert 插入
+
 - (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
 - (void)insertContent:(id)aContent;
 - (void)insertContents:(NSArray *)aContents;
 
-#pragma mark - get 查询
+####pragma mark - get 查询
 - (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
 - (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block;
@@ -203,7 +206,7 @@
 - (id)getContentByID:(NSString*)aID;
 - (NSArray *)getAllContent;
 
-#pragma mark - delete 删除
+####pragma mark - delete 删除
 - (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
 - (void)deleteContentByConditions:(void (^)(JYQueryConditions *make))block;
@@ -212,19 +215,19 @@
 - (void)deleteAllContent;
 - (void)cleanContentBefore:(NSDate*)date;
 
-#pragma mark - getCount
+####pragma mark - getCount
 - (NSInteger)getCountContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (NSInteger)getCountByConditions:(void (^)(JYQueryConditions *make))block;
 - (NSInteger)getAllCount;
 
 	
-四、工具的推荐
+##四、工具的推荐
 	
 	在移动端使用SqLite，个人建议安装 火狐浏览器 的一个插件 SQLite Manager 多的就不说了。
 	
-五、版本记录
+##五、版本记录
 
- tag - 1.0.6  谈下在移动端，数据库关于不同用户的区分问题
+### tag - 1.0.6  谈下在移动端，数据库关于不同用户的区分问题
 
 		移动端缓存有个必须要注意的问题，那就是用户区分，要不把用户A的缓存数据显示到了用户B上
 	就比较尴尬了。一般来说有两种方法：
@@ -264,6 +267,9 @@
 2.OC属性字段与sqlite属性字段的映射是依赖与 JYDataBaseConfig 里 NSDictionary * jy_correspondingDic()的静态方法，但是在实际使用中可能无法全部覆盖，触发断言，大家遇到后可以自己设置 corresponding 属性添加额外的映射。
 
 3.宗旨就是让数据库的使用变的简单，后期会根据我所遇到的一些业务场景进行持续更新。
+
+###tag - 1.1.0 增加多表关联插入功能
+
  
 
   	
