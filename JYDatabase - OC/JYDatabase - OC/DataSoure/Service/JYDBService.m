@@ -86,6 +86,14 @@
     [self.personDB.gradeTable cleanContentBefore:date];
 }
 
+- (NSInteger)getGradeInfoCountByConditions:(void (^)(JYQueryConditions *make))block{
+    return [self.personDB.gradeTable getCountByConditions:block];
+}
+
+- (NSInteger)getGradeInfoAllCount{
+    return [self.personDB.gradeTable getAllCount];
+}
+
 
 # pragma mark JYClassInfo operation
 - (void)insertClassInfo:(JYClassInfo *)aClassInfo{
@@ -138,6 +146,14 @@
 
 - (void)cleanClassInfoBefore:(NSDate*)date{
     [self.personDB.classTable cleanContentBefore:date];
+}
+
+- (NSInteger)getClassInfoCountByConditions:(void (^)(JYQueryConditions *make))block{
+    return [self.personDB.classTable getCountByConditions:block];
+}
+
+- (NSInteger)getClassInfoAllCount{
+    return [self.personDB.classTable getAllCount];
 }
 
 # pragma mark JYPersonInfo operation
@@ -193,5 +209,12 @@
     [self.personDB.personTable cleanContentBefore:date];
 }
 
+- (NSInteger)getPersonInfoCountByConditions:(void (^)(JYQueryConditions *make))block{
+    return [self.personDB.personTable getCountByConditions:block];
+}
+
+- (NSInteger)getPersonInfoAllCount{
+    return [self.personDB.personTable getAllCount];
+}
 
 @end

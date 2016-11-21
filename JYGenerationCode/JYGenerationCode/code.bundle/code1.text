@@ -14,6 +14,9 @@
 - (void)deleteAllHHContent;
 - (void)cleanHHContentBefore:(NSDate*)date;
 
+- (NSInteger)getHHContentCountByConditions:(void (^)(JYQueryConditions *make))block;
+- (NSInteger)getHHContentAllCount;
+
 # pragma mark HHClass operation
 - (void)insertHHContent:(HHClass *)aHHContent{
     [self.HHDBName.HHTableName insertContent:aHHContent];
@@ -65,5 +68,13 @@
 
 - (void)cleanHHContentBefore:(NSDate*)date{
     [self.HHDBName.HHTableName cleanContentBefore:date];
+}
+
+- (NSInteger)getHHContentCountByConditions:(void (^)(JYQueryConditions *make))block{
+    return [self.HHDBName.HHTableName getCountByConditions:block];
+}
+
+- (NSInteger)getHHContentAllCount{
+    return [self.HHDBName.HHTableName getAllCount];
 }
 

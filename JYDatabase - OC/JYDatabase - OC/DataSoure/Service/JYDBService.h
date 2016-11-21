@@ -32,6 +32,9 @@
 - (void)deleteAllGradeInfo;
 - (void)cleanGradeInfoBefore:(NSDate*)date;
 
+- (NSInteger)getGradeInfoCountByConditions:(void (^)(JYQueryConditions *make))block;
+- (NSInteger)getGradeInfoAllCount;
+
 # pragma mark JYClassInfo operation
 - (void)insertClassInfo:(JYClassInfo *)aClassInfo;
 - (void)insertClassInfos:(NSArray<JYClassInfo *> *)aClassInfos;
@@ -49,6 +52,9 @@
 - (void)deleteAllClassInfo;
 - (void)cleanClassInfoBefore:(NSDate*)date;
 
+- (NSInteger)getClassInfoCountByConditions:(void (^)(JYQueryConditions *make))block;
+- (NSInteger)getClassInfoAllCount;
+
 # pragma mark JYPersonInfo operation
 - (void)insertPersonInfo:(JYPersonInfo *)aPersonInfo;
 - (void)insertPersonInfos:(NSArray<JYPersonInfo *> *)aPersonInfos;
@@ -65,5 +71,8 @@
 - (void)deletePersonInfo:(NSString *)aPersonInfoID;
 - (void)deleteAllPersonInfo;
 - (void)cleanPersonInfoBefore:(NSDate*)date;
+
+- (NSInteger)getPersonInfoCountByConditions:(void (^)(JYQueryConditions *make))block;
+- (NSInteger)getPersonInfoAllCount;
 
 @end

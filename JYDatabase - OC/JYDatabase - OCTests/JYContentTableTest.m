@@ -45,6 +45,8 @@
     
     // 查询出全部的
     NSArray<JYGradeInfo*>*queryGradeInfos = [[JYDBService shared] getAllGradeInfo];
+    NSInteger count = [[JYDBService shared] getGradeInfoAllCount];
+    XCTAssert(count == queryGradeInfos.count);
     [queryGradeInfos enumerateObjectsUsingBlock:^(JYGradeInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([obj.gradeID isEqualToString:gradeInfo.gradeID]) {
             XCTAssert([obj.gradeName isEqualToString:@"修改后的 gradeName"]);
