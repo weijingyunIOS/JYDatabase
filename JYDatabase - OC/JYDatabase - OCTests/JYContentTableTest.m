@@ -34,6 +34,7 @@
     JYGradeInfo *gradeInfo = [self getGradeInfo];
     // 插入数据
     [[JYDBService shared] insertGradeInfo:gradeInfo];
+    
     // 查询数据
     JYGradeInfo *queryGradeInfo = [[JYDBService shared] getGradeInfo:gradeInfo.gradeID];
     BOOL isEqual = [self gradeInfo:gradeInfo equalTo:queryGradeInfo];
@@ -57,6 +58,11 @@
     //最后获取为空
     queryGradeInfo = [[JYDBService shared] getGradeInfo:gradeInfo.gradeID];
     XCTAssert(queryGradeInfo == nil);
+    
+    //清理所有数据
+    [[JYDBService shared] deleteAllGradeInfo];
+    queryGradeInfos = [[JYDBService shared] getAllGradeInfo];
+    XCTAssert(queryGradeInfos.count == 0);
 }
 
 
