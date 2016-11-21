@@ -40,7 +40,6 @@ NSDictionary * jy_correspondingDic(){
              @"T@\"NSData\"":@"BLOB",
              @"T@\"UIImage\"":@"BLOB",
              @"T@\"NSValue\"":@"BLOB",
-             @"T@\"NSNumber\"":@"BLOB",
              @"T@\"NSDictionary\"":@"BLOB",
              @"T@\"NSMutableDictionary\"":@"BLOB",
              @"T@\"NSMutableArray\"":@"BLOB",

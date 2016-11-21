@@ -36,6 +36,5 @@
 @property (nonatomic, strong) NSData                                    *data;
 @property (nonatomic, strong) NSNumber                                  *number;
 @property (nonatomic, strong) NSValue                                   *value;
-@property (nonatomic, strong) UIImage                                   *image;   // 不建议图片直接存数据库
 
 @end

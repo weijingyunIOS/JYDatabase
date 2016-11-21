@@ -155,12 +155,6 @@ static const NSInteger JYDeleteMaxCount = 500;
     }
     
     id vaule = [aContent valueForKey:akey];
-    @autoreleasepool {
-        if ([vaule isKindOfClass:[UIImage class]]) {
-            vaule = UIImageJPEGRepresentation(vaule,1.0);
-        }
-    }
-    
     NSString *type = [self attributeTypeDic][akey];
     if ([self jSONSerializationForType:type] && vaule != nil) {
         vaule = [NSJSONSerialization dataWithJSONObject:vaule options:NSJSONWritingPrettyPrinted error:nil];
@@ -172,10 +166,6 @@ static const NSInteger JYDeleteMaxCount = 500;
 - (id)checkVaule:(id)aVaule forKey:(NSString*)aKey{
     @autoreleasepool {
         NSString *type = [self attributeTypeDic][aKey];
-        if ([type  isEqual: @"T@\"UIImage\""] && aVaule != [NSNull null]) {
-            aVaule = [UIImage imageWithData:aVaule];
-        }
-    
         if ([self jSONSerializationForType:type] && aVaule != [NSNull null]) {
             aVaule =  [NSJSONSerialization JSONObjectWithData:aVaule options:NSJSONReadingMutableContainers error:nil];
         }

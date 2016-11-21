@@ -23,7 +23,7 @@
 - (NSArray<NSString *> *)getContentField{
     return @[@"mutableString1",@"array",@"arrayM",@"dic",@"dicM",@"integer1",
              @"uInteger1",@"int1",@"bool1",@"double1",@"float1",@"cgfloat1",
-             @"data",@"number",@"image",@"value",
+             @"data",@"number",@"value",
              @"teacherClassID",@"studentClassID"];
 }
 
