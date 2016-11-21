@@ -14,7 +14,7 @@
 
 @property (nonatomic, strong, readonly) NSMutableArray<NSMutableDictionary*> *conditions;
 @property (nonatomic, copy, readonly) NSMutableString *orderStr;
-@property (nonatomic, strong) NSMutableString *conditionStr;
+@property (nonatomic, copy) NSMutableString *conditionStr;
 
 //以该字段结尾，表示 条件是 或 如 userId = 1 或 userId = 2, 否则就是 AND
 - (JYQueryConditions * (^)())OR;

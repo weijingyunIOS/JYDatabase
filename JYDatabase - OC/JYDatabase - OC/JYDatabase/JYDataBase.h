@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger, ArtDatabaseMode)
 
 @interface JYDataBase : NSObject
 
-@property (nonatomic, strong, readonly) NSString* path;
+@property (nonatomic, copy, readonly) NSString* path;
 @property (nonatomic, strong, readonly) FMDatabaseQueue *dbQueue;
 @property (nonatomic, assign, readonly) ArtDatabaseMode mode;
 

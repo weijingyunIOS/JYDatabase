@@ -20,7 +20,7 @@ static const NSString *tableViceKey = @"tableViceKey";            // 属于本�
 
 @property (nonatomic, strong) FMDatabaseQueue *dbQueue;
 //数据库表名
-@property (nonatomic, strong) NSString *tableName;
+@property (nonatomic, copy) NSString *tableName;
 //该表对应的模型类
 @property (nonatomic, strong) Class contentClass;
 //默认缓存20条数据

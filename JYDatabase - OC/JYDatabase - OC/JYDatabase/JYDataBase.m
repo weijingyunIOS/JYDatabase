@@ -18,7 +18,7 @@
 @interface JYDataBase ()
 
 @property (nonatomic, strong) FMDatabaseQueue *dbQueue;
-@property (nonatomic, strong) NSString* path;
+@property (nonatomic, copy) NSString* path;
 @property (nonatomic, assign) ArtDatabaseMode mode;
 @property (nonatomic, strong) NSMutableArray<JYContentTable *> *tableArray;
 

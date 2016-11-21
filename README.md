@@ -50,9 +50,7 @@
           return NO;
       }
       
-      注意：1.数据表映射的属性仅仅支持 NSString  NSMutableString  NSInteger NSUInteger int BOOL double float NSData 的数据类型
-      其在数据表中对应的是@"BOOL",@"DOUBLE",@"FLOAT",@"INTEGER",@"INTEGER",@"INTEGER",@"VARCHAR",@"VARCHAR",@"BLOB"
-      默认的数据长度是   @"1"   ,@"10"    ,@"10"   ,@"10"     ,@"10"     ,@"10"     ,@"128"    ,@"128"    ,@"256"
+      注意：1.数据表映射的属性支持 NSString  NSMutableString  NSInteger NSUInteger int BOOL double float NSData NSArray NSMutableArray NSDictionary NSMutableDictionary 的数据类型 其中字典 数组 要能序列化。数组是其它数据库表的模型要进行特殊配置，参考下面多表设置。
       
       2.NSCache的默认缓存条数是20条，可自行设置修改self.cache.countLimit = 20; 使用enableCache 将优先从缓存中取数据
       如自行实现的查询请在适当情况下使用以下三个方法来加入缓存。方法内部有 enableCache 的实现。
