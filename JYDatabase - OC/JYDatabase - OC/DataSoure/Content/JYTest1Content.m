@@ -10,6 +10,9 @@
 
 @implementation JYTest1Content
 
+//- (void)dealloc{
+//    NSLog(@"%s",__func__);
+//}
 
 
 @end

@@ -206,50 +206,54 @@ static const NSInteger JYDeleteMaxCount = 500;
 // 特殊字段需要插入其它表
 - (void)insertSpecialFieldDB:(FMDatabase *)aDB content:(id)aContent forKey:(NSString *)akey{
     
-    // 需要存入表的对象以及关系描述
-    NSArray *fieldObject = [aContent valueForKey:akey];
-    if (fieldObject == nil) {
-        return;
+    @autoreleasepool {
+        // 需要存入表的对象以及关系描述
+        NSArray *fieldObject = [aContent valueForKey:akey];
+        if (fieldObject == nil) {
+            return;
+        }
+        if (![fieldObject isKindOfClass:[NSArray class]]) {
+            fieldObject = @[fieldObject];
+        }
+        NSDictionary *dic = self.associativeTableField[akey];
+        JYContentTable *table = dic[tableContentObject];
+        NSAssert([table isKindOfClass:[JYContentTable class]], @"tableContentObject 对应的必须是继承 JYContentTable类的对象");
+        NSString *viceKey = dic[tableViceKey];
+        
+        id contentIdValue = [aContent valueForKey:self.contentId];
+        [table deleteContentDB:aDB byconditions:^(JYQueryConditions *make) {
+            make.field(viceKey).equalTo(contentIdValue);
+        }];
+        [fieldObject enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [obj setValue:contentIdValue forKey:viceKey];
+        }];
+        [table insertDB:aDB contents:fieldObject];
     }
-    if (![fieldObject isKindOfClass:[NSArray class]]) {
-        fieldObject = @[fieldObject];
-    }
-    NSDictionary *dic = self.associativeTableField[akey];
-    JYContentTable *table = dic[tableContentObject];
-    NSAssert([table isKindOfClass:[JYContentTable class]], @"tableContentObject 对应的必须是继承 JYContentTable类的对象");
-    NSString *viceKey = dic[tableViceKey];
-    
-    id contentIdValue = [aContent valueForKey:self.contentId];
-    [table deleteContentDB:aDB byconditions:^(JYQueryConditions *make) {
-        make.field(viceKey).equalTo(contentIdValue);
-    }];
-    [fieldObject enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [obj setValue:contentIdValue forKey:viceKey];
-    }];
-    [table insertDB:aDB contents:fieldObject];
 }
 
 // 特殊字段要从其它表拿数据
 - (void)getSpecialFieldDB:(FMDatabase *)aDB content:(id)aContent forKey:(NSString *)akey{
     
-    NSDictionary *dic = self.associativeTableField[akey];
-    JYContentTable *table = dic[tableContentObject];
-    NSAssert([table isKindOfClass:[JYContentTable class]], @"tableContentObject 对应的必须是继承 JYContentTable类的对象");
-    NSString *viceKey = dic[tableViceKey];
-    id contentIdValue = [aContent valueForKey:self.contentId];
-    NSArray *specialFieldValue = [table getContentDB:aDB byconditions:^(JYQueryConditions *make) {
-        make.field(viceKey).equalTo(contentIdValue);
-    }];
-    if ([self isArrayForAttributeName:akey]) {
-        [aContent setValue:specialFieldValue forKey:akey];
-    }else{
-#if DEBUG
-        NSString *assertStr = [NSString stringWithFormat:@"%@ 所包含的 %@ 字段对应表%@ 数据异常，该字段查询出来应该只有一个值现在出现了多个值,代码删除，插入可能有问题",self,akey,table];
-        NSAssert(specialFieldValue.count < 2, assertStr);
-#endif
-        [aContent setValue:specialFieldValue.firstObject forKey:akey];
+    @autoreleasepool {
+        
+        NSDictionary *dic = self.associativeTableField[akey];
+        JYContentTable *table = dic[tableContentObject];
+        NSAssert([table isKindOfClass:[JYContentTable class]], @"tableContentObject 对应的必须是继承 JYContentTable类的对象");
+        NSString *viceKey = dic[tableViceKey];
+        id contentIdValue = [aContent valueForKey:self.contentId];
+        NSArray *specialFieldValue = [table getContentDB:aDB byconditions:^(JYQueryConditions *make) {
+            make.field(viceKey).equalTo(contentIdValue);
+        }];
+        if ([self isArrayForAttributeName:akey]) {
+            [aContent setValue:specialFieldValue forKey:akey];
+        }else{
+    #if DEBUG
+            NSString *assertStr = [NSString stringWithFormat:@"%@ 所包含的 %@ 字段对应表%@ 数据异常，该字段查询出来应该只有一个值现在出现了多个值,代码删除，插入可能有问题",self,akey,table];
+            NSAssert(specialFieldValue.count < 2, assertStr);
+    #endif
+            [aContent setValue:specialFieldValue.firstObject forKey:akey];
+        }
     }
-    
 }
 
 #pragma mark - field Attributes 获取准备处理 如 personid varchar(64)
@@ -860,10 +864,6 @@ static const NSInteger JYDeleteMaxCount = 500;
         return;
     }
     [self.cache removeAllObjects];
-}
-
-- (void)dealloc{
-
 }
 
 @end
