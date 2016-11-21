@@ -9,6 +9,8 @@
 #import "JYClassTable.h"
 #import "JYClassInfo.h"
 #import "JYPersonTable.h"
+#import "JYDBService.h"
+#import "JYPersonDB.h"
 
 @implementation JYClassTable
 
@@ -29,9 +31,7 @@
 // 设置关联的表
 - (NSDictionary<NSString *, NSDictionary *> *)associativeTableField{
     
-    JYPersonTable *table = [[JYPersonTable alloc] init];
-    table.dbQueue = self.dbQueue;
-    
+    JYPersonTable *table = [JYDBService shared].personDB.personTable;
     return @{
              @"teacher" : @{
                              tableContentObject : table,

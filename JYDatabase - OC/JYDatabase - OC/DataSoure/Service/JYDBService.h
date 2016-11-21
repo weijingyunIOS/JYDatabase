@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class JYGradeInfo,JYClassInfo,JYPersonInfo,JYQueryConditions;
+@class JYPersonDB,JYGradeInfo,JYClassInfo,JYPersonInfo,JYQueryConditions;
 
 @interface JYDBService : NSObject
 
 + (instancetype)shared;
+
+@property (nonatomic, strong, readonly) JYPersonDB *personDB;
 
 #pragma mark - 以下代码由 DEMO 中 JYGenerationCode 工具生成
 # pragma mark JYGradeInfo operation
