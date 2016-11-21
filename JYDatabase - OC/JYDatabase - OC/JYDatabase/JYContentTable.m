@@ -212,7 +212,7 @@ static const NSInteger JYDeleteMaxCount = 500;
         
         id contentIdValue = [aContent valueForKey:self.contentId];
         // 该删除手写sql，JYQueryConditions转换耗时
-        NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = \"%@\" ",table.tableName,viceKey,contentIdValue];
+        NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = \"%@\" ",table.tableName,viceKey,contentIdValue];
         [aDB executeUpdate:sql];
         [table checkError:aDB];
         [table removeAllCache];
