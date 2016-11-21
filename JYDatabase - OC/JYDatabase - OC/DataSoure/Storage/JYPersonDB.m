@@ -13,7 +13,6 @@
 
 @property (nonatomic, strong) NSString * documentDirectory ;
 @property (nonatomic, strong) JYPersonTable * personTable;
-@property (nonatomic, strong) JYTest1Table * test1Table;
 
 @end
 
@@ -30,7 +29,6 @@
     [self buildWithPath:self.documentDirectory mode:ArtDatabaseModeWrite registTable:^{
         //注册数据表 建议外引出来，用于其它位置调用封装
         self.personTable = (JYPersonTable *)[self registTableClass:[JYPersonTable class]];
-        self.test1Table = (JYTest1Table *)[self registTableClass:[JYTest1Table class]];
     }];
     
 }

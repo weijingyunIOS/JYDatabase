@@ -7,7 +7,6 @@
 //
 
 #import "JYPersonTable.h"
-#import "JYTest1Table.h"
 
 @implementation JYPersonTable
 
@@ -25,23 +24,6 @@
     return @[@"mutableString1",@"integer1",@"uInteger1",@"int1",@"bool1",@"double1",@"data",@"image",@"name",@"desc"];
 }
 
-- (NSDictionary<NSString *, NSDictionary *> *)associativeTableField{
-    
-    JYTest1Table *table = [[JYTest1Table alloc] init];
-    table.dbQueue = self.dbQueue;
-    return @{
-             @"test1Contents":@{
-                     tableContentObject: table,
-                     tableViceKey      : @"personID"
-                     
-                              },
-             @"test1":@{
-                     tableContentObject: table,
-                     tableViceKey      : @"testPersonID"
-                     
-                     }
-             };
-}
 
 //- (BOOL)enableCache{
 //    return NO;
