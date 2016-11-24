@@ -32,6 +32,7 @@
 - (NSDictionary<NSString *, NSDictionary *> *)associativeTableField{
     
     JYPersonTable *table = [JYDBService shared].personDB.personTable;
+    // tableSortKey 不设置查询时会以主key做升序放入数组
     return @{
              @"teacher" : @{
                              tableContentObject : table,
@@ -39,7 +40,8 @@
                            },
              @"students" : @{
                              tableContentObject : table,
-                             tableViceKey       : @"studentClassID"
+                             tableViceKey       : @"studentClassID",
+                             tableSortKey       : @"studentIdx"
                            }
              };
 }

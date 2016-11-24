@@ -11,7 +11,7 @@
 @interface JYPersonInfo : NSObject
 
 // 人员编号
-@property (nonatomic, copy) NSString *PersonID;
+@property (nonatomic, copy) NSString *personID;
 
 /* 主要演示 class  包含老师和学生
 *  这里要 两个外键区分，老师设置teacherClassID 学生 studentClassID
@@ -19,6 +19,11 @@
 */
 @property (nonatomic, copy) NSString *teacherClassID;
 @property (nonatomic, copy) NSString *studentClassID;
+
+/* 学生在  NSMutableArray<JYPersonInfo *> *students;
+ * 不设置这些字段，获取时会以personID 做升序
+ */
+@property (nonatomic, assign) NSInteger studentIdx;
 
 // 类型测试
 @property (nonatomic, copy)   NSMutableString                           *mutableString1;

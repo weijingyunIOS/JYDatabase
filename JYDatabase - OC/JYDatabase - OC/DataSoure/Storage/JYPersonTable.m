@@ -17,19 +17,19 @@
 }
 
 - (NSString *)contentId{
-    return @"PersonID";
+    return @"personID";
 }
 
 - (NSArray<NSString *> *)getContentField{
     return @[@"mutableString1",@"array",@"arrayM",@"dic",@"dicM",@"integer1",
              @"uInteger1",@"int1",@"bool1",@"double1",@"float1",@"cgfloat1",
              @"data",@"number",
-             @"teacherClassID",@"studentClassID"];
+             @"teacherClassID",@"studentClassID",@"studentIdx"];
 }
 
 // 为 studentClassID teacherClassID 加上索引
 - (void)addOtherOperationForTable:(FMDatabase *)aDB{
-    [self addDB:aDB uniques:@[@"teacherClassID",@"studentClassID"]];
+    [self addDB:aDB uniques:@[@"teacherClassID",@"studentClassID",@"studentIdx"]];
 }
 
 // 不使用缓存，开发中建议打开

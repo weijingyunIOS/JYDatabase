@@ -44,7 +44,7 @@
 #pragma mark - 数据库版本
 - (NSInteger)getCurrentDBVersion
 {
-    return 8;
+    return 6;
 }
 
 #pragma make - 懒加载

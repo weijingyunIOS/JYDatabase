@@ -233,10 +233,13 @@ static const NSInteger JYDeleteMaxCount = 500;
         JYContentTable *table = dic[tableContentObject];
         NSAssert([table isKindOfClass:[JYContentTable class]], @"tableContentObject 对应的必须是继承 JYContentTable类的对象");
         NSString *viceKey = dic[tableViceKey];
+        NSString *sort = dic[tableSortKey];
+        sort = sort.length > 0 ? sort : table.contentId;
         id contentIdValue = [aContent valueForKey:self.contentId];
         NSArray *specialFieldValue = [table getContentDB:aDB byconditions:^(JYQueryConditions *make) {
-            make.field(viceKey).equalTo(contentIdValue);
+            make.field(viceKey).equalTo(contentIdValue).asc(sort);
         }];
+        
         if ([self isArrayForAttributeName:akey]) {
             [aContent setValue:specialFieldValue forKey:akey];
         }else{
@@ -246,7 +249,7 @@ static const NSInteger JYDeleteMaxCount = 500;
     }
 }
 
-#pragma mark - field Attributes 获取准备处理 如 personid varchar(64)
+#pragma mark - field Attributes 获取准备处理 如 personID varchar(64)
 - (NSDictionary*)attributeTypeDic{
     if (!_attributeTypeDic) {
         NSMutableDictionary *dicM = [[NSMutableDictionary alloc] init];

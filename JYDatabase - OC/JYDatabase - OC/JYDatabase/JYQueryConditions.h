@@ -27,8 +27,8 @@
 - (JYQueryConditions * (^)(NSString *compare))lessTo;
 
 - (JYQueryConditions * (^)(NSString *field))field;
-- (JYQueryConditions * (^)(NSString *field))asc;
-- (JYQueryConditions * (^)(NSString *field))desc;
+- (JYQueryConditions * (^)(NSString *field))asc;  // 升序
+- (JYQueryConditions * (^)(NSString *field))desc; // 降序
 
 //以该字段结尾，表示 条件是 或 如 userId = 1 或 userId = 2, 否则就是 AND 与sqlStr 配对
 - (JYQueryConditions * (^)())sqlOR;

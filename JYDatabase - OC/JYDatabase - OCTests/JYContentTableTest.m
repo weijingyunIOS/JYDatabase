@@ -76,21 +76,22 @@
     classInfo.classID = [NSString stringWithFormat:@"%f",[NSDate date].timeIntervalSince1970];
     classInfo.gradeID = gradeID;
     classInfo.className = @"className";
-    classInfo.teacher = [self getPersonInfoForTeacherClassID:classInfo.classID studentClassID:nil];
+    classInfo.teacher = [self getPersonInfoForTeacherClassID:classInfo.classID studentClassID:nil studentIdx:0];
     classInfo.students = [[NSMutableArray alloc] init];
     for (int i = 0; i < 50; i ++) {
-        JYPersonInfo *student = [self getPersonInfoForTeacherClassID:nil studentClassID:classInfo.classID];
+        JYPersonInfo *student = [self getPersonInfoForTeacherClassID:nil studentClassID:classInfo.classID studentIdx:i];
         [classInfo.students addObject:student];
     }
     return classInfo;
 }
 
-- (JYPersonInfo *)getPersonInfoForTeacherClassID:(NSString *)teacherClassID studentClassID:(NSString *)studentClassID{
+- (JYPersonInfo *)getPersonInfoForTeacherClassID:(NSString *)teacherClassID studentClassID:(NSString *)studentClassID studentIdx:(NSInteger)idx{
     
     JYPersonInfo *personInfo = [[JYPersonInfo alloc] init];
-    personInfo.PersonID = [NSString stringWithFormat:@"%f",[NSDate date].timeIntervalSince1970];
+    personInfo.personID = [NSString stringWithFormat:@"%f",[NSDate date].timeIntervalSince1970];
     personInfo.teacherClassID = teacherClassID;
     personInfo.studentClassID = studentClassID;
+    personInfo.studentIdx = idx;
     personInfo.mutableString1 = [@"mutableString1" mutableCopy];
     personInfo.array = @[@"array1",@"array2"];
     personInfo.arrayM = [@[@"arrayM1",@"arrayM2"] mutableCopy];
@@ -136,10 +137,10 @@
     return isEqual;
 }
 
-- (BOOL)personInfo:(JYPersonInfo *)personInfo1 equalTo:(JYPersonInfo *)personInfo2{
+- (BOOL)personInfo:(JYPersonInfo *)personInfo1 equalTo:(JYPersonInfo *)personInfo2 {
     
     __block BOOL isEqual = YES;
-    NSArray<NSString *>*keys = @[@"PersonID",@"teacherClassID",@"studentClassID"];
+    NSArray<NSString *>*keys = @[@"personID",@"teacherClassID",@"studentClassID"];
     isEqual &= [self mode:personInfo1 equalTo:personInfo2 forKeys:keys];
     [personInfo1.array.firstObject isEqualToString:personInfo2.array.firstObject];
     [personInfo1.arrayM.firstObject isEqualToString:personInfo2.arrayM.firstObject];

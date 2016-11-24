@@ -13,6 +13,7 @@
 
 static const NSString *tableContentObject = @"tableContentObject";// 对应的字段 模型的 JYContentTable 对象
 static const NSString *tableViceKey = @"tableViceKey";            // 属于本表的 副key
+static const NSString *tableSortKey = @"tableSortKey";            // 用于排序字段(映射到数组的顺序) NSString or NSInteger
 
 @class FMDatabaseQueue , FMDatabase;
 
