@@ -300,7 +300,7 @@ static const NSInteger JYDeleteMaxCount = 500;
         [strM appendString:@" , "];
     }];
     [strM appendFormat:@"PRIMARY KEY (%@) ON CONFLICT REPLACE)",[self contentId]];
-//    //    NSLog(@"----------%@",strM);
+
     [aDB executeUpdate:[strM copy]];
     [self checkError:aDB];
     
@@ -368,7 +368,7 @@ static const NSInteger JYDeleteMaxCount = 500;
     if (aFields.count <= 0) {
         return;
     }
-//    //    NSLog(@"多余字段%@",aFields);
+
     // 1.根据原表新建一个表
     NSString *tempTableName = [NSString stringWithFormat:@"temp_%@",self.tableName];
     __block NSMutableString *tableField = [[NSMutableString alloc] init];
@@ -472,7 +472,6 @@ static const NSInteger JYDeleteMaxCount = 500;
         [strM1 appendFormat:@" ?"];
     }];
     [strM appendFormat:@") VALUES (%@)",strM1];
-//    //    NSLog(@"-----%@",strM);
     
     // 2.一条条插入
     [aContents enumerateObjectsUsingBlock:^(id  _Nonnull aContent, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -566,7 +565,6 @@ static const NSInteger JYDeleteMaxCount = 500;
         sql = [NSString stringWithFormat:@"SELECT * FROM %@ %@", self.tableName,conditions.orderStr];
     }
 
-    //    NSLog(@"conditions -- %@",sql);
     FMResultSet *rs = [aDB executeQuery:sql];
     id content = nil;
     NSMutableArray *arrayM = nil;
@@ -667,7 +665,6 @@ static const NSInteger JYDeleteMaxCount = 500;
         sql = [NSString stringWithFormat:@"DELETE FROM %@", self.tableName];
     }
     
-    //    NSLog(@"delete conditions -- %@",sql);
     [aDB executeUpdate:sql];
     [self checkError:aDB];
 }
@@ -810,7 +807,6 @@ static const NSInteger JYDeleteMaxCount = 500;
         sql = [NSString stringWithFormat:@"select count(1) from %@ ", self.tableName];
     }
     
-    //    NSLog(@"conditions -- %@",sql);
     NSInteger count = 0;
     FMResultSet *rs = [aDB executeQuery:sql];
     while([rs next]) {
