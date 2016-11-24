@@ -20,7 +20,7 @@
 	BS4: JYPersonInfo 是映射JYPersonTable表的列的对象。JYPersonTable表查询出来的数据都会转换成JYPersonInfo对象。
 	注意：个人建议不要在项目中建多个数据库，建一个数据库，多张表即可。
 
-1.1 JYPersonTable建立（数据表）
+######1.1 JYPersonTable建立（数据表）
 	
 	数据表的建立需要继承 JYContentTable(该类实现了工作中用到的大部分SQL查询)，只要重写以下几个方法就可以快速创建一张数据表。
 	
@@ -50,15 +50,9 @@
           return NO;
       }
       
-      注意：1.数据表映射的属性支持 NSString  NSMutableString  NSInteger NSUInteger int BOOL double float NSData NSArray NSMutableArray NSDictionary NSMutableDictionary 的数据类型 其中字典 数组 要能序列化。数组是其它数据库表的模型要进行特殊配置，参考下面多表设置。
+      注意：数据表映射的属性支持 NSString  NSMutableString  NSInteger NSUInteger int BOOL double float NSData NSArray NSMutableArray NSDictionary NSMutableDictionary 的数据类型 其中字典 数组 要能序列化。数组是其它数据库表的模型要进行特殊配置，参考下面多表设置。
       
-      2.NSCache的默认缓存条数是20条，可自行设置修改self.cache.countLimit = 20; 使用enableCache 将优先从缓存中取数据
-      如自行实现的查询请在适当情况下使用以下三个方法来加入缓存。方法内部有 enableCache 的实现。
-      - (id)getCacheContentID:(NSString *)aID;
-	  - (void)saveCacheContent:(id)aContent;
-	  - (void)removeCacheContentID:(NSString *)aID;
-      
-  1.2 JYPersonDB管理了数据库的创建和升级 需要继承JYDataBase
+######1.2 JYPersonDB管理了数据库的创建和升级 需要继承JYDataBase
 
 	关键方法：
 	// 该方法会根据当前版本判断 是创建数据库表还是 数据表升级
@@ -79,12 +73,12 @@
 	    [self.personTable updateDB:aDB];
 	}
 
-  1.3 JYDBService
+######1.3 JYDBService
   
   	这是一个单例，向外提供数据库的一切外部接口，具体实现大家可以看Demo。
 ##二、内部部分代码的实现讲解
  
- 2.1 数据库升级的实现 - (void)updateDB:(FMDatabase *)aDB 
+######2.1 数据库升级的实现 - (void)updateDB:(FMDatabase *)aDB 
  
  	对于每一张表，所谓的修改无非是 添加了一个 新的字段 或减少了几个字段（这种情况很少）。
  	2.2.1 字段的对比
@@ -104,7 +98,7 @@
  		d.为新表添加唯一索引
  		sql = [NSString stringWithFormat:@"create unique index '%@_key' on  %@(%@)", self.tableName,self.tableName,[self contentId]];
   	
- 2.2 FMDB部分方法说明
+######2.2 FMDB部分方法说明
  	
  	- (void)inTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block;
 	- (void)inDatabase:(void (^)(FMDatabase *db))block;
@@ -154,7 +148,7 @@
 	}
 	在数据库的创建 升级 以及 多数据的插入，我都使用了该方法。
 	
-2.3 条件查询的实现
+######2.3 条件查询的实现
 	
 	关于复杂查询我提供了一个简单的方法 
 	- (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block;
@@ -180,7 +174,7 @@
         [self.conditions addObject:dicM];
         return self;
     };
-}
+	}
 	
 ##三、提供的查询方法
 ####pragma mark - 索引添加
@@ -277,10 +271,10 @@
 ######修改记录
 	1.增加了多表关联功能，ModelA 包含 ModelB 的存入取出也可用简单的配置解决。
 	2.删除了UIImage的数据库存储支持。
-	3.DEMO做了大的修改，删除毫无意义的稀烂界面。写了一个测试代码 JYContentTableTest.m
-	4.对代码生成工具 JYGenerationCode 做了简单修改。
+	3.删除了内存缓存支持，这是一个很鸡肋无用的处理。需要可以自行在外部加上自己的缓存机制。
+	4.DEMO做了大的修改，删除毫无意义的稀烂界面。写了一个测试代码 JYContentTableTest.m
+	5.对代码生成工具 JYGenerationCode 做了简单修改。
 ######多表关联使用说明
-   
    
 	  DEMO中写了三模型，JYGradeInfo (年级)，JYClassInfo (班级)，JYPersonInfo（人）
 	他们之间的关系是，一个年级有多个班级，一个班级 有一个老师 和 多个学生。对此建立了三张
@@ -290,8 +284,33 @@
 	键.JYPersonTable 中的teacherClassID 对应 JYGradeTable的老师外键studentClassID
 	对应 JYGradeTable 的学生外键。
 	
-	外键功能的实现:
-	  1.直接使用.
+	  1.外键功能的实现:我在直接使用SQL的外键功能时遇到了一些问题(有空会再回头看看)，这理是
+	使用简单粗暴的形势实现的级联删除。在进行条件删除条件查询时会比较耗时。（也不是很糟糕
+	哈），有空我会有sql外键形式看看做下对比。
+	  2.关联表设置参考DEMO 按如下设置即可
+	  - (NSDictionary<NSString *, NSDictionary *> *)associativeTableField{
+	    
+	    JYPersonTable *table = [JYDBService shared].personDB.personTable;
+	    // tableSortKey 不设置查询时会以主key做升序放入数组
+	    return @{
+	             @"teacher" : @{
+	                             tableContentObject : table,
+	                             tableViceKey       : @"teacherClassID"
+	                           },
+	             @"students" : @{
+	                             tableContentObject : table,
+	                             tableViceKey       : @"studentClassID",
+	                             tableSortKey       : @"studentIdx"
+	                           }
+	             };
+		}
+	  3.为外键字段加上索引提高查询效率
+	  // 为 gradeID 加上索引
+	  - (void)addOtherOperationForTable:(FMDatabase *)aDB{
+        [self addDB:aDB uniques:@[@"gradeID"]];
+	  }
+	  
+	  
  
 
   	
