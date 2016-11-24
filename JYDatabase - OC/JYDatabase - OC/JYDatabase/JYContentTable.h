@@ -24,18 +24,13 @@ static const NSString *tableSortKey = @"tableSortKey";            // 用于排�
 @property (nonatomic, copy) NSString *tableName;
 //该表对应的模型类
 @property (nonatomic, strong) Class contentClass;
-//默认缓存20条数据
-@property (nonatomic, strong, readonly) NSCache *cache;
-
 
 - (void)checkError:(FMDatabase *)aDb;
 - (id)checkEmpty:(id)aObject;
 - (id)checkVaule:(id)aVaule forKey:(NSString*)aKey; // 查询出来的数据进行处理
 
-#pragma mark - 需要重写实现的一些功能
-- (BOOL)enableCache; // 对实现了 associativeTableField 的其它表 缓存是无效的 如果使用查找优先使用 默认 YES
-
 #pragma mark - 创建表
+- (void)configTableName;                    // 进行一些初始化设置
 - (NSString *)contentId;                    // 表的主键
 - (NSArray<NSString *> *)getContentField;   // 表除主键外其它的列 默认取 @“DB” 结尾的属性
 - (NSDictionary*)fieldLenght;               // 创建表 对应列默认长度  默认取默认值
@@ -106,10 +101,5 @@ static const NSString *tableSortKey = @"tableSortKey";            // 用于排�
 - (NSInteger)getCountContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (NSInteger)getCountByConditions:(void (^)(JYQueryConditions *make))block;
 - (NSInteger)getAllCount;
-
-#pragma mark - 缓存存取删
-- (id)getCacheContentID:(NSString *)aID;
-- (void)saveCacheContent:(id)aContent;
-- (void)removeCacheContentID:(NSString *)aID;
 
 @end
