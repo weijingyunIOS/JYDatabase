@@ -25,7 +25,7 @@
 }
 
 - (NSArray<NSString *> *)getContentField{
-    return @[@"gradeName"];
+    return @[@"gradeName",@"longlongText"];
 }
 
 // 设置关联的表
@@ -37,6 +37,18 @@
                              tableContentObject : table,
                              tableViceKey       : @"gradeID"
                             }
+             };
+}
+
+- (NSDictionary*)fieldStorageType{
+    return @{
+             @"longlongText" : @"TEXT"
+             };
+}
+
+- (NSDictionary *)fieldLenght{
+    return @{
+             @"longlongText" : @"515"
              };
 }
 

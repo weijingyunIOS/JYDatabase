@@ -67,6 +67,10 @@ static const NSInteger JYDeleteMaxCount = 500;
     return nil;
 }
 
+- (NSDictionary*)fieldStorageType{
+    return nil;
+}
+
 - (NSString *)contentId{
     return nil;
 }
@@ -271,17 +275,24 @@ static const NSInteger JYDeleteMaxCount = 500;
 
 // 类型的映射
 - (NSArray *)conversionAttributeName:(NSString *)aField{
-    NSString *aType = self.attributeTypeDic[aField];
-    NSAssert(aType != nil,@"该属性找不到对应类型 %@",aField);
     
-    NSString *str = jy_correspondingDic()[aType];
-    if (str == nil) {
-        if ([JYDataBaseConfig shared].corresponding) {
-            str = [JYDataBaseConfig shared].corresponding[aType];
+    NSString *str = self.fieldStorageType[aField];
+    if (str.length <= 0) {
+        NSString *aType = self.attributeTypeDic[aField];
+        NSAssert(aType != nil,@"该属性找不到对应类型 %@",aField);
+        str = jy_correspondingDic()[aType];
+        if (str.length <= 0) {
+            if ([JYDataBaseConfig shared].corresponding) {
+                str = [JYDataBaseConfig shared].corresponding[aType];
+            }
         }
+        NSAssert(str != nil,@"%@属性的对应类型%@ 找不到，请设置JYDataBaseConfig中的 corresponding 属性添加，并到gitHub留言告知我，谢谢",aField,aType);
     }
-    NSAssert(str != nil,@"%@属性的对应类型%@ 找不到，请设置JYDataBaseConfig中的 corresponding 属性添加，并到gitHub留言告知我，谢谢",aField,aType);
-    NSString *length = jy_defaultDic()[str];
+    
+    NSString *length = self.fieldLenght[aField];
+    if (length.length <= 0) {
+        length = jy_defaultDic()[str];
+    }
     return @[str,length];
 }
 
@@ -292,8 +303,7 @@ static const NSInteger JYDeleteMaxCount = 500;
     [strM appendFormat:@"CREATE TABLE if not exists %@ ( ",self.tableName];
     [self.getIndependentContentField enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSArray *array = [self conversionAttributeName:obj];
-        NSString *lenght = [self fieldLenght][obj] == nil ? array.lastObject : [self fieldLenght][obj];
-        [strM appendFormat:@"%@ %@(%@) ",obj,array.firstObject,lenght];
+        [strM appendFormat:@"%@ %@(%@) ",obj,array.firstObject,array.lastObject];
         if ([obj isEqualToString:[self contentId]]) {
             [strM appendString:@" NOT NULL"];
         }
@@ -356,8 +366,7 @@ static const NSInteger JYDeleteMaxCount = 500;
 - (void)updateDB:(FMDatabase *)aDB addFieldS:(NSArray<NSString*>*)aFields{
     [aFields enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSArray *array = [self conversionAttributeName:obj];
-        NSString *lenght = [self fieldLenght][obj] == nil ? array.lastObject : [self fieldLenght][obj];
-        NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ %@(%@)", self.tableName,obj,array.firstObject,lenght];
+        NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ %@(%@)", self.tableName,obj,array.firstObject,array.lastObject];
         [aDB executeUpdate:sql];
         [self checkError:aDB];
     }];

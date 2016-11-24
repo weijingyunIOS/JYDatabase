@@ -33,6 +33,7 @@ static const NSString *tableSortKey = @"tableSortKey";            // 用于排�
 - (void)configTableName;                    // 进行一些初始化设置
 - (NSString *)contentId;                    // 表的主键
 - (NSArray<NSString *> *)getContentField;   // 表除主键外其它的列 默认取 @“DB” 结尾的属性
+- (NSDictionary*)fieldStorageType;          // 创建表 对应列默认类型 
 - (NSDictionary*)fieldLenght;               // 创建表 对应列默认长度  默认取默认值
 /*
  * 用于关联其它表的属性联系必须是 NSArray<ContentClass>* NSMutableArray<ContentClass>或者  ContentClass

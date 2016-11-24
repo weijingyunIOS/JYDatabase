@@ -62,6 +62,7 @@
     JYGradeInfo *gradeInfo = [[JYGradeInfo alloc] init];
     gradeInfo.gradeID = [NSString stringWithFormat:@"%f",[NSDate date].timeIntervalSince1970];
     gradeInfo.gradeName = @"gradeName";
+    gradeInfo.longlongText = @"安拉说萨达斯大使鲁大师解答索朗多吉阿斯利康多久啊索朗多吉啊索朗多吉撒了肯德基卢萨卡的就阿斯利康大家阿拉山口大家卢萨卡的家啊索朗多吉啊索朗多吉萨里看到卢卡斯家里打扫家里的空间啊算了撒进来看到就撒了肯德基拉萨卡就收到啦升级到了撒娇的拉萨觉得萨鲁大师萨的旅客撒娇的拉萨金德拉克撒大家拉萨大家卢萨卡大家啦可是大家啊索朗多吉啊上课绝对拉升阶段拉萨肯德基卢萨卡就到拉萨肯德基拉萨肯德基拉萨的就撒了点酒洒了肯德基拉萨肯德基拉萨到拉萨的教练萨大家撒了点结束啦大家拉萨大家拉萨短裤收到了撒娇第六十九阿拉丁就撒了点酒撒了点酒洒落到家啦时间的撒了空间的拉萨到了撒娇的理解啊圣诞节啊圣诞节啊时间都撒到家啦圣诞节阿斯利康大家撒了肯德基撒了肯德基啊索朗多吉撒了点酒撒";
     gradeInfo.allClass = [[NSMutableArray alloc] init];
     for (int i = 0 ; i < 10; i ++) {
         JYClassInfo *classInfo = [self getClassInfoForGradeID:gradeInfo.gradeID];
@@ -115,7 +116,7 @@
 - (BOOL)gradeInfo:(JYGradeInfo *)gradeInfo1 equalTo:(JYGradeInfo *)gradeInfo2{
     
     __block BOOL isEqual = YES;
-    NSArray<NSString *>*keys = @[@"gradeID",@"gradeName"];
+    NSArray<NSString *>*keys = @[@"gradeID",@"gradeName",@"longlongText"];
     isEqual &= [self mode:gradeInfo1 equalTo:gradeInfo2 forKeys:keys];
     [gradeInfo1.allClass enumerateObjectsUsingBlock:^(JYClassInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         isEqual &= [self classInfo:obj equalTo:gradeInfo2.allClass[idx]];
