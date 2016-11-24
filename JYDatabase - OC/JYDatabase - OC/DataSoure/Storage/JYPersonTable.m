@@ -32,9 +32,4 @@
     [self addDB:aDB uniques:@[@"teacherClassID",@"studentClassID",@"studentIdx"]];
 }
 
-//// 不使用缓存，开发中建议打开
-//- (BOOL)enableCache{
-//    return NO;
-//}
-
 @end

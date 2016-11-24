@@ -51,10 +51,4 @@
     [self addDB:aDB uniques:@[@"gradeID"]];
 }
 
-//// 因为关联了其它表 开启了也无用
-//- (BOOL)enableCache{
-//    return NO;
-//}
-
-
 @end
