@@ -33,7 +33,7 @@ static const NSString *tableSortKey = @"tableSortKey";            // 用于排�
 - (id)checkVaule:(id)aVaule forKey:(NSString*)aKey; // 查询出来的数据进行处理
 
 #pragma mark - 需要重写实现的一些功能
-- (BOOL)enableCache; // 如果使用查找优先使用 默认 YES
+- (BOOL)enableCache; // 对实现了 associativeTableField 的其它表 缓存是无效的 如果使用查找优先使用 默认 YES
 
 #pragma mark - 创建表
 - (NSString *)contentId;                    // 表的主键

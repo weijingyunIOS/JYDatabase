@@ -44,7 +44,7 @@ static const NSInteger JYDeleteMaxCount = 500;
     self = [super init];
     if (self) {
         [self configTableName];
-        if ([self enableCache]) {
+        if ([self enableCache] || self.associativeTableField) {
             self.cache = [[NSCache alloc] init];
             self.cache.countLimit = 20;
         }
@@ -658,7 +658,7 @@ static const NSInteger JYDeleteMaxCount = 500;
     
 #pragma mark - delete 删除
 // 只删除本表内容不删除关联表内容
-- (void)deleteIndependentContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block{
+- (void)deleteIndependentContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block clearAllCache:(BOOL)clearCache{
 
     JYQueryConditions *conditions = [[JYQueryConditions alloc] init];
     if (block) {
@@ -682,7 +682,9 @@ static const NSInteger JYDeleteMaxCount = 500;
     //    NSLog(@"delete conditions -- %@",sql);
     [aDB executeUpdate:sql];
     [self checkError:aDB];
-    [self removeAllCache];
+    if (clearCache) {
+       [self removeAllCache];
+    }
 }
 
 // 删除关联表的数据
@@ -732,7 +734,7 @@ static const NSInteger JYDeleteMaxCount = 500;
     }
     NSArray<NSString *> *deleteIDs = [deleteContents valueForKeyPath:self.contentId];
     // 删除本表
-    [self deleteIndependentContentDB:aDB byconditions:block];
+    [self deleteIndependentContentDB:aDB byconditions:block clearAllCache:YES];
     // 删除关联表
     [self deleteSpecialContentDB:aDB contentByIDs:deleteIDs];
  
@@ -745,10 +747,12 @@ static const NSInteger JYDeleteMaxCount = 500;
     // 删除本表aIDs
     [self togetherArray:aIDs maxCount:JYDeleteMaxCount traverse:^(JYQueryConditions *make, NSString *obj) {
         make.field(self.contentId).equalTo(obj).OR();
+        [self removeCacheContentID:obj];
     } complete:^NSArray *(id block) {
-        [self deleteIndependentContentDB:aDB byconditions:block];
+        [self deleteIndependentContentDB:aDB byconditions:block clearAllCache:NO];
         return nil;
     }];
+    
     [self deleteSpecialContentDB:aDB contentByIDs:aIDs];
 }
 
@@ -778,7 +782,7 @@ static const NSInteger JYDeleteMaxCount = 500;
 
 - (void)deleteAllContent{
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-        [self deleteIndependentContentDB:db byconditions:nil];
+        [self deleteIndependentContentDB:db byconditions:nil clearAllCache:YES];
         [self.getSpecialContentField enumerateObjectsUsingBlock:^(NSString * _Nonnull field, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary*dic = self.associativeTableField[field];
             JYContentTable *table = dic[tableContentObject];
@@ -851,28 +855,28 @@ static const NSInteger JYDeleteMaxCount = 500;
 
 #pragma mark - 缓存存取删
 - (id)getCacheContentID:(NSString *)aID{
-    if (aID.length <= 0 || ![self enableCache]) {
+    if (aID.length <= 0 || self.cache == nil) {
         return nil;
     }
     return [self.cache objectForKey:aID];
 }
 
 - (void)saveCacheContent:(id)aContent{
-    if (aContent == nil || ![self enableCache]) {
+    if (aContent == nil || self.cache == nil) {
         return;
     }
     [self.cache setObject:aContent forKey:[aContent valueForKey:[self contentId]]];
 }
 
 - (void)removeCacheContentID:(NSString *)aID{
-    if (aID.length <= 0 || ![self enableCache]) {
+    if (aID.length <= 0 || self.cache == nil) {
         return;
     }
     [self.cache removeObjectForKey:aID];
 }
 
 - (void)removeAllCache{
-    if (![self enableCache]) {
+    if (self.cache == nil) {
         return;
     }
     [self.cache removeAllObjects];

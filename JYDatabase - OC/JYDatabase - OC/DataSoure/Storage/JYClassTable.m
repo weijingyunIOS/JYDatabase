@@ -51,10 +51,10 @@
     [self addDB:aDB uniques:@[@"gradeID"]];
 }
 
-// 不使用缓存，开发中建议打开
-- (BOOL)enableCache{
-    return NO;
-}
+//// 因为关联了其它表 开启了也无用
+//- (BOOL)enableCache{
+//    return NO;
+//}
 
 
 @end
