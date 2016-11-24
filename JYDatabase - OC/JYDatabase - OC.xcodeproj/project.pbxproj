@@ -32,7 +32,6 @@
 		5CE7DCA71CE0615E00470171 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CE7DCA51CE0615E00470171 /* Main.storyboard */; };
 		5CE7DCA91CE0615E00470171 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CE7DCA81CE0615E00470171 /* Assets.xcassets */; };
 		5CE7DCAC1CE0615E00470171 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CE7DCAA1CE0615E00470171 /* LaunchScreen.storyboard */; };
-		5CE7DCB71CE0615E00470171 /* JYDatabase___OCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE7DCB61CE0615E00470171 /* JYDatabase___OCTests.m */; };
 		5CE7DCC21CE0615E00470171 /* JYDatabase___OCUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE7DCC11CE0615E00470171 /* JYDatabase___OCUITests.m */; };
 		5CFD4F7F1CE5BBB80062F1C5 /* JYQueryConditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CFD4F7E1CE5BBB80062F1C5 /* JYQueryConditions.m */; };
 /* End PBXBuildFile section */
@@ -104,7 +103,6 @@
 		5CE7DCAB1CE0615E00470171 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5CE7DCAD1CE0615E00470171 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5CE7DCB21CE0615E00470171 /* JYDatabase - OCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "JYDatabase - OCTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5CE7DCB61CE0615E00470171 /* JYDatabase___OCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JYDatabase___OCTests.m"; sourceTree = "<group>"; };
 		5CE7DCB81CE0615E00470171 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5CE7DCBD1CE0615E00470171 /* JYDatabase - OCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "JYDatabase - OCUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CE7DCC11CE0615E00470171 /* JYDatabase___OCUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JYDatabase___OCUITests.m"; sourceTree = "<group>"; };
@@ -273,7 +271,6 @@
 		5CE7DCB51CE0615E00470171 /* JYDatabase - OCTests */ = {
 			isa = PBXGroup;
 			children = (
-				5CE7DCB61CE0615E00470171 /* JYDatabase___OCTests.m */,
 				5C3CC8101DE2C9EB00BC8C44 /* JYContentTableTest.m */,
 				5CE7DCB81CE0615E00470171 /* Info.plist */,
 			);
@@ -448,7 +445,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5CE7DCB71CE0615E00470171 /* JYDatabase___OCTests.m in Sources */,
 				5C3CC8111DE2C9EB00BC8C44 /* JYContentTableTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

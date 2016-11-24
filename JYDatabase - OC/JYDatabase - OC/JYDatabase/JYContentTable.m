@@ -240,10 +240,7 @@ static const NSInteger JYDeleteMaxCount = 500;
         if ([self isArrayForAttributeName:akey]) {
             [aContent setValue:specialFieldValue forKey:akey];
         }else{
-    #if DEBUG
-            NSString *assertStr = [NSString stringWithFormat:@"%@ 所包含的 %@ 字段对应表%@ 数据异常，该字段查询出来应该只有一个值现在出现了多个值,代码删除，插入可能有问题",self,akey,table];
-            NSAssert(specialFieldValue.count < 2, assertStr);
-    #endif
+            NSAssert(specialFieldValue.count < 2,@"%@ 所包含的 %@ 字段对应表%@ 数据异常，该字段查询出来应该只有一个值现在出现了多个值,代码删除，插入可能有问题",self,akey,table);
             [aContent setValue:specialFieldValue.firstObject forKey:akey];
         }
     }
@@ -278,10 +275,7 @@ static const NSInteger JYDeleteMaxCount = 500;
 // 类型的映射
 - (NSArray *)conversionAttributeName:(NSString *)aField{
     NSString *aType = self.attributeTypeDic[aField];
-#if DEBUG
-    NSString *assertStr = [NSString stringWithFormat:@"该属性找不到对应类型 %@",aField];
-    NSAssert(aType != nil,assertStr);
-#endif
+    NSAssert(aType != nil,@"该属性找不到对应类型 %@",aField);
     
     NSString *str = jy_correspondingDic()[aType];
     if (str == nil) {
@@ -289,10 +283,7 @@ static const NSInteger JYDeleteMaxCount = 500;
             str = [JYDataBaseConfig shared].corresponding[aType];
         }
     }
-#if DEBUG
-    NSString *assertStr1 = [NSString stringWithFormat:@"%@属性的对应类型%@ 找不到，请设置JYDataBaseConfig中的 corresponding 属性添加，并到gitHub留言告知我，谢谢",aField,aType];
-    NSAssert(str != nil,assertStr1);
-#endif
+    NSAssert(str != nil,@"%@属性的对应类型%@ 找不到，请设置JYDataBaseConfig中的 corresponding 属性添加，并到gitHub留言告知我，谢谢",aField,aType);
     NSString *length = jy_defaultDic()[str];
     return @[str,length];
 }
@@ -489,10 +480,7 @@ static const NSInteger JYDeleteMaxCount = 500;
     // 2.一条条插入
     [aContents enumerateObjectsUsingBlock:^(id  _Nonnull aContent, NSUInteger idx, BOOL * _Nonnull stop) {
         
-#if DEBUG
-        NSString * ts = [NSString stringWithFormat:@"%@不能为空",[self contentId]];
-        NSAssert([aContent valueForKey:[self contentId]], ts );
-#endif
+        NSAssert([aContent valueForKey:[self contentId]],@"%@不能为空",[self contentId] );
         if (associatedTable) { // 特殊字段的参数处理 更新关联表数据
             [self.getSpecialContentField enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 [self insertSpecialFieldDB:aDB content:aContent forKey:obj];

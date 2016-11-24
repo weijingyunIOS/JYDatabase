@@ -14,7 +14,7 @@
 @property (nonatomic, copy) NSString *PersonID;
 
 /* 主要演示 class  包含老师和学生
-*  这里要 两个副key区分，老师设置teacherClassID 学生 studentClassID
+*  这里要 两个外键区分，老师设置teacherClassID 学生 studentClassID
 *  否则会有问题，开发过程中表的设计应该避免这样。老师和学生用两张表处理
 */
 @property (nonatomic, copy) NSString *teacherClassID;
