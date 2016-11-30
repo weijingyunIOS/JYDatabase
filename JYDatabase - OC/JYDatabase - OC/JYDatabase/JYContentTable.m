@@ -182,16 +182,6 @@ static const NSInteger JYDeleteMaxCount = 500;
     return abool;
 }
 
-- (BOOL)isArrayForAttributeName:(NSString *)aKey{
-    NSString *type = [self attributeTypeDic][aKey];
-    NSArray *array = @[@"T@\"NSMutableArray\"",@"T@\"NSArray\""];
-    __block BOOL abool= NO;
-    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        abool =abool || [obj isEqualToString:type];
-    }];
-    return abool;
-}
-
 // 特殊字段需要插入其它表
 - (void)insertSpecialFieldDB:(FMDatabase *)aDB content:(id)aContent forKey:(NSString *)akey{
     
@@ -238,7 +228,10 @@ static const NSInteger JYDeleteMaxCount = 500;
             make.field(viceKey).equalTo(contentIdValue).asc(sort);
         }];
         
-        if ([self isArrayForAttributeName:akey]) {
+        NSString *type = [self attributeTypeDic][akey];
+        if ([type isEqualToString:@"T@\"NSMutableArray\""]) {
+            [aContent setValue:[specialFieldValue mutableCopy] forKey:akey];
+        }else if ([type isEqualToString:@"T@\"NSArray\""]){
             [aContent setValue:specialFieldValue forKey:akey];
         }else{
             NSAssert(specialFieldValue.count < 2,@"%@ 所包含的 %@ 字段对应表%@ 数据异常，该字段查询出来应该只有一个值现在出现了多个值,代码删除，插入可能有问题",self,akey,table);

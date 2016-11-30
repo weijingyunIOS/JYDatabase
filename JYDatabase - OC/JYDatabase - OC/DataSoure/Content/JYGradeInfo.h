@@ -21,6 +21,6 @@
 @property (nonatomic, copy) NSString *longlongText;
 
 // 年级下的所有班级
-@property (nonatomic, strong) NSMutableArray<JYClassInfo *> *allClass;
+@property (nonatomic, strong) NSArray<JYClassInfo *> *allClass;
 
 @end
