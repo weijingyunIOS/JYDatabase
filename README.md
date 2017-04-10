@@ -10,7 +10,7 @@
 	
 	pod 'JYDataBase'
 	
-#一、JYDatabase 的使用
+# 一、JYDatabase 的使用
 ![enter image description here](http://images2015.cnblogs.com/blog/737816/201611/737816-20161103101051924-1899693155.jpg)
 
 	如图：是Demo中创建本地数据库的一个框图。
@@ -20,7 +20,7 @@
 	BS4: JYPersonInfo 是映射JYPersonTable表的列的对象。JYPersonTable表查询出来的数据都会转换成JYPersonInfo对象。
 	注意：个人建议不要在项目中建多个数据库，建一个数据库，多张表即可。
 
-#####1.1 JYPersonTable建立（数据表）
+##### 1.1 JYPersonTable建立（数据表）
 	
 	数据表的建立需要继承 JYContentTable(该类实现了工作中用到的大部分SQL查询)，只要重写以下几个方法就可以快速创建一张数据表。
 	
@@ -52,7 +52,7 @@
       
       注意：数据表映射的属性支持 NSString  NSMutableString  NSInteger NSUInteger int BOOL double float NSData NSArray NSMutableArray NSDictionary NSMutableDictionary 的数据类型 其中字典 数组 要能序列化。数组是其它数据库表的模型要进行特殊配置，参考下面多表设置。
       
-#####1.2 JYPersonDB管理了数据库的创建和升级 需要继承JYDataBase
+##### 1.2 JYPersonDB管理了数据库的创建和升级 需要继承JYDataBase
 
 	关键方法：
 	// 该方法会根据当前版本判断 是创建数据库表还是 数据表升级
@@ -73,12 +73,12 @@
 	    [self.personTable updateDB:aDB];
 	}
 
-#####1.3 JYDBService
+##### 1.3 JYDBService
   
   	这是一个单例，向外提供数据库的一切外部接口，具体实现大家可以看Demo。
-#二、内部部分代码的实现讲解
+# 二、内部部分代码的实现讲解
  
-#####2.1 数据库升级的实现 - (void)updateDB:(FMDatabase *)aDB 
+##### 2.1 数据库升级的实现 - (void)updateDB:(FMDatabase *)aDB 
  
  	对于每一张表，所谓的修改无非是 添加了一个 新的字段 或减少了几个字段（这种情况很少）。
  	2.2.1 字段的对比
@@ -98,7 +98,7 @@
  		d.为新表添加唯一索引
  		sql = [NSString stringWithFormat:@"create unique index '%@_key' on  %@(%@)", self.tableName,self.tableName,[self contentId]];
   	
-#####2.2 FMDB部分方法说明
+##### 2.2 FMDB部分方法说明
  	
  	- (void)inTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block;
 	- (void)inDatabase:(void (^)(FMDatabase *db))block;
@@ -148,7 +148,7 @@
 	}
 	在数据库的创建 升级 以及 多数据的插入，我都使用了该方法。
 	
-#####2.3 条件查询的实现
+##### 2.3 条件查询的实现
 	
 	关于复杂查询我提供了一个简单的方法 
 	- (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block;
@@ -176,8 +176,8 @@
     };
 	}
 	
-#三、提供的查询方法
-####pragma mark - 索引添加
+# 三、提供的查询方法
+#### pragma mark - 索引添加
 
 - (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
 - (void)insertContent:(id)aContent;
@@ -186,13 +186,13 @@
 - (void)insertIndependentContent:(id)aContent;
 - (void)insertIndependentContents:(NSArray *)aContents;
 
-####pragma mark - insert 插入
+#### pragma mark - insert 插入
 
 - (void)insertDB:(FMDatabase *)aDB contents:(NSArray *)aContents;
 - (void)insertContent:(id)aContent;
 - (void)insertContents:(NSArray *)aContents;
 
-####pragma mark - get 查询
+#### pragma mark - get 查询
 - (NSArray *)getContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (NSArray *)getDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
 - (NSArray *)getContentByConditions:(void (^)(JYQueryConditions *make))block;
@@ -200,7 +200,7 @@
 - (id)getContentByID:(NSString*)aID;
 - (NSArray *)getAllContent;
 
-####pragma mark - delete 删除
+#### pragma mark - delete 删除
 - (void)deleteContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (void)deleteDB:(FMDatabase *)aDB contentByIDs:(NSArray<NSString*>*)aIDs;
 - (void)deleteContentByConditions:(void (^)(JYQueryConditions *make))block;
@@ -209,20 +209,20 @@
 - (void)deleteAllContent;
 - (void)cleanContentBefore:(NSDate*)date;
 
-####pragma mark - getCount
+#### pragma mark - getCount
 - (NSInteger)getCountContentDB:(FMDatabase *)aDB byconditions:(void (^)(JYQueryConditions *make))block;
 - (NSInteger)getCountByConditions:(void (^)(JYQueryConditions *make))block;
 - (NSInteger)getAllCount;
 
 	
-#四、工具的推荐
+# 四、工具的推荐
 	
 	在移动端使用SqLite，个人建议安装 火狐浏览器 的一个插件 SQLite Manager 多的就不说了。
 	
-#五、版本记录
+# 五、版本记录
 
 ### tag - 1.0.6 
-#####修改记录
+##### 修改记录
 
 	1.本修改了查询方法的使用，以及数据建立方法更为简便，不用用户写大量无用代码，具体可见Demo 中JYPersonDB。
 
@@ -230,7 +230,7 @@
 
 	3.宗旨就是让数据库的使用变的简单，后期会根据我所遇到的一些业务场景进行持续更新。
 
-#####谈下在移动端，数据库关于不同用户的区分问题
+##### 谈下在移动端，数据库关于不同用户的区分问题
 
 
 	移动端缓存有个必须要注意的问题，那就是用户区分，要不把用户A的缓存数据显示到了用户B上
@@ -266,15 +266,15 @@
 		如何解决上述问题，我的建议是 建立 两种数据库，一种是公用数据库(该库不区分用户)，还有一种是 独立数据库
 	(每个用户都建一个)。对于社交应用，缓存用户信息的表放倒 公用数据库 即可。
 
-###tag - 1.1.0 增加多表关联功能
+### tag - 1.1.0 增加多表关联功能
 
-#####修改记录
+##### 修改记录
 	1.增加了多表关联功能，ModelA 包含 ModelB 的存入取出也可用简单的配置解决。
 	2.删除了UIImage的数据库存储支持。
 	3.删除了内存缓存支持，这是一个很鸡肋无用的处理。需要可以自行在外部加上自己的缓存机制。
 	4.DEMO做了大的修改，删除毫无意义的稀烂界面。写了一个测试代码 JYContentTableTest.m
 	5.对代码生成工具 JYGenerationCode 做了简单修改。
-#####多表关联使用说明
+##### 多表关联使用说明
    
 	  DEMO中写了三模型，JYGradeInfo (年级)，JYClassInfo (班级)，JYPersonInfo（人）
 	他们之间的关系是，一个年级有多个班级，一个班级 有一个老师 和 多个学生。对此建立了三张
@@ -311,16 +311,16 @@
 	  }
 	  
 	  
-##六、避坑汇总
+## 六、避坑汇总
 
-###1.数据库字段属性，慎用除NSString外的对象存储。
+### 1.数据库字段属性，慎用除NSString外的对象存储。
 	
 	 框架虽然提供了 NSData，NSNumber，NSDictionary，NSMutableDictionary，
 	 NSMutableArray，NSArray 这些对象的存储（其中数组字典要可反序列化），但是它们
 	 在数据库中的存储类型都是 BLOB 类型，这导致sql查询查不出来，所以需要查询的字段请
 	 使用NSString及基本数据类型。
 
-###2.主键无自增功能
+### 2.主键无自增功能
 	
 	因为业务需求问题，是未考虑主键自增的，主键不可为空，请自行处理随机生成唯一主键。
 	
